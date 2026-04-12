@@ -458,6 +458,7 @@
                             <CheckBox x:Name="ChkBoilsoftVideoSplitter" Content="Boilsoft Video Splitter" Width="200" Height="34" Click="ChkBoilsoftVideoSplitter_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
                             <CheckBox x:Name="ChkVibe" Content="Vibe" Width="200" Height="34" Click="ChkVibe_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
                             <CheckBox x:Name="ChkMKVToolNix" Content="MKVToolNix MKVCleaver" Width="200" Height="34" Click="ChkMKVToolNix_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
+                            <CheckBox x:Name="ChkSubtitleDraftGMTPC" Content="Subtitle Draft GMTPC" Width="200" Height="34" Click="ChkSubtitleDraftGMTPC_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
                         </WrapPanel>
                     </ScrollViewer>
                 </TabItem>

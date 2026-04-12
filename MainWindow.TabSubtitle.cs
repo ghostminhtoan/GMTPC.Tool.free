@@ -23,6 +23,8 @@ namespace GMTPC.Tool
     {
         /*
          * AI Summary:
+         * Date: 2026-04-13
+         * - Added ChkSubtitleDraftGMTPC and InstallSubtitleDraftGMTPCAsync with download to C:\, desktop shortcut, and open file
          * Date: 2026-03-29 (3)
          * - Added 3 new checkboxes: ChkBoilsoftVideoSplitter, ChkVibe, ChkMKVToolNix
          * - Using InstallWithPromptAsync mechanism (Yes/No dialog)
@@ -488,6 +490,97 @@ namespace GMTPC.Tool
             catch (Exception ex)
             {
                 UpdateStatus($"Lỗi khi cài đặt MKVToolNix MKVCleaver: {ex.Message}", "Red");
+            }
+        }
+
+        // ===================================================================
+        // TabSubtitle — Subtitle Draft GMTPC
+        // ===================================================================
+        private void ChkSubtitleDraftGMTPC_Click(object sender, RoutedEventArgs e)
+        {
+            if (ChkSubtitleDraftGMTPC.IsChecked == true)
+            {
+                UpdateStatus("Đã chọn: Subtitle Draft GMTPC", "Green");
+            }
+            else
+            {
+                UpdateStatus("Đã hủy chọn: Subtitle Draft GMTPC", "Yellow");
+            }
+
+            UpdateInstallButtonState();
+        }
+
+        private async Task InstallSubtitleDraftGMTPCAsync()
+        {
+            try
+            {
+                // Bước 1: Tải file về ổ C:\
+                string subtitleDraftFolder = @"C:\";
+                string subtitleDraftExe = Path.Combine(subtitleDraftFolder, "Subtitle draft GMTPC.exe");
+
+                UpdateStatus("Đang tải Subtitle Draft GMTPC...", "Cyan");
+                await DownloadWithProgressAsync(SUBTITLE_DRAFT_GMTPC_DOWNLOAD_URL, subtitleDraftExe, "Subtitle Draft GMTPC");
+
+                Dispatcher.Invoke(() =>
+                {
+                    DownloadProgressBar.Value = 0;
+                    ProgressTextBlock.Text = "";
+                    SpeedTextBlock.Text = "";
+                });
+
+                UpdateStatus("Đã tải xong Subtitle Draft GMTPC", "Green");
+
+                // Bước 2: Tạo shortcut trên Desktop
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                string shortcutPath = Path.Combine(desktopPath, "Subtitle Draft GMTPC.lnk");
+
+                // Xóa shortcut cũ nếu tồn tại
+                if (File.Exists(shortcutPath))
+                {
+                    File.Delete(shortcutPath);
+                }
+
+                // Tạo shortcut mới sử dụng WshShell
+                try
+                {
+                    Type shellType = Type.GetTypeFromProgID("WScript.Shell");
+                    if (shellType != null)
+                    {
+                        object shell = Activator.CreateInstance(shellType);
+                        object shortcut = shellType.InvokeMember("CreateShortcut", System.Reflection.BindingFlags.InvokeMethod, null, shell, new object[] { shortcutPath });
+
+                        // Set các thuộc tính shortcut
+                        shellType.InvokeMember("TargetPath", System.Reflection.BindingFlags.SetProperty, null, shortcut, new object[] { subtitleDraftExe });
+                        shellType.InvokeMember("WorkingDirectory", System.Reflection.BindingFlags.SetProperty, null, shortcut, new object[] { subtitleDraftFolder });
+                        shellType.InvokeMember("Description", System.Reflection.BindingFlags.SetProperty, null, shortcut, new object[] { "Subtitle Draft GMTPC" });
+                        shellType.InvokeMember("Save", System.Reflection.BindingFlags.InvokeMethod, null, shortcut, null);
+
+                        UpdateStatus("Đã tạo shortcut Subtitle Draft GMTPC trên Desktop", "Green");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    UpdateStatus($"Không thể tạo shortcut: {ex.Message}", "Orange");
+                }
+
+                // Bước 3: Mở file
+                UpdateStatus("Đang mở Subtitle Draft GMTPC...", "Cyan");
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    FileName = subtitleDraftExe,
+                    UseShellExecute = true,
+                    WorkingDirectory = subtitleDraftFolder
+                };
+                Process process = Process.Start(startInfo);
+
+                if (process != null)
+                {
+                    UpdateStatus("Subtitle Draft GMTPC đã được mở!", "Green");
+                }
+            }
+            catch (Exception ex)
+            {
+                UpdateStatus($"Lỗi khi cài đặt Subtitle Draft GMTPC: {ex.Message}", "Red");
             }
         }
     }

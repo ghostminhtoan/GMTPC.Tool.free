@@ -176,7 +176,7 @@ namespace GMTPC.Tool
         // ===================================================================
         // TabSubtitle — Links (B) and Arguments (C)
         // TabItem Header: "Subtitle"
-        // Checkboxes: ChkBoilsoftVideoSplitter, ChkVibe, ChkMKVToolNix
+        // Checkboxes: ChkBoilsoftVideoSplitter, ChkVibe, ChkMKVToolNix, ChkSubtitleDraftGMTPC
         // ===================================================================
         // Boilsoft Video Splitter (Tab: Subtitle)
         private const string BOILSOFT_VIDEO_SPLITTER_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/BoilsoftVideoSplitter.8.3.3.by.elchupacabra.exe";
@@ -189,6 +189,9 @@ namespace GMTPC.Tool
         // MKVToolNix MKVCleaver (Tab: Subtitle)
         private const string MKVTOOLNIX_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/mkvtoolnix-mkvcleaver.exe";
         private const string MKVTOOLNIX_INSTALL_ARGUMENTS = "/S";
+
+        // Subtitle Draft GMTPC (Tab: Subtitle)
+        private const string SUBTITLE_DRAFT_GMTPC_DOWNLOAD_URL = "https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/blob/master/Subtitle%20draft%20GMTPC.exe";
 
         // ===================================================================
         // TabDriver — Links (B) and Arguments (C)
@@ -634,6 +637,8 @@ namespace GMTPC.Tool
                              ChkVibe.IsChecked == true ||
                              // Thêm checkbox cho MKVToolNix MKVCleaver (Tab Subtitle)
                              ChkMKVToolNix.IsChecked == true ||
+                             // Thêm checkbox cho Subtitle Draft GMTPC (Tab Subtitle)
+                             ChkSubtitleDraftGMTPC.IsChecked == true ||
                              // Thêm checkbox cho AOMEI Partition Assistant
                              ChkAomeiPartitionAssistant.IsChecked == true ||
                              // Thêm checkbox cho PowerISO

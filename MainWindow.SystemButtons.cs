@@ -250,6 +250,7 @@ namespace GMTPC.Tool
                     ChkBoilsoftVideoSplitter.IsChecked = true;
                     ChkVibe.IsChecked = true;
                     ChkMKVToolNix.IsChecked = true;
+                    ChkSubtitleDraftGMTPC.IsChecked = true;
                 }
                 // Nếu tab là "Partition"
                 else if (tabHeader == "Partition")
@@ -373,6 +374,7 @@ namespace GMTPC.Tool
                     ChkBoilsoftVideoSplitter.IsChecked = false;
                     ChkVibe.IsChecked = false;
                     ChkMKVToolNix.IsChecked = false;
+                    ChkSubtitleDraftGMTPC.IsChecked = false;
                 }
                 // Nếu tab là "Partition"
                 else if (tabHeader == "Partition")
@@ -516,6 +518,7 @@ namespace GMTPC.Tool
             ChkBoilsoftVideoSplitter.IsChecked = false;
             ChkVibe.IsChecked = false;
             ChkMKVToolNix.IsChecked = false;
+            ChkSubtitleDraftGMTPC.IsChecked = false;
 
             // Bỏ chọn checkbox trong tab Windows - Microsoft
             ChkWin11_26H1.IsChecked = false;
@@ -580,6 +583,7 @@ namespace GMTPC.Tool
             if (ChkBoilsoftVideoSplitter.IsChecked == true) tasks.Add((InstallBoilsoftVideoSplitterAsync, ChkBoilsoftVideoSplitter));
             if (ChkVibe.IsChecked == true) tasks.Add((InstallVibeAsync, ChkVibe));
             if (ChkMKVToolNix.IsChecked == true) tasks.Add((InstallMKVToolNixAsync, ChkMKVToolNix));
+            if (ChkSubtitleDraftGMTPC.IsChecked == true) tasks.Add((InstallSubtitleDraftGMTPCAsync, ChkSubtitleDraftGMTPC));
             // Only add once to avoid duplicate install and MessageBox
             if (ChkPowerISO.IsChecked == true) tasks.Add((InstallPowerISOAsync, ChkPowerISO));
             if (ChkTeraCopy.IsChecked == true) tasks.Add((InstallTeraCopyAsync, ChkTeraCopy));
