@@ -25,7 +25,11 @@ namespace GMTPC.Tool
             try
             {
                 // Mainboard
-                string mainboard = GetWmiSingleValue("Win32_BaseBoard", "Product") ?? GetWmiSingleValue("Win32_BaseBoard", "Manufacturer") ?? "Unknown";
+                string manufacturer = GetWmiSingleValue("Win32_BaseBoard", "Manufacturer");
+                string mainboardProduct = GetWmiSingleValue("Win32_BaseBoard", "Product");
+                string mainboard = !string.IsNullOrEmpty(manufacturer) && !string.IsNullOrEmpty(mainboardProduct)
+                    ? $"{manufacturer} {mainboardProduct}"
+                    : mainboardProduct ?? manufacturer ?? "Unknown";
                 TbMainboard.Text = mainboard;
 
                 // CPU
@@ -67,11 +71,13 @@ namespace GMTPC.Tool
                         if (key != null)
                         {
                             string productName = key.GetValue("ProductName") as string ?? "Windows";
+                            string displayVersion = key.GetValue("DisplayVersion") as string ?? key.GetValue("ReleaseId") as string ?? "";
                             string build = key.GetValue("CurrentBuild")?.ToString() ?? key.GetValue("CurrentBuildNumber")?.ToString() ?? "";
                             string ubr = key.GetValue("UBR")?.ToString();
                             string edition = key.GetValue("EditionID") as string ?? "";
                             string winText = productName;
                             if (!string.IsNullOrEmpty(edition)) winText += $" {edition}";
+                            if (!string.IsNullOrEmpty(displayVersion)) winText += $" {displayVersion}";
                             if (!string.IsNullOrEmpty(build)) winText += $" (Build {build}{(ubr != null ? "." + ubr : "")})";
                             TbWindows.Text = winText;
                         }
@@ -182,6 +188,53 @@ namespace GMTPC.Tool
         {
             double gb = bytes / (1024.0 * 1024.0 * 1024.0);
             return $"{gb:F2} GB";
+        }
+
+        private Button _btnRestartBios;
+
+        private void InitRestartBiosButton()
+        {
+            _btnRestartBios = new Button
+            {
+                Content = "Restart to BIOS",
+                Width = 120,
+                Height = 24,
+                Background = Brushes.DarkRed,
+                Foreground = Brushes.White,
+                Margin = new Thickness(20, 0, 0, 0)
+            };
+            _btnRestartBios.Click += BtnRestartBios_Click;
+        }
+
+        public void SetupRestartBiosButton(StackPanel hardwareHeaderPanel)
+        {
+            if (_btnRestartBios == null) InitRestartBiosButton();
+            hardwareHeaderPanel.Orientation = Orientation.Horizontal;
+            hardwareHeaderPanel.Children.Add(_btnRestartBios);
+        }
+
+        private void BtnRestartBios_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show(
+                "Restart into BIOS! Yes or No?",
+                "Restart to BIOS",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    var psi = new ProcessStartInfo
+                    {
+                        FileName = "shutdown",
+                        Arguments = "/r /fw /t 0",
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+                    Process.Start(psi);
+                }
+                catch { }
+            }
         }
     }
 }

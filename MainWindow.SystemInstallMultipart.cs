@@ -2,7 +2,7 @@
 // MainWindow.SystemInstallMultipart.cs
 // Chức năng: Cơ chế cài đặt Multi-part - tải nhiều split file, tự động ghép và xóa
 // Cập nhật gần đây:
-//   - 2026-03-17: Tạo mới theo yêu cầu phân loại cơ chế cài đặt
+//   - 2026-04-16: Cập nhật UpdateStatus hiển thị "đang tải x/y parts"
 // =======================================================================
 using System;
 using System.Diagnostics;
@@ -45,15 +45,15 @@ namespace GMTPC.Tool
                     string partFileName = Path.GetFileName(downloadUrls[i]);
                     partPaths[i] = Path.Combine(tempFolder, partFileName);
                     
-                    UpdateStatus($"Đang tải {displayName} - Phần {i + 1}/{downloadUrls.Length}...", "Cyan");
-                    await DownloadWithProgressAsync(downloadUrls[i], partPaths[i], $"{displayName} - Part {i + 1}");
+                    string partInfo = $"Part {i + 1}/{downloadUrls.Length} - {displayName}";
+                    Dispatcher.Invoke(() => PartInfoTextBlock.Text = partInfo);
+                    await DownloadWithProgressAsync(downloadUrls[i], partPaths[i], partInfo);
                     
                     // Reset progress bar between parts
                     Dispatcher.Invoke(() =>
                     {
                         DownloadProgressBar.Value = 0;
                         ProgressTextBlock.Text = "";
-                        SpeedTextBlock.Text = "";
                     });
                 }
 

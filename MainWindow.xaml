@@ -271,7 +271,7 @@
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10,0,0,0">
-                        <TextBlock Text="Theme" FontSize="10" Foreground="#FFE6E6E6" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+                        <TextBlock Text="Theme Windows" FontSize="10" Foreground="#FFE6E6E6" HorizontalAlignment="Center" Margin="0,0,0,2"/>
                         <ToggleButton x:Name="TglTheme"
                                       Style="{StaticResource ThemeToggleSwitchStyle}"
                                       HorizontalAlignment="Center"
@@ -354,7 +354,9 @@
                         <StackPanel Margin="8">
                             <Border BorderBrush="#FF7A7A7A" BorderThickness="1" CornerRadius="5" Padding="8" Margin="0,0,0,8">
                                 <StackPanel>
-                                    <TextBlock Text="Hardware" FontSize="14" FontWeight="Bold" Foreground="#FFFFFFFF" Margin="0,0,0,6" FontFamily="Consolas"/>
+                                    <StackPanel x:Name="HardwareHeaderPanel" Orientation="Horizontal">
+                                        <TextBlock Text="Hardware" FontSize="14" FontWeight="Bold" Foreground="#FFFFFFFF" FontFamily="Consolas"/>
+                                    </StackPanel>
                                     <Grid Margin="0,2,0,0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
@@ -604,6 +606,7 @@
         <!-- Progress Bar Section -->
         <Border Grid.Row="3" Background="#FF1F1F1F" CornerRadius="6" Padding="10" Margin="0,0,19,10" Grid.ColumnSpan="2">
             <StackPanel>
+                <TextBlock x:Name="PartInfoTextBlock" FontSize="14" FontWeight="Bold" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,0,0,5"/>
                 <ProgressBar x:Name="DownloadProgressBar" x:FieldModifier="public" Height="20" Margin="0,0,0,10" Style="{StaticResource RoundedProgressBarStyle}" Background="#FF3E3E3E" Foreground="#FF005FB8"/>
                 <TextBlock x:Name="SpeedTextBlock" FontSize="13" FontWeight="Bold" Foreground="Cyan" HorizontalAlignment="Center" Margin="0,0,0,5"/>
                 <TextBlock x:Name="ProgressTextBlock" FontSize="13" Foreground="#FFCCCCCC" HorizontalAlignment="Center" Margin="0,0,0,5" FontWeight="Bold"/>

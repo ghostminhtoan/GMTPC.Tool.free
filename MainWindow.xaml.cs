@@ -25,6 +25,7 @@ namespace GMTPC.Tool
             System.Net.ServicePointManager.Expect100Continue = false;
             System.Net.ServicePointManager.UseNagleAlgorithm = false;
             InitializeComponent();
+            SetupRestartBiosButton(HardwareHeaderPanel);
             UpdateStatus("Chọn một tùy chọn từ menu bên trên hoặc nhấn phím số tương ứng (1-6, 0):", "Cyan");
             this.Closing += MainWindow_Closing;
             UpdateInstallButtonState();

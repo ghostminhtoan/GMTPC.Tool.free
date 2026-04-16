@@ -191,7 +191,7 @@ namespace GMTPC.Tool
         private const string MKVTOOLNIX_INSTALL_ARGUMENTS = "/S";
 
         // Subtitle Draft GMTPC (Tab: Subtitle)
-        private const string SUBTITLE_DRAFT_GMTPC_DOWNLOAD_URL = "https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/blob/master/Subtitle%20draft%20GMTPC.exe";
+        private const string SUBTITLE_DRAFT_GMTPC_DOWNLOAD_URL = "https://raw.githubusercontent.com/ghostminhtoan/Subtitle-draft-GMTPC/refs/heads/master/Subtitle%20draft%20GMTPC.exe";
 
         // ===================================================================
         // TabDriver — Links (B) and Arguments (C)
