@@ -48,6 +48,7 @@ if %ERRORLEVEL% NEQ 0 (
 )
 echo.
 
+<<<<<<< HEAD
 echo Adding exe to git...
 git add GMTPC.Tool.exe
 if %ERRORLEVEL% NEQ 0 (
@@ -79,5 +80,25 @@ if %ERRORLEVEL% NEQ 0 (
 echo [OK] Commit and push successful!
 
 :end
+=======
+echo Adding to git...
+git add .
+echo Enter commit message:
+set /p COMMIT_MSG=
+git commit -m "%COMMIT_MSG%"
+if %ERRORLEVEL% NEQ 0 (
+    echo [ERROR] Commit failed!
+    pause
+    exit /b %ERRORLEVEL%
+)
+echo Pushing to remote...
+git push
+if %ERRORLEVEL% NEQ 0 (
+    echo [ERROR] Push failed!
+    pause
+    exit /b %ERRORLEVEL%
+)
+
+>>>>>>> 3fa1fd0 (fix UI)
 echo Done!
 pause
