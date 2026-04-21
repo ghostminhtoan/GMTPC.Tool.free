@@ -44,6 +44,7 @@ namespace GMTPC.Tool
             this.Focus();
             Keyboard.Focus(this);
             SetupInitialOrientation();
+            ApplyResponsiveLayout();
             SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
             try { PopulateSystemInfo(); } catch { }
             PopulateTempFolderComboBox();
@@ -64,6 +65,7 @@ namespace GMTPC.Tool
             Dispatcher.Invoke(() =>
             {
                 SetupInitialOrientation();
+                ApplyResponsiveLayout();
                 ApplyDPIScale();
             });
         }

@@ -528,11 +528,11 @@ namespace GMTPC.Tool
 
         private void SetupInitialOrientation()
         {
-            // Initial State: On app start, detect if screen is Portrait or Landscape
-            bool isPortrait = SystemParameters.PrimaryScreenWidth < SystemParameters.PrimaryScreenHeight;
+            // Initial State: use the monitor that currently contains this window.
+            Rect workArea = GetCurrentMonitorWorkAreaDip();
 
             // Set initial dimensions
-            originalWidth = Math.Max(SystemParameters.PrimaryScreenWidth, SystemParameters.PrimaryScreenHeight);
+            originalWidth = Math.Max(workArea.Width, workArea.Height);
             originalHeight = 18; // Default bar thickness
 
             UpdateConnectionTraceOrientation();
@@ -541,6 +541,7 @@ namespace GMTPC.Tool
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // Reactive Update: Track orientation changes via size changes
+            ApplyResponsiveLayout();
             UpdateConnectionTraceOrientation();
         }
 

@@ -45,6 +45,7 @@ namespace GMTPC.Tool
     {
         // ===================== DPI Scale Fields =====================
         private double currentDPIScale = 1.0;
+        private bool _isUpdatingDpiSelection;
         private readonly int[] DPI_STEPS = new int[] { 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 200 };
 
         private void ApplyDPIScale()
@@ -52,13 +53,14 @@ namespace GMTPC.Tool
             ScaleTransform scaleTransform = new ScaleTransform(currentDPIScale, currentDPIScale);
             MainGrid.LayoutTransform = scaleTransform;
 
-            bool isPortrait = SystemParameters.PrimaryScreenWidth < SystemParameters.PrimaryScreenHeight;
+            Rect workArea = GetCurrentMonitorWorkAreaDip();
+            bool isPortrait = workArea.Height > workArea.Width;
             double designMaxWidth  = isPortrait ? 580  : 1000;
             double designMaxHeight = isPortrait ? 950  : 750;
 
-            var workArea = SystemParameters.WorkArea;
             this.MaxHeight = Math.Min(designMaxHeight * currentDPIScale, workArea.Height);
             this.MaxWidth  = Math.Min(designMaxWidth  * currentDPIScale, workArea.Width);
+            ApplyResponsiveLayout();
 
             MainGrid.InvalidateMeasure();
             this.InvalidateMeasure();
@@ -73,21 +75,7 @@ namespace GMTPC.Tool
 
             this.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle, new Action(() =>
             {
-                const double margin = 12.0;
-                try
-                {
-                    double maxAllowedHeight = Math.Max(0, workArea.Height - margin);
-                    double maxAllowedWidth  = Math.Max(0, workArea.Width  - margin);
-
-                    if (this.ActualHeight > maxAllowedHeight) this.Height = maxAllowedHeight;
-                    if (this.ActualWidth  > maxAllowedWidth)  this.Width  = maxAllowedWidth;
-
-                    if (this.Top  < workArea.Top  + margin) this.Top  = workArea.Top  + margin;
-                    if (this.Left < workArea.Left + margin) this.Left = workArea.Left + margin;
-                    if (this.Top  + this.Height > workArea.Bottom - margin) this.Top  = workArea.Bottom - margin - this.Height;
-                    if (this.Left + this.Width  > workArea.Right  - margin) this.Left = workArea.Right  - margin - this.Width;
-                }
-                catch { }
+                KeepWindowInsideCurrentMonitor();
 
                 try { this.SizeToContent = SizeToContent.Manual; } catch { }
             }));
@@ -104,7 +92,15 @@ namespace GMTPC.Tool
                 {
                     if (item.Content.ToString() == dpiText)
                     {
-                        CboDPIValue.SelectedItem = item;
+                        try
+                        {
+                            _isUpdatingDpiSelection = true;
+                            CboDPIValue.SelectedItem = item;
+                        }
+                        finally
+                        {
+                            _isUpdatingDpiSelection = false;
+                        }
                         break;
                     }
                 }
@@ -151,6 +147,7 @@ namespace GMTPC.Tool
 
         private void CboDPIValue_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (_isUpdatingDpiSelection) return;
             if (CboDPIValue.SelectedItem == null) return;
 
             // Get the ComboBoxItem and extract its Content
