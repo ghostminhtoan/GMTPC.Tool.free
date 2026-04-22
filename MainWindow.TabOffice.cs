@@ -26,8 +26,9 @@ namespace GMTPC.Tool
          * - Added 3 download buttons for Subtitle Edit: Vietnamese Profile, Multiple Replace Template, and Shortcut MMT XML
          * Date: 2026-03-28
          * - Added ChkSubtitleEdit_Click and InstallSubtitleEditAsync
+         * Date: 2026-04-22
+         * - Replaced Gouenji Fansub Fonts with GMTPC Fonts and delete-on-exit cleanup
          * Date: 2026-03-08
-         * - Added ChkGouenjiFonts_Click and InstallGouenjiFontsAsync
          * - Added ChkNotepadPlusPlus_Click and InstallNotepadPlusPlusAsync
          */
 
@@ -243,29 +244,30 @@ namespace GMTPC.Tool
         }
 
         // ===================================================================
-        // TabOffice — Gouenji Fansub Fonts
+        // TabOffice — GMTPC Fonts
         // ===================================================================
-        private void ChkGouenjiFonts_Click(object sender, RoutedEventArgs e)
+        private void ChkGMTPCFonts_Click(object sender, RoutedEventArgs e)
         {
-            if (ChkGouenjiFonts.IsChecked == true)
+            if (ChkGMTPCFonts.IsChecked == true)
             {
-                UpdateStatus("Đã chọn: Gouenji Fansub Fonts", "Green");
+                UpdateStatus("Đã chọn: GMTPC Fonts", "Green");
             }
             else
             {
-                UpdateStatus("Đã hủy chọn: Gouenji Fansub Fonts", "Yellow");
+                UpdateStatus("Đã hủy chọn: GMTPC Fonts", "Yellow");
             }
 
             UpdateInstallButtonState();
         }
 
-        private async Task InstallGouenjiFontsAsync()
+        private async Task InstallGMTPCFontsAsync()
         {
             try
             {
-                UpdateStatus("Đang tải Gouenji Fansub Fonts...", "Cyan");
-                string fontsPath = Path.Combine(GetGMTPCFolder(), "Gouenji.Fansub.Fonts.exe");
-                await DownloadWithProgressAsync(GOUENJI_FONTS_DOWNLOAD_URL, fontsPath, "Gouenji Fansub Fonts");
+                UpdateStatus("Đang tải GMTPC Fonts...", "Cyan");
+                string fontsPath = Path.Combine(GetGMTPCFolder(), "GMTPC-FONTS.exe");
+                RegisterDownloadedFileForDeleteOnExit(fontsPath);
+                await DownloadWithProgressAsync(GMTPC_FONTS_DOWNLOAD_URL, fontsPath, "GMTPC Fonts");
 
                 Dispatcher.Invoke(() =>
                 {
@@ -274,29 +276,22 @@ namespace GMTPC.Tool
                     SpeedTextBlock.Text = "";
                 });
 
-                UpdateStatus("Đang cài đặt Gouenji Fansub Fonts (passive)...", "Yellow");
+                UpdateStatus("Đang chạy GMTPC Fonts...", "Yellow");
                 ProcessStartInfo startInfo = new ProcessStartInfo
                 {
                     FileName = fontsPath,
-                    Arguments = GOUENJI_FONTS_INSTALL_ARGUMENTS,
                     UseShellExecute = true
                 };
                 Process process = Process.Start(startInfo);
 
                 if (process != null)
                 {
-                    await Task.Run(() => process.WaitForExit());
-                    UpdateStatus("Cài đặt Gouenji Fansub Fonts hoàn tất!", "Green");
-                }
-
-                if (File.Exists(fontsPath))
-                {
-                    File.Delete(fontsPath);
+                    UpdateStatus("Đã chạy GMTPC Fonts. File tải về sẽ được xóa khi tắt app.", "Green");
                 }
             }
             catch (Exception ex)
             {
-                UpdateStatus($"Lỗi khi cài đặt Gouenji Fansub Fonts: {ex.Message}", "Red");
+                UpdateStatus($"Lỗi khi chạy GMTPC Fonts: {ex.Message}", "Red");
             }
         }
 

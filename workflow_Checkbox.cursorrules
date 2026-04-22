@@ -467,7 +467,7 @@ nếu chọn ổ D thì sẽ tự tạo  defender exclusion cho D:\Temp Folder, 
     <checkbox name="ChkInstallBID" tab="Popular" url="https://bulkimagedownloader.com/files/bid_6_62_setup_x64.exe" args=""/>
     
     <!-- Tab Office -->
-    <checkbox name="ChkInstallGouenjiFonts" tab="Office" url="https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Gouenji.Fansub.Fonts.exe" args="/passive /norestart"/>
+    <checkbox name="ChkGMTPCFonts" tab="Office" url="https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/releases/download/subtitle.materials/GMTPC-FONTS.exe" args=""/>
     <checkbox name="ChkInstallNotepadPlusPlus" tab="Office" url="https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.2/npp.8.9.2.Installer.x64.msi" args="/passive /norestart"/>
     
     <!-- Tab Browser -->

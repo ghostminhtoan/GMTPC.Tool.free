@@ -14,6 +14,7 @@ namespace GMTPC.Tool
 {
     // =============================================================================
     // MainWindow.TabWinModMMT.cs
+    // Updated: 2026-04-22 - Added WinPE to HDD admin PowerShell button
     // Updated: 2026-03-17 - Changed download URLs to new links without boot.windowsRE
     // =============================================================================
     public partial class MainWindow
@@ -159,6 +160,33 @@ namespace GMTPC.Tool
         private void ChkWin10_22H2_2024_December_Click(object sender, RoutedEventArgs e)
         {
             UpdateInstallButtonState();
+        }
+
+        private void BtnWinPEToHDD_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                UpdateStatus("Đang mở WinPE to HDD với quyền administrator...", "Cyan");
+
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = "-NoProfile -ExecutionPolicy Bypass -Command \"irm bit.ly/mmtwinpe | iex\"",
+                    UseShellExecute = true,
+                    Verb = "runas"
+                };
+
+                Process.Start(startInfo);
+                UpdateStatus("Đã chạy WinPE to HDD.", "Green");
+            }
+            catch (System.ComponentModel.Win32Exception ex) when (ex.NativeErrorCode == 1223)
+            {
+                UpdateStatus("Đã hủy chạy WinPE to HDD.", "Yellow");
+            }
+            catch (Exception ex)
+            {
+                UpdateStatus($"Lỗi khi chạy WinPE to HDD: {ex.Message}", "Red");
+            }
         }
 
         private async Task InstallWin10LtscIot21H2Async()

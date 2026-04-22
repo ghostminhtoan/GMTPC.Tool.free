@@ -1,5 +1,5 @@
-// AI Summary: 2026-04-21 - Added no-scrollbar auto-fit behavior with visual clipping detection;
-// oversized or clipped tab controls automatically step DPI down until the last checkbox remains visible.
+// AI Summary: 2026-04-22 - Added tab-change auto-fit behavior;
+// switching from a sparse tab to a denser tab now rechecks clipping and steps DPI down automatically.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
 // Chuc nang: Desktop responsive layout cho man hinh ngang/doc va multi-monitor.
@@ -39,6 +39,7 @@ namespace GMTPC.Tool
         private void Window_SourceInitialized(object sender, EventArgs e)
         {
             DisableMaximizeButton();
+            AttachDownloadedFileCleanupOnClose();
         }
 
         private void DisableMaximizeButton()
@@ -57,6 +58,18 @@ namespace GMTPC.Tool
                 int style = GetWindowLong32(handle, GWL_STYLE);
                 SetWindowLong32(handle, GWL_STYLE, style & ~WS_MAXIMIZEBOX);
             }
+        }
+
+        private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source != MainTabControl) return;
+
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
+            {
+                ApplyResponsiveLayout();
+                MainGrid.UpdateLayout();
+                QueueAutoFitScaleToCurrentMonitor();
+            }));
         }
 
         private void ApplyResponsiveLayout()

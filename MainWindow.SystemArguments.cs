@@ -159,11 +159,10 @@ namespace GMTPC.Tool
         // TabOffice — Links (B) and Arguments (C)
         // TabItem Header: "Office"
         // Checkboxes: ChkActivateOffice, ChkOfficeToolPlus, ChkOfficeSoftmaker,
-        //             ChkGouenjiFonts, ChkNotepadPlusPlus
+        //             ChkGMTPCFonts, ChkNotepadPlusPlus
         // ===================================================================
-        // Gouenji Fansub Fonts (Tab: Office)
-        private const string GOUENJI_FONTS_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Gouenji.Fansub.Fonts.exe";
-        private const string GOUENJI_FONTS_INSTALL_ARGUMENTS = "/passive /norestart";
+        // GMTPC Fonts (Tab: Office)
+        private const string GMTPC_FONTS_DOWNLOAD_URL = "https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/releases/download/subtitle.materials/GMTPC-FONTS.exe";
 
         // Notepad++ (Tab: Office)
         private const string NOTEPAD_PLUS_PLUS_DOWNLOAD_URL = "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.2/npp.8.9.2.Installer.x64.msi";
@@ -623,8 +622,8 @@ namespace GMTPC.Tool
                              ChkComfortClipboardPro.IsChecked == true ||
                              // Thêm checkbox cho Office Softmaker
                              ChkOfficeSoftmaker.IsChecked == true ||
-                             // Thêm checkbox cho Gouenji Fonts
-                             ChkGouenjiFonts.IsChecked == true ||
+                             // Thêm checkbox cho GMTPC Fonts
+                             ChkGMTPCFonts.IsChecked == true ||
                              // Thêm checkbox cho Notepad++
                              ChkNotepadPlusPlus.IsChecked == true ||
                              // Thêm checkbox cho Subtitle Edit

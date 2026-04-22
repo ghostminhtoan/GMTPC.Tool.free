@@ -5,7 +5,8 @@
 //            BtnDownloadPage, DPI controls
 // Cập nhật gần đây:
 //   - 2026-04-19: Added ChkInstallNeatDM to BtnSelectNoneAllTabs for proper interaction with Select None All Tabs button
-//   - 2026-04-19: Added missing checkbox cases in Checkbox_MouseEnter for ChkGouenjiFonts, ChkNotepadPlusPlus, ChkSubtitleEdit, ChkVidCoder, ChkBoilsoftVideoSplitter, ChkVibe, ChkMKVToolNix, ChkSubtitleDraftGMTPC; Added ChkSubtitleDraftGMTPC to _cachedDownloadLinks
+//   - 2026-04-22: Replaced ChkGouenjiFonts with ChkGMTPCFonts
+//   - 2026-04-19: Added missing checkbox cases in Checkbox_MouseEnter for office/subtitle checkboxes; Added ChkSubtitleDraftGMTPC to _cachedDownloadLinks
 //   - 2026-04-19: Added missing checkboxes to Checkbox_MouseEnter: ChkInstallZalo, ChkJumpForce, ChkWintoHDD; Added missing checkboxes to _cachedDownloadLinks for hover and copy functionality
 //   - 2026-03-29 (5): Added ChkBoilsoftVideoSplitter, ChkVibe, ChkMKVToolNix
 //   - 2026-03-29: Added ChkVidCoder and new Subtitle tab support
@@ -240,7 +241,7 @@ namespace GMTPC.Tool
                     ChkOfficeToolPlus.IsChecked = true;
                     ChkOfficeSoftmaker.IsChecked = true;
                     ChkActivateOffice.IsChecked = true;
-                    ChkGouenjiFonts.IsChecked = true;
+                    ChkGMTPCFonts.IsChecked = true;
                     ChkNotepadPlusPlus.IsChecked = true;
                 }
                 else if (tabHeader == "Subtitle")
@@ -364,7 +365,7 @@ namespace GMTPC.Tool
                     ChkOfficeToolPlus.IsChecked = false;
                     ChkOfficeSoftmaker.IsChecked = false;
                     ChkActivateOffice.IsChecked = false;
-                    ChkGouenjiFonts.IsChecked = false;
+                    ChkGMTPCFonts.IsChecked = false;
                     ChkNotepadPlusPlus.IsChecked = false;
                 }
                 else if (tabHeader == "Subtitle")
@@ -510,7 +511,7 @@ namespace GMTPC.Tool
             ChkOfficeToolPlus.IsChecked = false;
             ChkOfficeSoftmaker.IsChecked = false;
             ChkActivateOffice.IsChecked = false;
-            ChkGouenjiFonts.IsChecked = false;
+            ChkGMTPCFonts.IsChecked = false;
             ChkNotepadPlusPlus.IsChecked = false;
 
             // Bỏ chọn checkbox trong tab Subtitle
@@ -577,7 +578,7 @@ namespace GMTPC.Tool
             if (ChkDISMPP.IsChecked == true) tasks.Add((InstallDISMPPAsync, ChkDISMPP));
             if (ChkComfortClipboardPro.IsChecked == true) tasks.Add((InstallComfortClipboardProAsync, ChkComfortClipboardPro));
             if (ChkOfficeSoftmaker.IsChecked == true) tasks.Add((InstallOfficeSoftmakerAsync, ChkOfficeSoftmaker));
-            if (ChkGouenjiFonts.IsChecked == true) tasks.Add((InstallGouenjiFontsAsync, ChkGouenjiFonts));
+            if (ChkGMTPCFonts.IsChecked == true) tasks.Add((InstallGMTPCFontsAsync, ChkGMTPCFonts));
             if (ChkNotepadPlusPlus.IsChecked == true) tasks.Add((InstallNotepadPlusPlusAsync, ChkNotepadPlusPlus));
             if (ChkSubtitleEdit.IsChecked == true) tasks.Add((InstallSubtitleEditAsync, ChkSubtitleEdit));
             if (ChkVidCoder.IsChecked == true) tasks.Add((InstallVidCoderAsync, ChkVidCoder));
@@ -784,8 +785,8 @@ namespace GMTPC.Tool
             if (ChkActivateOffice?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/activate/ACTIVATE.OFFICE.cmd");
 
-            if (ChkGouenjiFonts?.IsChecked == true)
-                _cachedDownloadLinks.Add(GOUENJI_FONTS_DOWNLOAD_URL);
+            if (ChkGMTPCFonts?.IsChecked == true)
+                _cachedDownloadLinks.Add(GMTPC_FONTS_DOWNLOAD_URL);
 
             if (ChkNotepadPlusPlus?.IsChecked == true)
                 _cachedDownloadLinks.Add(NOTEPAD_PLUS_PLUS_DOWNLOAD_URL);
@@ -1006,7 +1007,7 @@ namespace GMTPC.Tool
                 ChkInstallIDM, ChkInstallWinRAR, ChkInstallBID, ChkActivateWindows,
                 ChkPauseWindowsUpdate, ChkVcredist, ChkDirectX, ChkJava, ChkOpenAL,
                 Chk3DPChip, Chk3DPNet, ChkRevoUninstaller,
-                ChkOfficeToolPlus, ChkOfficeSoftmaker, ChkActivateOffice,
+                ChkOfficeToolPlus, ChkOfficeSoftmaker, ChkActivateOffice, ChkGMTPCFonts,
                 ChkPotPlayer, ChkFastStone, ChkFoxit, ChkBandiview, ChkAdvancedCodecPack,
                 ChkMMTApps, ChkDISMPP, ChkComfortClipboardPro,
                 ChkFolderSize, ChkPowerISO, ChkTeraCopy, ChkVPN1111, ChkGoogleDrive,
@@ -1159,8 +1160,8 @@ namespace GMTPC.Tool
                     case "ChkActivateOffice":
                         link = "https://github.com/ghostminhtoan/MMT/releases/download/activate/ACTIVATE.OFFICE.cmd";
                         break;
-                    case "ChkGouenjiFonts":
-                        link = GOUENJI_FONTS_DOWNLOAD_URL;
+                    case "ChkGMTPCFonts":
+                        link = GMTPC_FONTS_DOWNLOAD_URL;
                         break;
                     case "ChkNotepadPlusPlus":
                         link = NOTEPAD_PLUS_PLUS_DOWNLOAD_URL;
