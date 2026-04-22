@@ -1,5 +1,5 @@
 ﻿<!-- AI Summary: 2026-04-18 - Added child button "enable INVITE WORKSPACE LTSC" inside ChkEdge checkbox -->
-<!-- AI Summary: 2026-04-22 - Replaced Gouenji Fansub Fonts with GMTPC Fonts and added WinPE to HDD button -->
+<!-- AI Summary: 2026-04-22 - Reordered header author, donate button, and antivirus guidance text -->
 <Window x:Class="GMTPC.Tool.MainWindow"
          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -222,28 +222,30 @@
                                 FontWeight="Bold"
                                 Foreground="Yellow"
                                 Margin="0,0,10,5" Height="29" Width="138"/>
-                    <TextBlock
-                Width="162" Text="Tác giả: Ma Minh Toàn 1993" FontSize="13" Foreground="LightGreen"/>
                 </StackPanel>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,0">
-                    <TextBlock Text="Không cần tắt Windows Defender, còn dùng antivirus khác thì nên tắt."
-                               FontSize="15"
-                               Foreground="Cyan"
-                               TextWrapping="Wrap"
-                               Width="241"/>
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,10,0">
-                        <Button
-                                x:Name="BtnDonate"
+                <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,6">
+                        <TextBlock Width="180" Text="Tác giả: Ma Minh Toàn 1993" FontSize="13" Foreground="LightGreen" VerticalAlignment="Center"/>
+                        <Button x:Name="BtnDonate"
                                 Content="Ủng hộ tác giả"
                                 Background="DarkGreen"
                                 BorderBrush="#FF005FB8"
                                 Foreground="#FFE6E6E6"
                                 FontSize="9"
                                 Padding="4,2"
-                                Margin="0,0,0,4"
+                                Margin="0,0,12,0"
                                 HorizontalAlignment="Left"
                                 Click="BtnExit_Click" Height="22" Width="90"/>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Windows Defender: không cần tắt, Antivirus khác: phải tắt."
+                                   FontSize="15"
+                                   Foreground="Cyan"
+                                   TextWrapping="Wrap"
+                                   Width="430"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,10,0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <TextBlock Text="Scale DPI:" FontSize="10" Foreground="#FFE6E6E6" Margin="0,0,2,0" VerticalAlignment="Center"/>
                             <Button x:Name="BtnDPIMinus" Content="-" Width="22" Height="18" FontSize="10" Margin="0,0,2,0" Click="BtnDPIMinus_Click" VerticalAlignment="Center"/>
                             <ComboBox x:Name="CboDPIValue" Width="52" Height="18" FontSize="10" SelectedValuePath="Content" SelectionChanged="CboDPIValue_SelectionChanged" Margin="0,0,2,0"
@@ -271,14 +273,15 @@
                                 <ComboBoxItem Content="200%"/>
                             </ComboBox>
                             <Button x:Name="BtnDPIPlus" Content="+" Width="22" Height="18" FontSize="10" Click="BtnDPIPlus_Click" VerticalAlignment="Center"/>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10,0,0,0">
-                        <TextBlock Text="Theme Windows" FontSize="10" Foreground="#FFE6E6E6" HorizontalAlignment="Center" Margin="0,0,0,2"/>
-                        <ToggleButton x:Name="TglTheme"
-                                      Style="{StaticResource ThemeToggleSwitchStyle}"
-                                      HorizontalAlignment="Center"
-                                      Click="TglTheme_Click"/>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10,0,0,0">
+                            <TextBlock Text="Theme Windows" FontSize="10" Foreground="#FFE6E6E6" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+                            <ToggleButton x:Name="TglTheme"
+                                          Style="{StaticResource ThemeToggleSwitchStyle}"
+                                          HorizontalAlignment="Center"
+                                          Click="TglTheme_Click"/>
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
             </Grid>
