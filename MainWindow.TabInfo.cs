@@ -1,4 +1,4 @@
-// AI Summary: 2026-04-23 - Expanded System Information into detailed GPU/CPU/RAM/Mainboard hardware panels.
+// AI Summary: 2026-04-23 - Added blank-line separation between CPU sockets and RAM slots in System Information.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -81,6 +81,7 @@ namespace GMTPC.Tool
                 AppendLine(sb, "Cache L3", AppendUnit(GetValue(cpu, "L3CacheSize"), "KB"));
                 AppendLine(sb, "Virtualization", GetValue(cpu, "VirtualizationFirmwareEnabled"));
                 AppendLine(sb, "Processor ID", GetValue(cpu, "ProcessorId"));
+                AppendLine(sb, "");
                 index++;
             }
 
@@ -108,6 +109,7 @@ namespace GMTPC.Tool
                 AppendLine(sb, "Tốc độ", AppendUnit(GetValue(ram, "Speed"), "MHz"));
                 AppendLine(sb, "Configured Speed", AppendUnit(GetValue(ram, "ConfiguredClockSpeed"), "MHz"));
                 AppendLine(sb, "Form Factor", GetMemoryFormFactor(GetValue(ram, "FormFactor")));
+                AppendLine(sb, "");
                 AppendLine(sb, "");
                 slot++;
             }
