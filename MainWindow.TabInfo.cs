@@ -1,4 +1,4 @@
-// AI Summary: 2026-04-23 - Added blank-line separation between CPU sockets and RAM slots in System Information.
+// AI Summary: 2026-04-23 - Fixed blank-line rendering between CPU sockets and RAM slots in System Information.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -204,7 +204,7 @@ namespace GMTPC.Tool
 
         private void AppendLine(StringBuilder sb, string text)
         {
-            if (string.IsNullOrWhiteSpace(text)) return;
+            if (text == null) return;
             sb.AppendLine(text);
         }
 
