@@ -1,4 +1,4 @@
-// AI Summary: 2026-04-23 - Kept sparse Windows tabs readable by skipping auto-fit and giving them a minimum content height.
+// AI Summary: 2026-04-23 - Fixed sparse Windows tab clipping by sizing columns and child controls to the scaled viewport.
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
@@ -200,6 +200,11 @@ namespace GMTPC.Tool
             {
                 if (panel == null) continue;
 
+                if (ApplySparseWindowsPanelSizing(panel, monitorWidth, isCompact))
+                {
+                    continue;
+                }
+
                 bool longTextPanel = panel == WindowsPanel || panel == WindowsModPanel;
                 double desiredItemWidth = longTextPanel ? (denseLandscape ? 270 : 300) : (denseLandscape ? 190 : (zoomedOutLandscape ? 245 : 205));
                 int columns = Math.Max(1, Math.Min(maxColumns, (int)Math.Floor(available / desiredItemWidth)));
@@ -232,6 +237,48 @@ namespace GMTPC.Tool
             yield return RemoteDesktopPanel;
             yield return WindowsPanel;
             yield return WindowsModPanel;
+        }
+
+        private bool ApplySparseWindowsPanelSizing(WrapPanel panel, double monitorWidth, bool isCompact)
+        {
+            bool isWindowsTab = panel == WindowsPanel && IsSelectedTab("Windows - Microsoft");
+            bool isWindowsModTab = panel == WindowsModPanel && IsSelectedTab("Windows Mod MMT");
+            if (!isWindowsTab && !isWindowsModTab) return false;
+
+            double scaledViewportWidth = monitorWidth / Math.Max(1.0, currentDPIScale);
+            double available = Math.Max(260, scaledViewportWidth - (isCompact ? 52 : 96));
+            int columns = isWindowsTab ? 1 : 2;
+            double gap = 8;
+            double itemSlotWidth = Math.Floor((available - ((columns - 1) * gap)) / columns);
+            itemSlotWidth = Math.Max(260, Math.Min(isWindowsTab ? 620 : 560, itemSlotWidth));
+
+            panel.Orientation = Orientation.Horizontal;
+            panel.ItemWidth = itemSlotWidth;
+            panel.Width = Math.Ceiling((itemSlotWidth * columns) + ((columns - 1) * gap));
+            panel.HorizontalAlignment = HorizontalAlignment.Center;
+            panel.Margin = new Thickness(0);
+
+            SetSparseWindowsChildWidths(panel, itemSlotWidth);
+            return true;
+        }
+
+        private void SetSparseWindowsChildWidths(WrapPanel panel, double itemSlotWidth)
+        {
+            double childWidth = Math.Max(180, itemSlotWidth - 10);
+
+            if (panel == WindowsPanel)
+            {
+                if (ChkWin11_26H1 != null) ChkWin11_26H1.Width = childWidth;
+                return;
+            }
+
+            if (panel == WindowsModPanel)
+            {
+                if (ChkWin10LtscIot21H2 != null) ChkWin10LtscIot21H2.Width = childWidth;
+                if (ChkWin10_22H2_2024_December != null) ChkWin10_22H2_2024_December.Width = childWidth;
+                if (ChkWintoHDD != null) ChkWintoHDD.Width = childWidth;
+                if (BtnWinPEToHDD != null) BtnWinPEToHDD.Width = childWidth;
+            }
         }
 
         private void ApplySparseTabSizing(bool isCompact)
