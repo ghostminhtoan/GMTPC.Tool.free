@@ -4,6 +4,7 @@
 //            SelectNoneAllTabs, Install, Pause, Resume, Refresh Color,
 //            BtnDownloadPage, DPI controls
 // Cập nhật gần đây:
+//   - 2026-04-23: Fixed Ghost of Tsushima copy-link cache and added WintoHDD to Select None flows
 //   - 2026-04-19: Added ChkInstallNeatDM to BtnSelectNoneAllTabs for proper interaction with Select None All Tabs button
 //   - 2026-04-22: Replaced ChkGouenjiFonts with ChkGMTPCFonts
 //   - 2026-04-19: Added missing checkbox cases in Checkbox_MouseEnter for office/subtitle checkboxes; Added ChkSubtitleDraftGMTPC to _cachedDownloadLinks
@@ -312,6 +313,7 @@ namespace GMTPC.Tool
                 {
                     ChkWin10LtscIot21H2.IsChecked = true;
                     ChkWin10_22H2_2024_December.IsChecked = true;
+                    ChkWintoHDD.IsChecked = true;
                 }
             }
 
@@ -436,6 +438,7 @@ namespace GMTPC.Tool
                 {
                     ChkWin10LtscIot21H2.IsChecked = false;
                     ChkWin10_22H2_2024_December.IsChecked = false;
+                    ChkWintoHDD.IsChecked = false;
                 }
             }
 
@@ -528,6 +531,7 @@ namespace GMTPC.Tool
             // Bỏ chọn checkbox trong tab Windows Mod MMT
             ChkWin10LtscIot21H2.IsChecked = false;
             ChkWin10_22H2_2024_December.IsChecked = false;
+            ChkWintoHDD.IsChecked = false;
 
             UpdateInstallButtonState();
         }
@@ -871,6 +875,39 @@ namespace GMTPC.Tool
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/SAMURAI.MAIDEN_LinkNeverDie.Com.part4.rar");
             }
 
+            if (ChkGhostOfTsushima?.IsChecked == true)
+            {
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART01_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART02_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART03_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART04_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART05_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART06_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART07_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART08_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART09_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART10_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART11_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART12_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART13_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART14_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART15_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART16_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART17_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART18_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART19_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART20_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART21_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART22_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART23_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART24_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART25_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART26_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART27_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART28_URL);
+                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART29_URL);
+            }
+
             if (ChkWin11_26H1?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://archive.org/download/microsoft-win11-26h2-february-2026/en-us_windows_11_consumer_editions_version_26h1_x64_dvd_5208fe5b.iso");
 
@@ -903,7 +940,9 @@ namespace GMTPC.Tool
         {
             try
             {
-                // Sử dụng danh sách link đã được cache khi hover
+                BtnDownloadPage_MouseEnter(sender, null);
+
+                // Sử dụng danh sách link mới nhất theo checkbox đang chọn
                 if (_cachedDownloadLinks.Count == 0)
                 {
                     UpdateStatus("Vui lòng chọn (check) các checkbox ứng với phần mềm muốn tải trước", "Orange");
@@ -926,6 +965,8 @@ namespace GMTPC.Tool
 
         private void BtnDownloadPage_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
+            BtnDownloadPage_MouseEnter(sender, null);
+
             var contextMenu = new ContextMenu();
             var copyItem = new MenuItem { Header = "Copy Link" };
             copyItem.Click += (s, args) =>
