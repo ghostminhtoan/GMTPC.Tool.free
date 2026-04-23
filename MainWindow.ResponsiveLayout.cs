@@ -1,4 +1,4 @@
-// AI Summary: 2026-04-23 - Capped landscape zoom-out content width and hid command/status chrome on System Information.
+// AI Summary: 2026-04-23 - Disabled auto-fit DPI reduction for System Information because it uses per-panel scrolling.
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
@@ -69,7 +69,7 @@ namespace GMTPC.Tool
                 ApplyResponsiveLayout();
                 MainGrid.UpdateLayout();
                 UpdateSystemInformationChromeVisibility();
-                QueueAutoFitScaleToCurrentMonitor();
+                if (!IsSystemInformationTabSelected()) QueueAutoFitScaleToCurrentMonitor();
             }));
         }
 
@@ -96,7 +96,7 @@ namespace GMTPC.Tool
                 ApplyProgressSizing(isCompact);
                 UpdateSystemInformationChromeVisibility();
                 KeepWindowInsideCurrentMonitor(workArea);
-                QueueAutoFitScaleToCurrentMonitor();
+                if (!IsSystemInformationTabSelected()) QueueAutoFitScaleToCurrentMonitor();
             }
             finally
             {
@@ -267,22 +267,26 @@ namespace GMTPC.Tool
 
         private void UpdateSystemInformationChromeVisibility()
         {
-            bool isSystemInformationTab = false;
-
-            try
-            {
-                if (MainTabControl != null && MainTabControl.SelectedItem is TabItem selectedTab)
-                {
-                    isSystemInformationTab = selectedTab.Header != null &&
-                                             selectedTab.Header.ToString() == "System Information";
-                }
-            }
-            catch { }
-
+            bool isSystemInformationTab = IsSystemInformationTabSelected();
             Visibility chromeVisibility = isSystemInformationTab ? Visibility.Collapsed : Visibility.Visible;
 
             if (ButtonsBorder != null) ButtonsBorder.Visibility = chromeVisibility;
             if (ProgressBorder != null) ProgressBorder.Visibility = chromeVisibility;
+        }
+
+        private bool IsSystemInformationTabSelected()
+        {
+            try
+            {
+                if (MainTabControl != null && MainTabControl.SelectedItem is TabItem selectedTab)
+                {
+                    return selectedTab.Header != null &&
+                           selectedTab.Header.ToString() == "System Information";
+                }
+            }
+            catch { }
+
+            return false;
         }
 
         private void KeepWindowInsideCurrentMonitor()
@@ -324,6 +328,7 @@ namespace GMTPC.Tool
 
         private void QueueAutoFitScaleToCurrentMonitor()
         {
+            if (IsSystemInformationTabSelected()) return;
             if (_isAutoFittingScale) return;
 
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle, new Action(() =>
@@ -334,6 +339,7 @@ namespace GMTPC.Tool
 
         private void AutoFitScaleToCurrentMonitor()
         {
+            if (IsSystemInformationTabSelected()) return;
             if (_isAutoFittingScale || currentDPIScale <= 0.5) return;
             bool reducedScale = false;
 
