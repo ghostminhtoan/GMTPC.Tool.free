@@ -1,5 +1,5 @@
-// AI Summary: 2026-04-22 - Added tab-change auto-fit behavior;
-// switching from a sparse tab to a denser tab now rechecks clipping and steps DPI down automatically.
+// AI Summary: 2026-04-23 - Capped landscape zoom-out content width so checkbox rows stay readable;
+// WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
 // Chuc nang: Desktop responsive layout cho man hinh ngang/doc va multi-monitor.
@@ -189,6 +189,7 @@ namespace GMTPC.Tool
         private void ApplyTabItemSizing(double monitorWidth, bool isMonitorPortrait, bool isCompact)
         {
             bool denseLandscape = !isMonitorPortrait && currentDPIScale >= 1.2;
+            bool zoomedOutLandscape = !isMonitorPortrait && currentDPIScale < 1.0;
             double available = Math.Max(260, monitorWidth - (denseLandscape ? 54 : (isCompact ? 48 : 86)));
             int maxColumns = isMonitorPortrait ? 2 : 4;
 
@@ -197,16 +198,19 @@ namespace GMTPC.Tool
                 if (panel == null) continue;
 
                 bool longTextPanel = panel == WindowsPanel || panel == WindowsModPanel;
-                double desiredItemWidth = longTextPanel ? (denseLandscape ? 270 : 300) : (denseLandscape ? 190 : 205);
+                double desiredItemWidth = longTextPanel ? (denseLandscape ? 270 : 300) : (denseLandscape ? 190 : (zoomedOutLandscape ? 245 : 205));
                 int columns = Math.Max(1, Math.Min(maxColumns, (int)Math.Floor(available / desiredItemWidth)));
 
                 double itemWidth = Math.Floor((available - ((columns - 1) * 6)) / columns);
-                double minItemWidth = longTextPanel ? (denseLandscape ? 270 : 300) : (denseLandscape ? 190 : 190);
-                double maxItemWidth = longTextPanel ? 520 : (denseLandscape ? 226 : 260);
+                double minItemWidth = longTextPanel ? (denseLandscape ? 270 : 300) : (denseLandscape ? 190 : (zoomedOutLandscape ? 220 : 190));
+                double maxItemWidth = longTextPanel ? 520 : (denseLandscape ? 226 : (zoomedOutLandscape ? 300 : 260));
                 itemWidth = Math.Max(minItemWidth, Math.Min(maxItemWidth, itemWidth));
 
+                double itemSlotWidth = itemWidth + (denseLandscape ? 3 : 6);
                 panel.Orientation = Orientation.Horizontal;
-                panel.ItemWidth = itemWidth + (denseLandscape ? 3 : 6);
+                panel.ItemWidth = itemSlotWidth;
+                panel.Width = Math.Ceiling(itemSlotWidth * columns);
+                panel.HorizontalAlignment = zoomedOutLandscape || denseLandscape ? HorizontalAlignment.Center : HorizontalAlignment.Stretch;
                 panel.Margin = isCompact || denseLandscape ? new Thickness(0) : new Thickness(0, 1, 0, 0);
             }
         }
