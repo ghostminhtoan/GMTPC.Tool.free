@@ -23,6 +23,8 @@ namespace GMTPC.Tool
     {
         /*
          * AI Summary:
+         * Date: 2026-04-24 (2)
+         * - Updated InstallSampleVideoAsync to download sample video into %USERPROFILE%\Videos and open its containing folder
          * Date: 2026-04-24
          * - Added ChkDownloadSampleVideo and InstallSampleVideoAsync to download sample video directly to C:\ and open its containing folder
          * Date: 2026-04-13
@@ -607,11 +609,16 @@ namespace GMTPC.Tool
         {
             try
             {
-                string targetFolder = @"C:\";
+                string targetFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
                 string fileName = Path.GetFileName(new Uri(SAMPLE_VIDEO_DOWNLOAD_URL).LocalPath);
                 string sampleVideoPath = Path.Combine(targetFolder, fileName);
 
-                UpdateStatus("Đang tải sample video về C:\\...", "Cyan");
+                if (!Directory.Exists(targetFolder))
+                {
+                    Directory.CreateDirectory(targetFolder);
+                }
+
+                UpdateStatus($"Đang tải sample video về {targetFolder}...", "Cyan");
                 await DownloadWithProgressAsync(SAMPLE_VIDEO_DOWNLOAD_URL, sampleVideoPath, "Sample video");
 
                 Dispatcher.Invoke(() =>
@@ -621,7 +628,7 @@ namespace GMTPC.Tool
                     SpeedTextBlock.Text = "";
                 });
 
-                UpdateStatus("Đã tải xong sample video vào C:\\", "Green");
+                UpdateStatus($"Đã tải xong sample video vào {targetFolder}", "Green");
 
                 Process.Start(new ProcessStartInfo
                 {
