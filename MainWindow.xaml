@@ -553,6 +553,7 @@
                         <WrapPanel x:Name="PartitionPanel" Orientation="Horizontal" HorizontalAlignment="Stretch" Style="{StaticResource ResponsiveWrapPanelStyle}">
                             <CheckBox x:Name="ChkAomeiPartitionAssistant" Content="AOMEI Partition Assistant" Width="200" Height="34" Click="ChkAomeiPartitionAssistant_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
                             <CheckBox x:Name="ChkDiskGenius" Content="Disk Genius" Width="200" Height="34" Click="ChkDiskGenius_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
+                            <Border Width="200" Height="34" Margin="2" Visibility="Hidden"/>
                         </WrapPanel>
                     </ScrollViewer>
                 </TabItem>
@@ -575,6 +576,7 @@
                         <WrapPanel x:Name="DriverPanel" Orientation="Horizontal" HorizontalAlignment="Stretch" Style="{StaticResource ResponsiveWrapPanelStyle}">
                             <CheckBox x:Name="Chk3DPChip" Content="3DP Chip &#10;(all driver trừ internet)" Width="200" Height="34" Click="Chk3DPChip_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
                             <CheckBox x:Name="Chk3DPNet" Content="3DP Net - driver internet" Width="200" Height="34" Click="Chk3DPNet_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
+                            <Border Width="200" Height="34" Margin="2" Visibility="Hidden"/>
                         </WrapPanel>
                     </ScrollViewer>
                 </TabItem>
@@ -585,6 +587,7 @@
                             <CheckBox x:Name="ChkCocCoc" Content="Cốc Cốc" Width="200" Height="34" Click="ChkCocCoc_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
                             <CheckBox x:Name="ChkEdge" Content="Microsoft Edge" Width="200" Height="34" Click="ChkEdge_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
                             <CheckBox x:Name="ChkBrave" Content="Brave" Width="200" Height="34" Click="ChkBrave_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
+                            <Border Width="200" Height="34" Margin="2" Visibility="Hidden"/>
                         </WrapPanel>
                     </ScrollViewer>
                 </TabItem>
