@@ -744,6 +744,11 @@ namespace GMTPC.Tool
 
             if (IsSystemInformationTabSelected()) return false;
 
+            if (HasPortraitSingleColumnLayout())
+            {
+                return true;
+            }
+
             if (HasSelectedTabBottomOverflow())
             {
                 return true;
@@ -893,6 +898,55 @@ namespace GMTPC.Tool
             }
 
             return null;
+        }
+
+        private WrapPanel GetSelectedInstallPanel()
+        {
+            try
+            {
+                return GetSelectedTabScrollViewer()?.Content as WrapPanel;
+            }
+            catch
+            {
+            }
+
+            return null;
+        }
+
+        private bool HasPortraitSingleColumnLayout()
+        {
+            try
+            {
+                Rect workArea = GetCurrentMonitorWorkAreaDip();
+                if (!IsPortrait(workArea)) return false;
+                if (IsSystemInformationTabSelected()) return false;
+
+                WrapPanel panel = GetSelectedInstallPanel();
+                if (panel == null) return false;
+                if (panel == WindowsPanel) return false;
+
+                List<FrameworkElement> visibleChildren = panel.Children
+                    .OfType<FrameworkElement>()
+                    .Where(child => child.Visibility == Visibility.Visible && child.ActualWidth > 0 && child.ActualHeight > 0)
+                    .Take(2)
+                    .ToList();
+
+                if (visibleChildren.Count < 2) return false;
+
+                Rect firstBounds = visibleChildren[0].TransformToAncestor(panel)
+                                                    .TransformBounds(new Rect(0, 0, visibleChildren[0].ActualWidth, visibleChildren[0].ActualHeight));
+                Rect secondBounds = visibleChildren[1].TransformToAncestor(panel)
+                                                     .TransformBounds(new Rect(0, 0, visibleChildren[1].ActualWidth, visibleChildren[1].ActualHeight));
+
+                bool sameRow = Math.Abs(firstBounds.Top - secondBounds.Top) <= 4;
+                bool secondIsRightOfFirst = secondBounds.Left > firstBounds.Left + 4;
+
+                return !(sameRow && secondIsRightOfFirst);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private bool HasSelectedTabBottomOverflow()
