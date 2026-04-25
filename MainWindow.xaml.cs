@@ -93,12 +93,6 @@ namespace GMTPC.Tool
         {
             if (e.Delta > 0)
             {
-                if (IsManualDpiIncreaseLockedForCurrentTab())
-                {
-                    e.Handled = true;
-                    return;
-                }
-
                 BtnDPIPlus_Click(sender, new RoutedEventArgs());
             }
             else if (e.Delta < 0)

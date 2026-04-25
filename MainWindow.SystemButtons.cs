@@ -119,10 +119,63 @@ namespace GMTPC.Tool
         }
 
         private void ResetDPIButtonStates() { /* Kept for compatibility */ }
-        private bool IsManualDpiIncreaseLockedForCurrentTab()
+        private int GetCurrentDpiStepIndex()
         {
-            if (IsSystemInformationTabSelected()) return true;
-            return !(IsSelectedTab("Windows - Microsoft") || IsSelectedTab("Windows Mod MMT"));
+            int currentPercent = (int)Math.Round(currentDPIScale * 100.0);
+            int idx = Array.IndexOf(DPI_STEPS, currentPercent);
+            if (idx >= 0) return idx;
+
+            int closest = 0;
+            int minDiff = int.MaxValue;
+            for (int i = 0; i < DPI_STEPS.Length; i++)
+            {
+                int diff = Math.Abs(DPI_STEPS[i] - currentPercent);
+                if (diff < minDiff) { minDiff = diff; closest = i; }
+            }
+
+            return closest;
+        }
+
+        private bool TrySetDpiIndexSafelyForCurrentTab(int targetIndex)
+        {
+            if (ForceSystemInformationDpiTo100Percent()) return false;
+
+            targetIndex = Math.Max(0, Math.Min(DPI_STEPS.Length - 1, targetIndex));
+            int currentIndex = GetCurrentDpiStepIndex();
+            if (targetIndex == currentIndex) return false;
+
+            if (targetIndex < currentIndex)
+            {
+                SetCurrentDpiStepSilently(targetIndex);
+                ApplyDPIScale();
+                return true;
+            }
+
+            Rect workArea = GetCurrentMonitorWorkAreaDip();
+            int safeIndex = currentIndex;
+            bool changed = false;
+
+            for (int idx = currentIndex + 1; idx <= targetIndex; idx++)
+            {
+                SetCurrentDpiStepSilently(idx);
+                ApplyDPIScale();
+                MainGrid.UpdateLayout();
+                UpdateLayout();
+                changed = true;
+
+                if (IsCurrentScaleOverflowingForTabFit(workArea))
+                {
+                    SetCurrentDpiStepSilently(safeIndex);
+                    ApplyDPIScale();
+                    MainGrid.UpdateLayout();
+                    UpdateLayout();
+                    return safeIndex != currentIndex;
+                }
+
+                safeIndex = idx;
+            }
+
+            return changed;
         }
 
         private bool ForceSystemInformationDpiTo100Percent()
@@ -150,40 +203,24 @@ namespace GMTPC.Tool
         {
             if (ForceSystemInformationDpiTo100Percent()) return;
 
-            // Find current index in DPI_STEPS
-            int currentPercent = (int)Math.Round(currentDPIScale * 100.0);
-            int idx = Array.IndexOf(DPI_STEPS, currentPercent);
+            int idx = GetCurrentDpiStepIndex();
             if (idx <= 0) idx = 0; else idx--;
-            currentDPIScale = DPI_STEPS[idx] / 100.0;
-            // Update combo box selection if available
-            try { if (CboDPIValue != null && idx >= 0 && idx < CboDPIValue.Items.Count) CboDPIValue.SelectedIndex = idx; } catch { }
-            ApplyDPIScale();
-            UpdateSecondaryStatus($"Đã đổi DPI: {DPI_STEPS[idx]}%", "Cyan");
+            if (TrySetDpiIndexSafelyForCurrentTab(idx))
+            {
+                UpdateSecondaryStatus($"Đã đổi DPI: {DPI_STEPS[GetCurrentDpiStepIndex()]}%", "Cyan");
+            }
         }
 
         private void BtnDPIPlus_Click(object sender, RoutedEventArgs e)
         {
             if (ForceSystemInformationDpiTo100Percent()) return;
-            if (IsManualDpiIncreaseLockedForCurrentTab()) return;
 
-            int currentPercent = (int)Math.Round(currentDPIScale * 100.0);
-            int idx = Array.IndexOf(DPI_STEPS, currentPercent);
-            if (idx < 0) // if current percent not exactly in steps, find nearest
-            {
-                // Find closest step
-                int closest = 0; int minDiff = int.MaxValue;
-                for (int i = 0; i < DPI_STEPS.Length; i++)
-                {
-                    int diff = Math.Abs(DPI_STEPS[i] - currentPercent);
-                    if (diff < minDiff) { minDiff = diff; closest = i; }
-                }
-                idx = closest;
-            }
+            int idx = GetCurrentDpiStepIndex();
             if (idx < DPI_STEPS.Length - 1) idx++; else idx = DPI_STEPS.Length - 1;
-            currentDPIScale = DPI_STEPS[idx] / 100.0;
-            try { if (CboDPIValue != null && idx >= 0 && idx < CboDPIValue.Items.Count) CboDPIValue.SelectedIndex = idx; } catch { }
-            ApplyDPIScale();
-            UpdateSecondaryStatus($"Đã đổi DPI: {DPI_STEPS[idx]}%", "Cyan");
+            if (TrySetDpiIndexSafelyForCurrentTab(idx))
+            {
+                UpdateSecondaryStatus($"Đã đổi DPI: {DPI_STEPS[GetCurrentDpiStepIndex()]}%", "Cyan");
+            }
         }
 
         private void CboDPIValue_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -227,17 +264,23 @@ namespace GMTPC.Tool
                     }
                 }
 
-                if (IsManualDpiIncreaseLockedForCurrentTab() && closest > currentIndex)
+                if (closest > currentIndex)
                 {
-                    SetDPIComboIndexSilently(currentIndex);
+                    if (TrySetDpiIndexSafelyForCurrentTab(closest))
+                    {
+                        UpdateSecondaryStatus($"Đã đổi DPI: {DPI_STEPS[GetCurrentDpiStepIndex()]}%", "Cyan");
+                    }
+                    else
+                    {
+                        SetDPIComboIndexSilently(currentIndex);
+                    }
                     return;
                 }
 
-                currentDPIScale = DPI_STEPS[closest] / 100.0;
-                // Keep combobox selection consistent
-                try { if (CboDPIValue != null && closest >= 0 && closest < CboDPIValue.Items.Count) CboDPIValue.SelectedIndex = closest; } catch { }
-                ApplyDPIScale();
-                UpdateSecondaryStatus($"Đã đổi DPI: {DPI_STEPS[closest]}%", "Cyan");
+                if (TrySetDpiIndexSafelyForCurrentTab(closest))
+                {
+                    UpdateSecondaryStatus($"Đã đổi DPI: {DPI_STEPS[GetCurrentDpiStepIndex()]}%", "Cyan");
+                }
             }
         }
 
