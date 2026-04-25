@@ -1,4 +1,5 @@
 ﻿// AI Summary: 2026-04-25 - Added maximize-then-fit DPI logic for tab switching so each selected tab auto-zooms to the largest fully visible scale.
+// AI Summary: 2026-04-25 - Rebalanced per-tab fit limits so Office/Multimedia/Remote Desktop clamp earlier while Driver/Browser/Windows tabs can scale larger.
 // AI Summary: 2026-04-23 - Added sparse Windows tab overflow detection so DPI reduces before content overlaps buttons.
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
@@ -357,11 +358,11 @@ namespace GMTPC.Tool
             bool isWindowsTab = IsSelectedTab("Windows - Microsoft");
             bool isWindowsModTab = IsSelectedTab("Windows Mod MMT");
             bool isSparseWindowsTab = isWindowsTab || isWindowsModTab;
-            double panelMinHeight = isCompact ? 74 : 88;
+            double panelMinHeight = isCompact ? 54 : 68;
 
             if (TabHostBorder != null)
             {
-                TabHostBorder.MinHeight = isSparseWindowsTab ? (isCompact ? 130 : 150) : 0;
+                TabHostBorder.MinHeight = isSparseWindowsTab ? (isCompact ? 96 : 112) : 0;
             }
 
             if (WindowsPanel != null)
@@ -923,4 +924,3 @@ namespace GMTPC.Tool
     }
 }
 
-// AI Summary: 2026-04-25 - Tuned tab spacer sizes and sparse-tab widths so clipped tabs can fit like Subtitle while dense tabs stay capped.
