@@ -898,6 +898,8 @@ namespace GMTPC.Tool
             if (selectedScrollViewer == null || selectedScrollViewer.ActualWidth <= 0 || selectedScrollViewer.ActualHeight <= 0) return false;
             if (!(selectedScrollViewer.Content is WrapPanel panel)) return false;
 
+            if (HasSelectedTabChromeOverflow()) return true;
+
             double leftLimit = 0;
             double rightLimit = selectedScrollViewer.ActualWidth;
             double bottomLimit = selectedScrollViewer.ActualHeight;
@@ -926,6 +928,78 @@ namespace GMTPC.Tool
                 }
 
                 return panelBounds.Left < leftLimit - tolerance ||
+                       maxChildRight > rightLimit + tolerance ||
+                       maxChildBottom > bottomLimit + tolerance;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool HasSelectedTabChromeOverflow()
+        {
+            const double tolerance = 2.0;
+
+            try
+            {
+                if (MainGrid == null || TabHostBorder == null) return false;
+
+                ScrollViewer selectedScrollViewer = GetSelectedTabScrollViewer();
+                if (selectedScrollViewer == null || selectedScrollViewer.ActualWidth <= 0 || selectedScrollViewer.ActualHeight <= 0) return false;
+                if (!(selectedScrollViewer.Content is FrameworkElement content) || content.ActualWidth <= 0 || content.ActualHeight <= 0) return false;
+
+                Rect hostBounds = TabHostBorder.TransformToAncestor(MainGrid)
+                                               .TransformBounds(new Rect(0, 0, TabHostBorder.ActualWidth, TabHostBorder.ActualHeight));
+
+                double leftLimit = hostBounds.Left + TabHostBorder.Padding.Left + 2;
+                double rightLimit = hostBounds.Right - TabHostBorder.Padding.Right - 2;
+                double bottomLimit = hostBounds.Bottom - TabHostBorder.Padding.Bottom - 2;
+
+                if (ButtonsBorder != null && ButtonsBorder.IsVisible && ButtonsBorder.ActualWidth > 0 && ButtonsBorder.ActualHeight > 0)
+                {
+                    Rect buttonsBounds = ButtonsBorder.TransformToAncestor(MainGrid)
+                                                      .TransformBounds(new Rect(0, 0, ButtonsBorder.ActualWidth, ButtonsBorder.ActualHeight));
+                    bottomLimit = Math.Min(bottomLimit, buttonsBounds.Top - 2);
+                }
+
+                double minChildLeft = double.MaxValue;
+                double maxChildRight = double.MinValue;
+                double maxChildBottom = double.MinValue;
+
+                void AccumulateBounds(FrameworkElement element)
+                {
+                    if (element == null || !element.IsVisible || element.ActualWidth <= 0 || element.ActualHeight <= 0) return;
+
+                    try
+                    {
+                        Rect bounds = element.TransformToAncestor(MainGrid)
+                                             .TransformBounds(new Rect(0, 0, element.ActualWidth, element.ActualHeight));
+                        minChildLeft = Math.Min(minChildLeft, bounds.Left);
+                        maxChildRight = Math.Max(maxChildRight, bounds.Right);
+                        maxChildBottom = Math.Max(maxChildBottom, bounds.Bottom);
+                    }
+                    catch
+                    {
+                    }
+                }
+
+                AccumulateBounds(content);
+
+                if (content is Panel contentPanel)
+                {
+                    foreach (FrameworkElement child in contentPanel.Children.OfType<FrameworkElement>())
+                    {
+                        AccumulateBounds(child);
+                    }
+                }
+
+                if (double.IsInfinity(minChildLeft) || double.IsInfinity(maxChildRight) || double.IsInfinity(maxChildBottom))
+                {
+                    return false;
+                }
+
+                return minChildLeft < leftLimit - tolerance ||
                        maxChildRight > rightLimit + tolerance ||
                        maxChildBottom > bottomLimit + tolerance;
             }

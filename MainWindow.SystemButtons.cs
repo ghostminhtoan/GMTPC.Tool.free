@@ -4,6 +4,7 @@
 //            SelectNoneAllTabs, Install, Pause, Resume, Refresh Color,
 //            BtnDownloadPage, DPI controls
 // Cập nhật gần đây:
+//   - 2026-04-25: Kept window max height independent from DPI so sparse tabs clamp manual zoom before becoming oversized
 //   - 2026-04-25: Added Brave to Browser tab selection, install, hover, and download-link cache flows
 //   - 2026-04-25: Suppressed repetitive primary DPI status messages while auto-fitting scale for the selected tab
 //   - 2026-04-25: Updated Subtitle Edit cached download link to the new GMTPC portable release URL
@@ -65,7 +66,7 @@ namespace GMTPC.Tool
             double designMaxWidth  = isPortrait ? 580  : 1000;
             double designMaxHeight = isPortrait ? 950  : 750;
 
-            this.MaxHeight = Math.Min(designMaxHeight * currentDPIScale, workArea.Height);
+            this.MaxHeight = Math.Min(designMaxHeight, workArea.Height);
             this.MaxWidth  = Math.Min(designMaxWidth  * currentDPIScale, workArea.Width);
             ApplyResponsiveLayout();
 
