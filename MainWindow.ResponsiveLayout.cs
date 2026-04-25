@@ -350,14 +350,12 @@ namespace GMTPC.Tool
         {
             bool isWindowsTab = IsSelectedTab("Windows - Microsoft");
             bool isWindowsModTab = IsSelectedTab("Windows Mod MMT");
-            bool isStrictSparseTab = IsSelectedTab("Partition") || IsSelectedTab("Driver") || IsSelectedTab("Browser");
             bool isSparseWindowsTab = isWindowsTab || isWindowsModTab;
             double panelMinHeight = isCompact ? 74 : 88;
-            double strictSparseMinHeight = isCompact ? 190 : 220;
 
             if (TabHostBorder != null)
             {
-                TabHostBorder.MinHeight = isSparseWindowsTab ? (isCompact ? 130 : 150) : (isStrictSparseTab ? strictSparseMinHeight : 0);
+                TabHostBorder.MinHeight = isSparseWindowsTab ? (isCompact ? 130 : 150) : 0;
             }
 
             if (WindowsPanel != null)
@@ -370,24 +368,6 @@ namespace GMTPC.Tool
             {
                 WindowsModPanel.MinHeight = isWindowsModTab ? panelMinHeight : 0;
                 WindowsModPanel.VerticalAlignment = isWindowsModTab ? VerticalAlignment.Center : VerticalAlignment.Top;
-            }
-
-            if (PartitionPanel != null)
-            {
-                PartitionPanel.MinHeight = isStrictSparseTab && IsSelectedTab("Partition") ? strictSparseMinHeight : 0;
-                PartitionPanel.VerticalAlignment = isStrictSparseTab && IsSelectedTab("Partition") ? VerticalAlignment.Top : VerticalAlignment.Top;
-            }
-
-            if (DriverPanel != null)
-            {
-                DriverPanel.MinHeight = isStrictSparseTab && IsSelectedTab("Driver") ? strictSparseMinHeight : 0;
-                DriverPanel.VerticalAlignment = isStrictSparseTab && IsSelectedTab("Driver") ? VerticalAlignment.Top : VerticalAlignment.Top;
-            }
-
-            if (BrowserPanel != null)
-            {
-                BrowserPanel.MinHeight = isStrictSparseTab && IsSelectedTab("Browser") ? strictSparseMinHeight : 0;
-                BrowserPanel.VerticalAlignment = isStrictSparseTab && IsSelectedTab("Browser") ? VerticalAlignment.Top : VerticalAlignment.Top;
             }
         }
 
