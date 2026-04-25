@@ -659,8 +659,7 @@ namespace GMTPC.Tool
 
             if (IsSystemInformationTabSelected()) return false;
 
-            ScrollViewer selectedScrollViewer = GetSelectedTabScrollViewer();
-            if (selectedScrollViewer != null && HasSelectedTabContentOverflow(selectedScrollViewer))
+            if (HasSelectedTabBottomOverflow())
             {
                 return true;
             }
@@ -791,41 +790,32 @@ namespace GMTPC.Tool
             return null;
         }
 
-        private bool HasSelectedTabContentOverflow(ScrollViewer scrollViewer)
+        private bool HasSelectedTabBottomOverflow()
         {
             const double tolerance = 1.0;
-            if (scrollViewer == null) return false;
-            if (scrollViewer.ActualWidth <= 0 || scrollViewer.ActualHeight <= 0) return false;
-            if (!(scrollViewer.Content is WrapPanel panel)) return false;
+            if (TabHostBorder == null || TabHostBorder.ActualWidth <= 0 || TabHostBorder.ActualHeight <= 0) return false;
 
-            double maxRight = 0;
-            double maxBottom = 0;
-            bool foundChild = false;
+            ScrollViewer selectedScrollViewer = GetSelectedTabScrollViewer();
+            if (selectedScrollViewer == null || selectedScrollViewer.ActualWidth <= 0 || selectedScrollViewer.ActualHeight <= 0) return false;
+            if (!(selectedScrollViewer.Content is WrapPanel panel)) return false;
 
-            foreach (FrameworkElement child in panel.Children.OfType<FrameworkElement>())
+            double leftLimit = Math.Max(0, TabHostBorder.Padding.Left);
+            double rightLimit = Math.Max(0, TabHostBorder.ActualWidth - TabHostBorder.Padding.Right);
+            double bottomLimit = Math.Max(0, TabHostBorder.ActualHeight - TabHostBorder.Padding.Bottom);
+
+            try
             {
-                if (!child.IsVisible || child.ActualWidth <= 0 || child.ActualHeight <= 0) continue;
+                Rect panelBounds = panel.TransformToAncestor(TabHostBorder)
+                                        .TransformBounds(new Rect(0, 0, panel.ActualWidth, panel.ActualHeight));
 
-                Rect bounds;
-                try
-                {
-                    bounds = child.TransformToAncestor(scrollViewer)
-                                  .TransformBounds(new Rect(0, 0, child.ActualWidth, child.ActualHeight));
-                }
-                catch
-                {
-                    continue;
-                }
-
-                maxRight = Math.Max(maxRight, bounds.Right);
-                maxBottom = Math.Max(maxBottom, bounds.Bottom);
-                foundChild = true;
+                return panelBounds.Left < leftLimit - tolerance ||
+                       panelBounds.Right > rightLimit + tolerance ||
+                       panelBounds.Bottom > bottomLimit + tolerance;
             }
-
-            if (!foundChild) return false;
-
-            return maxRight > scrollViewer.ActualWidth + tolerance ||
-                   maxBottom > scrollViewer.ActualHeight + tolerance;
+            catch
+            {
+                return false;
+            }
         }
 
         private bool IsElementClippedByScrollViewer(FrameworkElement element, ScrollViewer scrollViewer)
