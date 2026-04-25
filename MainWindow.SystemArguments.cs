@@ -11,6 +11,8 @@ namespace GMTPC.Tool
 {
     /*
  * AI Summary:
+ * Date: 2026-04-25
+ * - Updated SUBTITLE_EDIT_DOWNLOAD_URL to the new Subtitle Edit GMTPC portable release link
  * Date: 2026-04-24
  * - Added SAMPLE_VIDEO_DOWNLOAD_URL and ChkDownloadSampleVideo to UpdateInstallButtonState()
  * Date: 2026-03-29 (6)
@@ -171,7 +173,7 @@ namespace GMTPC.Tool
         private const string NOTEPAD_PLUS_PLUS_INSTALL_ARGUMENTS = "/passive /norestart";
 
         // Subtitle Edit (Tab: Office)
-        private const string SUBTITLE_EDIT_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Subtitle.Edit.exe";
+        private const string SUBTITLE_EDIT_DOWNLOAD_URL = "https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/releases/download/subtitle.materials/Subtitle.Edit.-.GMTPC.portable.exe";
         private const string SUBTITLE_EDIT_INSTALL_ARGUMENTS = "/passive";
 
         // ===================================================================

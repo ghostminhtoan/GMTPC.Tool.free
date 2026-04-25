@@ -4,6 +4,7 @@
 //            SelectNoneAllTabs, Install, Pause, Resume, Refresh Color,
 //            BtnDownloadPage, DPI controls
 // Cập nhật gần đây:
+//   - 2026-04-25: Updated Subtitle Edit cached download link to the new GMTPC portable release URL
 //   - 2026-04-24: Added ChkDownloadSampleVideo to Subtitle select/install flows, download-link cache, and hover tooltip
 //   - 2026-04-23: Fixed Ghost of Tsushima copy-link cache and added WintoHDD to Select None flows
 //   - 2026-04-19: Added ChkInstallNeatDM to BtnSelectNoneAllTabs for proper interaction with Select None All Tabs button
@@ -825,7 +826,7 @@ namespace GMTPC.Tool
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/WinPE/wintohdd.exe");
 
             if (ChkSubtitleEdit?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Subtitle.Edit.exe");
+                _cachedDownloadLinks.Add(SUBTITLE_EDIT_DOWNLOAD_URL);
 
             if (ChkVidCoder?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/RandomEngy/VidCoder/releases");
