@@ -29,6 +29,7 @@ namespace GMTPC.Tool
         private int _tabScaleFitRequestId;
         private CancellationTokenSource _tabScaleFitDelayCts;
         private const int TabScaleFitDelayMs = 700;
+        private const int TabScaleFitStepDelayMs = 80;
 
         private const int GWL_STYLE = -16;
         private const int WS_MAXIMIZEBOX = 0x00010000;
@@ -499,7 +500,7 @@ namespace GMTPC.Tool
 
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle, new Action(() =>
             {
-                FitSelectedTabStartingFrom100Percent(requestId);
+                _ = FitSelectedTabStartingFrom100PercentAsync(requestId);
             }));
         }
 
@@ -541,7 +542,7 @@ namespace GMTPC.Tool
             }
         }
 
-        private void FitSelectedTabStartingFrom100Percent(int requestId)
+        private async Task FitSelectedTabStartingFrom100PercentAsync(int requestId)
         {
             if (_isAutoFittingScale || currentDPIScale <= 0.5) return;
             if (requestId != _tabScaleFitRequestId) return;
@@ -558,64 +559,69 @@ namespace GMTPC.Tool
             _suppressPrimaryDpiStatus = true;
             _suppressResponsiveAutoFitQueue = true;
 
-            currentDPIScale = DPI_STEPS[baseIndex] / 100.0;
-            SetDPIComboIndexSilently(baseIndex);
-            ApplyDPIScale();
-            MainGrid.UpdateLayout();
-            UpdateLayout();
-            changedScale = true;
-
-            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, new Action(() =>
+            try
             {
-                try
+                currentDPIScale = DPI_STEPS[baseIndex] / 100.0;
+                SetDPIComboIndexSilently(baseIndex);
+                ApplyDPIScale();
+                MainGrid.UpdateLayout();
+                UpdateLayout();
+                changedScale = true;
+
+                await Task.Yield();
+                await Task.Delay(TabScaleFitStepDelayMs);
+
+                if (requestId != _tabScaleFitRequestId) return;
+
+                for (int idx = baseIndex + 1; idx < DPI_STEPS.Length; idx++)
                 {
                     if (requestId != _tabScaleFitRequestId) return;
 
-                    for (int idx = baseIndex + 1; idx < DPI_STEPS.Length; idx++)
+                    currentDPIScale = DPI_STEPS[idx] / 100.0;
+                    SetDPIComboIndexSilently(idx);
+                    ApplyDPIScale();
+                    MainGrid.UpdateLayout();
+                    UpdateLayout();
+                    appliedIndex = idx;
+                    changedScale = true;
+
+                    await Task.Yield();
+                    await Task.Delay(TabScaleFitStepDelayMs);
+
+                    if (requestId != _tabScaleFitRequestId) return;
+
+                    if (!IsCurrentScaleOverflowingForTabFit(workArea))
                     {
-                        if (requestId != _tabScaleFitRequestId) return;
-
-                        currentDPIScale = DPI_STEPS[idx] / 100.0;
-                        SetDPIComboIndexSilently(idx);
-                        ApplyDPIScale();
-                        MainGrid.UpdateLayout();
-                        UpdateLayout();
-                        appliedIndex = idx;
-                        changedScale = true;
-
-                        if (!IsCurrentScaleOverflowingForTabFit(workArea))
-                        {
-                            targetIndex = idx;
-                            continue;
-                        }
-
-                        targetIndex = idx - 1;
-                        reducedScale = true;
-                        break;
+                        targetIndex = idx;
+                        continue;
                     }
 
-                    if (targetIndex != appliedIndex)
-                    {
-                        if (requestId != _tabScaleFitRequestId) return;
-
-                        currentDPIScale = DPI_STEPS[targetIndex] / 100.0;
-                        SetDPIComboIndexSilently(targetIndex);
-                        ApplyDPIScale();
-                        changedScale = true;
-                    }
-
-                    if (changedScale && reducedScale)
-                    {
-                        UpdateSecondaryStatus($"Tự giảm DPI để hiển thị toàn bộ: {DPI_STEPS[targetIndex]}%", "Cyan");
-                    }
+                    targetIndex = idx - 1;
+                    reducedScale = true;
+                    break;
                 }
-                finally
+
+                if (targetIndex != appliedIndex)
                 {
-                    _suppressPrimaryDpiStatus = false;
-                    _suppressResponsiveAutoFitQueue = false;
-                    _isAutoFittingScale = false;
+                    if (requestId != _tabScaleFitRequestId) return;
+
+                    currentDPIScale = DPI_STEPS[targetIndex] / 100.0;
+                    SetDPIComboIndexSilently(targetIndex);
+                    ApplyDPIScale();
+                    changedScale = true;
                 }
-            }));
+
+                if (changedScale && reducedScale)
+                {
+                    UpdateSecondaryStatus($"Tự giảm DPI để hiển thị toàn bộ: {DPI_STEPS[targetIndex]}%", "Cyan");
+                }
+            }
+            finally
+            {
+                _suppressPrimaryDpiStatus = false;
+                _suppressResponsiveAutoFitQueue = false;
+                _isAutoFittingScale = false;
+            }
         }
 
         private void ResetCurrentTabDpiTo100Percent()
