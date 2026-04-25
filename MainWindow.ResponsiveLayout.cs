@@ -8,6 +8,7 @@
 // =======================================================================
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -587,6 +588,22 @@ namespace GMTPC.Tool
 
         private bool IsCurrentScaleOverflowingForTabFit(Rect workArea)
         {
+            ScrollViewer selectedScrollViewer = GetSelectedTabScrollViewer();
+            if (selectedScrollViewer != null)
+            {
+                if (selectedScrollViewer.ActualWidth <= 0 || selectedScrollViewer.ActualHeight <= 0)
+                {
+                    return false;
+                }
+
+                if (selectedScrollViewer.ScrollableWidth > 1.0 || selectedScrollViewer.ScrollableHeight > 1.0)
+                {
+                    return true;
+                }
+
+                return HasSparseWindowsTabOverflow();
+            }
+
             const double margin = 10.0;
             double maxAllowedWidth = Math.Max(0, workArea.Width - margin);
             double maxAllowedHeight = Math.Max(0, workArea.Height - margin);
@@ -594,10 +611,9 @@ namespace GMTPC.Tool
             double desiredWidth = Math.Max(ActualWidth, DesiredSize.Width);
             double desiredHeight = Math.Max(ActualHeight, DesiredSize.Height);
             bool tooWide = desiredWidth > maxAllowedWidth + 1;
-            bool tooTall = desiredHeight > maxAllowedHeight + 1 || ActualHeight >= maxAllowedHeight - 1;
-            bool clippedContent = HasClippedScrollViewerContent() || HasSparseWindowsTabOverflow();
+            bool tooTall = desiredHeight > maxAllowedHeight + 1;
 
-            return tooWide || tooTall || clippedContent;
+            return tooWide || tooTall || HasSparseWindowsTabOverflow();
         }
 
         private int GetClosestDpiStepIndex(int percent)
@@ -696,6 +712,22 @@ namespace GMTPC.Tool
             {
                 return false;
             }
+        }
+
+        private ScrollViewer GetSelectedTabScrollViewer()
+        {
+            try
+            {
+                if (MainTabControl?.SelectedItem is TabItem selectedTab)
+                {
+                    return FindVisualChildren<ScrollViewer>(selectedTab).FirstOrDefault();
+                }
+            }
+            catch
+            {
+            }
+
+            return null;
         }
 
         private bool IsElementClippedByScrollViewer(FrameworkElement element, ScrollViewer scrollViewer)
