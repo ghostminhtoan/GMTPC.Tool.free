@@ -656,20 +656,17 @@ namespace GMTPC.Tool
 
         private bool IsCurrentScaleOverflowingForTabFit(Rect workArea)
         {
-            ScrollViewer selectedScrollViewer = GetSelectedTabScrollViewer();
-            if (selectedScrollViewer != null)
+            if (IsSelectedTab("Windows - Microsoft") || IsSelectedTab("Windows Mod MMT"))
             {
-                if (selectedScrollViewer.ActualWidth <= 0 || selectedScrollViewer.ActualHeight <= 0)
-                {
-                    return false;
-                }
-
-                if (selectedScrollViewer.ScrollableWidth > 1.0 || selectedScrollViewer.ScrollableHeight > 1.0)
-                {
-                    return true;
-                }
-
                 return HasSparseWindowsTabOverflow();
+            }
+
+            if (IsSystemInformationTabSelected()) return false;
+
+            ScrollViewer selectedScrollViewer = GetSelectedTabScrollViewer();
+            if (selectedScrollViewer != null && HasSelectedTabContentOverflow(selectedScrollViewer))
+            {
+                return true;
             }
 
             const double margin = 10.0;
@@ -788,7 +785,7 @@ namespace GMTPC.Tool
             {
                 if (MainTabControl?.SelectedItem is TabItem selectedTab)
                 {
-                    return FindVisualChildren<ScrollViewer>(selectedTab).FirstOrDefault();
+                    return selectedTab.Content as ScrollViewer;
                 }
             }
             catch
@@ -796,6 +793,43 @@ namespace GMTPC.Tool
             }
 
             return null;
+        }
+
+        private bool HasSelectedTabContentOverflow(ScrollViewer scrollViewer)
+        {
+            const double tolerance = 1.0;
+            if (scrollViewer == null) return false;
+            if (scrollViewer.ActualWidth <= 0 || scrollViewer.ActualHeight <= 0) return false;
+            if (!(scrollViewer.Content is WrapPanel panel)) return false;
+
+            double maxRight = 0;
+            double maxBottom = 0;
+            bool foundChild = false;
+
+            foreach (FrameworkElement child in panel.Children.OfType<FrameworkElement>())
+            {
+                if (!child.IsVisible || child.ActualWidth <= 0 || child.ActualHeight <= 0) continue;
+
+                Rect bounds;
+                try
+                {
+                    bounds = child.TransformToAncestor(scrollViewer)
+                                  .TransformBounds(new Rect(0, 0, child.ActualWidth, child.ActualHeight));
+                }
+                catch
+                {
+                    continue;
+                }
+
+                maxRight = Math.Max(maxRight, bounds.Right);
+                maxBottom = Math.Max(maxBottom, bounds.Bottom);
+                foundChild = true;
+            }
+
+            if (!foundChild) return false;
+
+            return maxRight > scrollViewer.ActualWidth + tolerance ||
+                   maxBottom > scrollViewer.ActualHeight + tolerance;
         }
 
         private bool IsElementClippedByScrollViewer(FrameworkElement element, ScrollViewer scrollViewer)
