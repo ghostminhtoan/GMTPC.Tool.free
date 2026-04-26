@@ -273,7 +273,8 @@ namespace GMTPC.Tool
 
                 bool longTextPanel = panel == WindowsPanel || panel == WindowsModPanel;
                 double desiredItemWidth = longTextPanel ? (denseLandscape ? 270 : 300) : (denseLandscape ? 190 : (zoomedOutLandscape ? 245 : 205));
-                int columns = Math.Max(1, Math.Min(maxColumns, (int)Math.Floor(available / desiredItemWidth)));
+                int columns = isMonitorPortrait ? 2 : 4;
+                columns = Math.Max(1, Math.Min(maxColumns, columns));
 
                 double itemWidth = Math.Floor((available - ((columns - 1) * 6)) / columns);
                 double minItemWidth = longTextPanel ? (denseLandscape ? 270 : 300) : (denseLandscape ? 190 : (zoomedOutLandscape ? 220 : 190));
