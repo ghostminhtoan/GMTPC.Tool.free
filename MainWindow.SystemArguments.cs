@@ -199,7 +199,7 @@ namespace GMTPC.Tool
         private const string SUBTITLE_DRAFT_GMTPC_DOWNLOAD_URL = "https://raw.githubusercontent.com/ghostminhtoan/Subtitle-draft-GMTPC/refs/heads/master/Subtitle%20draft%20GMTPC.exe";
 
         // Download sample video (Tab: Subtitle)
-        private const string SAMPLE_VIDEO_DOWNLOAD_URL = "https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/releases/download/subtitle.materials/ReZero.Starting.Life.in.Another.World.S04E01.WEB-DL.1080p.AVC.AAC.Dual.Audio-FBI.mkv";
+        private const string SAMPLE_VIDEO_DOWNLOAD_URL = "https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/releases/download/subtitle.materials/DB.Mirai.Shounen.Conan_-_01_.Dual.Audio_10bit_BD1080p_x265.mkv";
 
         // ===================================================================
         // TabDriver — Links (B) and Arguments (C)

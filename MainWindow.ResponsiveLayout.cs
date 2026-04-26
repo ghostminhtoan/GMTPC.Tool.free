@@ -1,4 +1,6 @@
-﻿// AI Summary: 2026-04-25 - Added maximize-then-fit DPI logic for tab switching so each selected tab auto-zooms to the largest fully visible scale.
+﻿// AI Summary: 2026-04-25 - Forced Windows and Windows Mod landscape layout through the three-column sparse sizing path.
+// AI Summary: 2026-04-25 - Limited landscape checkbox layout to three columns.
+// AI Summary: 2026-04-25 - Added maximize-then-fit DPI logic for tab switching so each selected tab auto-zooms to the largest fully visible scale.
 // AI Summary: 2026-04-25 - Rebalanced per-tab fit limits so Office/Multimedia/Remote Desktop clamp earlier while Driver/Browser/Windows tabs can scale larger.
 // AI Summary: 2026-04-23 - Added sparse Windows tab overflow detection so DPI reduces before content overlaps buttons.
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
@@ -253,7 +255,7 @@ namespace GMTPC.Tool
             bool zoomedOutLandscape = !isMonitorPortrait && currentDPIScale < 1.0;
             double logicalViewportWidth = GetSelectedTabLogicalViewportWidth(monitorWidth);
             double available = Math.Max(240, logicalViewportWidth - (denseLandscape ? 18 : (isCompact ? 16 : 24)));
-            int maxColumns = isMonitorPortrait ? 2 : 4;
+            int maxColumns = isMonitorPortrait ? 2 : 3;
 
             foreach (WrapPanel panel in GetInstallPanels())
             {
@@ -311,10 +313,13 @@ namespace GMTPC.Tool
 
             double scaledViewportWidth = GetSelectedTabLogicalViewportWidth(monitorWidth);
             double available = Math.Max(240, scaledViewportWidth - (isCompact ? 16 : 24));
-            int columns = isWindowsTab ? 1 : 2;
+            bool isLandscape = !IsPortrait(GetCurrentMonitorWorkAreaDip()) && !isCompact;
+            int targetColumns = isLandscape ? 3 : (isWindowsTab ? 1 : 2);
+            int itemCount = isWindowsTab ? 1 : 4;
+            int columns = Math.Max(1, Math.Min(targetColumns, itemCount));
             double gap = 8;
             double itemSlotWidth = Math.Floor((available - ((columns - 1) * gap)) / columns);
-            itemSlotWidth = Math.Max(isWindowsTab ? 300 : 280, Math.Min(isWindowsTab ? 560 : 420, itemSlotWidth));
+            itemSlotWidth = Math.Max(isWindowsTab ? 300 : 280, Math.Min(isLandscape ? 360 : (isWindowsTab ? 560 : 420), itemSlotWidth));
 
             panel.Orientation = Orientation.Horizontal;
             panel.ItemWidth = itemSlotWidth;
