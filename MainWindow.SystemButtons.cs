@@ -57,6 +57,7 @@ namespace GMTPC.Tool
         private bool _suppressPrimaryDpiStatus;
         private readonly Dictionary<string, int> _tabMaxDpiIndexByHeader = new Dictionary<string, int>(StringComparer.Ordinal);
         private readonly int[] DPI_STEPS = new int[] { 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 200 };
+        private const string VIDCODER_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/vidcoder.exe";
 
         private void ApplyDPIScale()
         {
@@ -999,7 +1000,7 @@ namespace GMTPC.Tool
                 _cachedDownloadLinks.Add(SUBTITLE_EDIT_DOWNLOAD_URL);
 
             if (ChkVidCoder?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/RandomEngy/VidCoder/releases");
+                _cachedDownloadLinks.Add(VIDCODER_DOWNLOAD_URL);
 
             if (ChkBoilsoftVideoSplitter?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/BoilsoftVideoSplitter.8.3.3.by.elchupacabra.exe");
@@ -1409,7 +1410,7 @@ namespace GMTPC.Tool
                         link = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part01.exe (29 parts)";
                         break;
                     case "ChkVidCoder":
-                        link = "https://github.com/RandomEngy/VidCoder/releases";
+                        link = VIDCODER_DOWNLOAD_URL;
                         break;
                     case "ChkBoilsoftVideoSplitter":
                         link = BOILSOFT_VIDEO_SPLITTER_DOWNLOAD_URL;

@@ -69,23 +69,11 @@ namespace GMTPC.Tool
                     UpdateStatus($"Đã tạo folder {vidCoderFolder}", "Cyan");
                 }
 
-                // Bước 2: Tìm phiên bản VidCoder mới nhất từ GitHub
-                UpdateStatus("Đang tìm phiên bản VidCoder mới nhất...", "Cyan");
-                string latestVersion = await GetLatestVidCoderVersionAsync();
-                
-                if (string.IsNullOrEmpty(latestVersion))
-                {
-                    UpdateStatus("Không thể tìm thấy phiên bản VidCoder mới nhất!", "Red");
-                    return;
-                }
-
-                UpdateStatus($"Phiên bản mới nhất: {latestVersion}", "Green");
-
-                // Bước 3: Tải VidCoder.exe
-                string vidCoderExeUrl = $"https://github.com/RandomEngy/VidCoder/releases/download/{latestVersion}/VidCoder-{latestVersion.TrimStart('v')}-Portable.exe";
+                // Bước 2: Tải VidCoder.exe từ link cố định của MMT
+                string vidCoderExeUrl = VIDCODER_DOWNLOAD_URL;
                 string vidCoderExePath = Path.Combine(vidCoderFolder, "VidCoder.exe");
                 
-                UpdateStatus($"Đang tải VidCoder {latestVersion}...", "Cyan");
+                UpdateStatus("Đang tải VidCoder...", "Cyan");
                 await DownloadWithProgressAsync(vidCoderExeUrl, vidCoderExePath, "VidCoder");
 
                 Dispatcher.Invoke(() =>
@@ -95,7 +83,7 @@ namespace GMTPC.Tool
                     SpeedTextBlock.Text = "";
                 });
 
-                // Bước 4: Tải file VidCoder.sqlite từ MMT repo
+                // Bước 3: Tải file VidCoder.sqlite từ MMT repo
                 string vidCoderSqliteUrl = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/VidCoder.sqlite";
                 string vidCoderSqlitePath = Path.Combine(vidCoderFolder, "VidCoder.sqlite");
 
@@ -107,7 +95,7 @@ namespace GMTPC.Tool
 
                 UpdateStatus("Đã tải xong VidCoder.sqlite", "Green");
 
-                // Bước 5: Tạo shortcut trên Desktop
+                // Bước 4: Tạo shortcut trên Desktop
                 string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
                 string shortcutPath = Path.Combine(desktopPath, "VidCoder.lnk");
                 
@@ -140,7 +128,7 @@ namespace GMTPC.Tool
                     UpdateStatus($"Không thể tạo shortcut: {ex.Message}", "Orange");
                 }
 
-                // Bước 6: Chỉ chạy file .exe sau khi tải xong SQLite
+                // Bước 5: Chỉ chạy file .exe sau khi tải xong SQLite
                 UpdateStatus("Đang mở VidCoder...", "Cyan");
                 ProcessStartInfo startInfo = new ProcessStartInfo
                 {
@@ -161,9 +149,7 @@ namespace GMTPC.Tool
             }
         }
 
-        /// <summary>
-        /// Tìm phiên bản VidCoder mới nhất từ GitHub Releases
-        /// </summary>
+        // Legacy GitHub-version probe kept in case we ever need a fallback again.
         private async Task<string> GetLatestVidCoderVersionAsync()
         {
             try
