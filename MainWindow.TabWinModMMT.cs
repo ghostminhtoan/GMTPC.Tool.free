@@ -1,3 +1,4 @@
+// AI Summary: 2026-04-28 - Added Ventoy SourceForge probe/install flow and checkbox wiring
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -8,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using HtmlAgilityPack;
 
 namespace GMTPC.Tool
 {
@@ -215,8 +215,7 @@ namespace GMTPC.Tool
                 string latestVersionFolderUrl = await GetLatestVentoyVersionFolderUrlAsync();
                 if (string.IsNullOrEmpty(latestVersionFolderUrl))
                 {
-                    UpdateStatus("Không tìm thấy version Ventoy mới nhất!", "Red");
-                    return;
+                    throw new InvalidOperationException("Không tìm thấy version Ventoy mới nhất.");
                 }
 
                 string latestVersionName = GetVentoyVersionNameFromUrl(latestVersionFolderUrl);
@@ -226,8 +225,7 @@ namespace GMTPC.Tool
                 Tuple<string, string> ventoyZipDownloadInfo = await GetVentoyWindowsZipDownloadInfoAsync(latestVersionFolderUrl);
                 if (ventoyZipDownloadInfo == null || string.IsNullOrEmpty(ventoyZipDownloadInfo.Item1))
                 {
-                    UpdateStatus("Không tìm thấy file Ventoy windows.zip!", "Red");
-                    return;
+                    throw new InvalidOperationException("Không tìm thấy file Ventoy windows.zip.");
                 }
 
                 string ventoyZipDownloadUrl = ventoyZipDownloadInfo.Item1;
@@ -252,6 +250,7 @@ namespace GMTPC.Tool
                     }
                 }
 
+                UpdateStatus($"Đã tìm thấy file: {zipFileName}", "Cyan");
                 UpdateStatus("Đang tải Ventoy windows.zip...", "Cyan");
                 await DownloadWithProgressAsync(ventoyZipDownloadUrl, zipPath, "Ventoy");
 
@@ -262,8 +261,7 @@ namespace GMTPC.Tool
                 string ventoyExePath = FindVentoy2DiskExe(versionFolderPath);
                 if (string.IsNullOrEmpty(ventoyExePath))
                 {
-                    UpdateStatus("Không tìm thấy ventoy2disk.exe sau khi giải nén!", "Red");
-                    return;
+                    throw new InvalidOperationException("Không tìm thấy ventoy2disk.exe sau khi giải nén.");
                 }
 
                 UpdateStatus("Đang mở Ventoy2Disk với quyền administrator...", "Cyan");
@@ -298,27 +296,19 @@ namespace GMTPC.Tool
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("GMTPC-Tool");
                 string html = await client.GetStringAsync(VENTOY_SOURCEFORGE_FILES_URL);
 
-                HtmlDocument doc = new HtmlDocument();
-                doc.LoadHtml(html);
-
                 Version bestVersion = null;
                 string bestUrl = null;
 
-                var nodes = doc.DocumentNode.SelectNodes("//a[@href]");
-                if (nodes == null)
+                MatchCollection matches = Regex.Matches(html ?? string.Empty, @"href=""(?<href>[^""]*/files/v(?<ver>\d+\.\d+\.\d+)/?)""", RegexOptions.IgnoreCase);
+                if (matches == null || matches.Count == 0)
                 {
                     return null;
                 }
 
-                foreach (var node in nodes)
+                foreach (Match match in matches)
                 {
-                    string text = HtmlEntity.DeEntitize(node.InnerText ?? string.Empty).Trim();
-                    if (!Regex.IsMatch(text, @"^v\d+\.\d+\.\d+$"))
-                    {
-                        continue;
-                    }
-
-                    Version version = ParseVentoyVersion(text);
+                    string versionText = "v" + match.Groups["ver"].Value;
+                    Version version = ParseVentoyVersion(versionText);
                     if (version == null)
                     {
                         continue;
@@ -326,9 +316,8 @@ namespace GMTPC.Tool
 
                     if (bestVersion == null || version.CompareTo(bestVersion) > 0)
                     {
-                        string href = HtmlEntity.DeEntitize(node.GetAttributeValue("href", string.Empty)).Trim();
                         bestVersion = version;
-                        bestUrl = NormalizeSourceForgeUrl(href);
+                        bestUrl = NormalizeSourceForgeUrl(match.Groups["href"].Value);
                     }
                 }
 
@@ -348,25 +337,16 @@ namespace GMTPC.Tool
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("GMTPC-Tool");
                 string html = await client.GetStringAsync(versionFolderUrl);
 
-                HtmlDocument doc = new HtmlDocument();
-                doc.LoadHtml(html);
-
-                var nodes = doc.DocumentNode.SelectNodes("//a[@href]");
-                if (nodes == null)
+                MatchCollection matches = Regex.Matches(html ?? string.Empty, @"href=""(?<href>[^""]*ventoy-(?<ver>\d+\.\d+\.\d+)-windows\.zip[^""]*)""", RegexOptions.IgnoreCase);
+                if (matches == null || matches.Count == 0)
                 {
                     return null;
                 }
 
-                foreach (var node in nodes)
+                foreach (Match match in matches)
                 {
-                    string text = HtmlEntity.DeEntitize(node.InnerText ?? string.Empty).Trim();
-                    if (!Regex.IsMatch(text, @"^ventoy-.*windows\.zip$", RegexOptions.IgnoreCase))
-                    {
-                        continue;
-                    }
-
-                    string href = HtmlEntity.DeEntitize(node.GetAttributeValue("href", string.Empty)).Trim();
-                    return Tuple.Create(NormalizeSourceForgeDownloadUrl(href), text);
+                    string fileName = $"ventoy-{match.Groups["ver"].Value}-windows.zip";
+                    return Tuple.Create(NormalizeSourceForgeDownloadUrl(match.Groups["href"].Value), fileName);
                 }
             }
 

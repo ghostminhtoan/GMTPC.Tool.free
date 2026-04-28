@@ -28,6 +28,7 @@
 //                 theo AI_WORKFLOW.md
 //   - 2026-03-08: Thêm MouseRightButtonUp cho BtnDownloadPage để copy link
 //   - 2026-03-09: Removed ChkAdvancedCodec, ChkTeracopy, ChkVPN1111 references
+// AI Summary: 2026-04-28 - Added Ventoy to Windows Mod MMT selection, hover, and copy-link flows
 // =======================================================================
 using System;
 using System.Collections.Generic;

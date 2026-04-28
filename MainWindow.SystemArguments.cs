@@ -1,3 +1,4 @@
+// AI Summary: 2026-04-28 - Added VentoySourceForgeFiles URL and Ventoy checkbox state wiring
 using System;
 using System.Diagnostics;
 using System.IO;

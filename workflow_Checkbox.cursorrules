@@ -1,3 +1,4 @@
+<!-- AI Summary: 2026-04-28 - Added Ventoy probe-based install flow note for Windows Mod MMT -->
 <!-- AI Summary: 2026-04-25 - Added Brave browser checkbox entry to the Browser workflow checklist -->
 <!-- AI Summary: 2026-04-24 - Added mandatory rule to always git add/commit/push root GMTPC.Tool.exe after build -->
 <!-- AI Summary: 2026-03-29 - Added mandatory UpdateInstallButtonState() rule to prevent Install button interaction issues -->
