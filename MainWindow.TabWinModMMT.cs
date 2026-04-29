@@ -33,7 +33,7 @@ namespace GMTPC.Tool
         private const string WIN10_22H2_2024_DEC_PART4_URL = "https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.004";
         private const string WIN10_22H2_2024_DEC_PART5_URL = "https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.005";
         private const string WIN10_22H2_2024_DEC_FINAL_NAME = "win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso";
-        private const string VENTOY_EXTRACT_ROOT = @"C:\Ventoy";
+        private const string VENTOY_EXTRACT_ROOT = @"C:\";
         private const string VENTOY_GITHUB_RELEASES_API_URL = "https://api.github.com/repos/ventoy/Ventoy/releases/latest";
 
         // WintoHDD - Use InstallWithPromptAsync for Yes/No dialog with NTFS Compression check
@@ -242,7 +242,7 @@ namespace GMTPC.Tool
                     }
                 }
 
-                UpdateStatus("Đang tải Ventoy windows.zip...", "Cyan");
+                UpdateStatus("Đang tải Ventoy windows.zip trực tiếp vào ổ C:\\...", "Cyan");
                 await DownloadWithProgressAsync(ventoyZipDownloadUrl, zipPath, "Ventoy");
 
                 UpdateStatus("Đang giải nén Ventoy...", "Cyan");
