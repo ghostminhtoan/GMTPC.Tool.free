@@ -268,6 +268,21 @@ namespace GMTPC.Tool
                 if (process != null)
                 {
                     UpdateStatus("Ventoy2Disk đã được mở!", "Green");
+                    UpdateStatus("Đợi Ventoy2Disk tắt để dọn file zip...", "Cyan");
+                    await WaitForProcessExitAsync(process);
+
+                    if (File.Exists(zipPath))
+                    {
+                        try
+                        {
+                            File.Delete(zipPath);
+                            UpdateStatus($"Đã xóa file zip Ventoy: {Path.GetFileName(zipPath)}", "Gray");
+                        }
+                        catch (Exception ex)
+                        {
+                            UpdateStatus($"Không xóa được file zip Ventoy: {ex.Message}", "Orange");
+                        }
+                    }
                 }
             }
             catch (System.ComponentModel.Win32Exception ex) when (ex.NativeErrorCode == 1223)
@@ -305,6 +320,30 @@ namespace GMTPC.Tool
 
                 return Tuple.Create(tagMatch.Groups["tag"].Value, assetMatch.Groups["url"].Value, assetMatch.Groups["name"].Value);
             }
+        }
+
+        private static Task WaitForProcessExitAsync(Process process)
+        {
+            if (process == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            if (process.HasExited)
+            {
+                return Task.CompletedTask;
+            }
+
+            TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+            process.EnableRaisingEvents = true;
+            process.Exited += (sender, args) => tcs.TrySetResult(null);
+
+            if (process.HasExited)
+            {
+                tcs.TrySetResult(null);
+            }
+
+            return tcs.Task;
         }
 
         private static Version ParseVentoyVersion(string versionName)
