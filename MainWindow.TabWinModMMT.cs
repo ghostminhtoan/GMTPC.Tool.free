@@ -1,4 +1,4 @@
-// AI Summary: 2026-04-29 - Switched Ventoy install flow to GitHub Releases and checkbox wiring
+// AI Summary: 2026-04-29 - Windows Mod MMT tab: Switched Ventoy install flow to GitHub Releases and checkbox wiring
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -14,6 +14,7 @@ namespace GMTPC.Tool
 {
 // =============================================================================
 // MainWindow.TabWinModMMT.cs
+// Windows Mod MMT
 // Updated: 2026-04-29 - Switched Ventoy install flow to GitHub Releases and checkbox wiring
 // Updated: 2026-04-22 - Added WinPE to HDD admin PowerShell button
 // Updated: 2026-03-17 - Changed download URLs to new links without boot.windowsRE

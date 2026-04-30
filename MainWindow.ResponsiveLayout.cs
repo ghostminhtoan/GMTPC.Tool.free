@@ -73,15 +73,23 @@ namespace GMTPC.Tool
 
         private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.Source != MainTabControl) return;
+            if (!ReferenceEquals(sender, MainTabControl)) return;
             QueueSelectedTabScaleWorkflow();
         }
 
         private void WindowsTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.Source != WindowsTabControl) return;
+            if (!ReferenceEquals(sender, WindowsTabControl)) return;
             QueueSelectedTabScaleWorkflow();
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
+            {
+                ScrollSelectedTabToTop();
+            }));
+        }
+
+        private void ScrollSelectedTabToTop()
+        {
+            try
             {
                 ScrollViewer selectedScrollViewer = GetSelectedTabScrollViewer();
                 if (selectedScrollViewer != null)
@@ -89,7 +97,10 @@ namespace GMTPC.Tool
                     selectedScrollViewer.ScrollToTop();
                     selectedScrollViewer.ScrollToLeftEnd();
                 }
-            }));
+            }
+            catch
+            {
+            }
         }
 
         private void QueueSelectedTabScaleWorkflow()
@@ -290,7 +301,7 @@ namespace GMTPC.Tool
                     continue;
                 }
 
-                bool longTextPanel = panel == WindowsPanel || panel == WindowsToolsPanel;
+                bool longTextPanel = panel == WindowsPanel || panel == WindowsToolsPanel || panel == WindowsSetupPanel;
                 double desiredItemWidth = longTextPanel ? (denseLandscape ? 270 : 300) : (denseLandscape ? 190 : (zoomedOutLandscape ? 245 : 205));
                 int columns = isMonitorPortrait ? 2 : 4;
                 columns = Math.Max(1, Math.Min(maxColumns, columns));
@@ -323,23 +334,25 @@ namespace GMTPC.Tool
             yield return RemoteDesktopPanel;
             yield return WindowsPanel;
             yield return WindowsToolsPanel;
+            yield return WindowsSetupPanel;
         }
 
         private bool ApplySparseWindowsPanelSizing(WrapPanel panel, double monitorWidth, bool isCompact)
         {
             bool isWindowsTab = panel == WindowsPanel && IsSelectedTab("Windows");
             bool isWindowsToolsTab = panel == WindowsToolsPanel && IsSelectedTab("Windows");
-            if (!isWindowsTab && !isWindowsToolsTab) return false;
+            bool isWindowsSetupTab = panel == WindowsSetupPanel && IsSelectedTab("Windows");
+            if (!isWindowsTab && !isWindowsToolsTab && !isWindowsSetupTab) return false;
 
             double scaledViewportWidth = GetSelectedTabLogicalViewportWidth(monitorWidth);
             double available = Math.Max(240, scaledViewportWidth - (isCompact ? 16 : 24));
             bool isLandscape = !IsPortrait(GetCurrentMonitorWorkAreaDip()) && !isCompact;
-            int targetColumns = isLandscape ? 4 : (isWindowsTab ? 1 : 2);
-            int itemCount = isWindowsTab ? 1 : 5;
+            int targetColumns = isLandscape ? (isWindowsSetupTab ? 3 : 4) : (isWindowsTab ? 1 : (isWindowsSetupTab ? 2 : 2));
+            int itemCount = isWindowsTab ? 1 : (isWindowsSetupTab ? 3 : 2);
             int columns = Math.Max(1, Math.Min(targetColumns, itemCount));
             double gap = 8;
             double itemSlotWidth = Math.Floor((available - ((columns - 1) * gap)) / columns);
-            itemSlotWidth = Math.Max(isWindowsTab ? 300 : 280, Math.Min(isLandscape ? 360 : (isWindowsTab ? 560 : 420), itemSlotWidth));
+            itemSlotWidth = Math.Max(isWindowsTab ? 300 : 280, Math.Min(isLandscape ? 360 : (isWindowsTab ? 560 : (isWindowsSetupTab ? 360 : 420)), itemSlotWidth));
 
             panel.Orientation = Orientation.Horizontal;
             panel.ItemWidth = itemSlotWidth;
@@ -408,6 +421,11 @@ namespace GMTPC.Tool
             {
                 if (ChkWin10LtscIot21H2 != null) ChkWin10LtscIot21H2.Width = childWidth;
                 if (ChkWin10_22H2_2024_December != null) ChkWin10_22H2_2024_December.Width = childWidth;
+                return;
+            }
+
+            if (panel == WindowsSetupPanel)
+            {
                 if (ChkVentoy != null) ChkVentoy.Width = Math.Max(200, childWidth);
                 if (ChkWintoHDD != null) ChkWintoHDD.Width = childWidth;
                 if (BtnWinPEToHDD != null) BtnWinPEToHDD.Width = childWidth;
@@ -436,6 +454,12 @@ namespace GMTPC.Tool
             {
                 WindowsToolsPanel.MinHeight = isWindowsTab ? panelMinHeight : 0;
                 WindowsToolsPanel.VerticalAlignment = isWindowsTab ? (isPortraitLayout ? VerticalAlignment.Top : VerticalAlignment.Center) : VerticalAlignment.Top;
+            }
+
+            if (WindowsSetupPanel != null)
+            {
+                WindowsSetupPanel.MinHeight = isWindowsTab ? panelMinHeight : 0;
+                WindowsSetupPanel.VerticalAlignment = isWindowsTab ? (isPortraitLayout ? VerticalAlignment.Top : VerticalAlignment.Center) : VerticalAlignment.Top;
             }
         }
 
@@ -625,6 +649,7 @@ namespace GMTPC.Tool
                 ApplyResponsiveLayout();
                 MainGrid.UpdateLayout();
                 UpdateSystemInformationChromeVisibility();
+                ScrollSelectedTabToTop();
                 ResetSelectedTabDpiLimitTo100Percent();
                 ResetCurrentTabDpiTo100Percent();
                 _hasCompletedInitialTabScaleFit = true;
@@ -722,6 +747,7 @@ namespace GMTPC.Tool
                 }
 
                 SetSelectedTabDpiLimitIndex(targetIndex);
+                ScrollSelectedTabToTop();
             }
             finally
             {
@@ -871,7 +897,7 @@ namespace GMTPC.Tool
                     return true;
                 }
 
-                WrapPanel selectedPanel = WindowsToolsPanel != null && WindowsToolsPanel.ActualWidth > 0 ? WindowsToolsPanel : WindowsPanel;
+                WrapPanel selectedPanel = GetSelectedInstallPanel();
                 if (selectedPanel == null || selectedPanel.ActualWidth <= 0 || selectedPanel.ActualHeight <= 0) return false;
                 ScrollViewer selectedScrollViewer = GetSelectedTabScrollViewer();
                 if (selectedScrollViewer == null || selectedScrollViewer.ActualWidth <= 0 || selectedScrollViewer.ActualHeight <= 0) return false;

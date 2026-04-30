@@ -694,6 +694,12 @@
                                 <WrapPanel x:Name="WindowsToolsPanel" Orientation="Horizontal" HorizontalAlignment="Stretch" Style="{StaticResource ResponsiveWrapPanelStyle}">
                                     <CheckBox x:Name="ChkWin10LtscIot21H2" Content="Win 10 LTSC IoT 21H2 - No Defender - Office - MMTPC 3.0" Width="420" Height="34" Click="ChkWin10LtscIot21H2_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
                                     <CheckBox x:Name="ChkWin10_22H2_2024_December" Content="Win 10 22h2 2024 DECEMBER - Office.365 - win 10 MMTPC 4.0" Width="420" Height="34" Click="ChkWin10_22H2_2024_December_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
+                                </WrapPanel>
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="Windows setup">
+                            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" Background="#FF1F1F1F">
+                                <WrapPanel x:Name="WindowsSetupPanel" Orientation="Horizontal" HorizontalAlignment="Stretch" Style="{StaticResource ResponsiveWrapPanelStyle}">
                                     <CheckBox x:Name="ChkVentoy" Content="Ventoy" Width="200" Height="34" Click="ChkVentoy_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
                                     <CheckBox x:Name="ChkWintoHDD" Content="WintoHDD" Width="200" Height="34" Click="ChkWintoHDD_Click" Margin="2" MouseEnter="Checkbox_MouseEnter"/>
                                     <Button x:Name="BtnWinPEToHDD" Content="WinPE to HDD" Width="200" Height="28" Click="BtnWinPEToHDD_Click" Margin="2"/>
