@@ -1,3 +1,4 @@
+﻿<!-- AI Summary: 2026-04-30 - Integrated MainWindow.SystemDPISCaling.cs into the checkbox workflow as the parent/child tab DPI entry point -->
 <!-- AI Summary: 2026-04-28 - Added Ventoy probe-based install flow note for Windows Mod MMT -->
 <!-- AI Summary: 2026-04-25 - Added Brave browser checkbox entry to the Browser workflow checklist -->
 <!-- AI Summary: 2026-04-24 - Added mandatory rule to always git add/commit/push root GMTPC.Tool.exe after build -->
@@ -140,6 +141,13 @@ nếu chọn ổ D thì sẽ tự tạo  defender exclusion cho D:\Temp Folder, 
                   + Dùng `UpdateStatus("Đang tải [Y]...", "Màu_phù_hợp");` (từ SystemBar)
                   + Dùng `await DownloadWithProgressAsync(...)`
                   + Gọi `ProcessStartInfo` với `[Y]_INSTALL_ARGUMENTS` từ Bước 1.
+            </step>
+
+            <step number="2.1" target_file="MainWindow.SystemDPISCaling.cs">
+                - Nếu Tab [X] là parent tab mới hoặc child tab mới, phải nối workflow DPI qua file này trước khi render UI.
+                - Parent tab: `MainTabControl_SelectionChanged()` → reset về 100% → `QueueParentTabDpiWorkflow()` → `QueueSelectedTabScaleWorkflow()`.
+                - Child tab: `WindowsTabControl_SelectionChanged()` → reset về 100% → `QueueChildTabDpiWorkflow()` → `ScrollSelectedTabToTop()` → `QueueSelectedTabScaleWorkflow()`.
+                - Không tự viết logic DPI rải trong các file tab khác nếu luồng này có thể dùng lại từ file này.
             </step>
 
             <step number="3" target_file="MainWindow.SystemArguments.cs">
@@ -543,6 +551,14 @@ nếu chọn ổ D thì sẽ tự tạo  defender exclusion cho D:\Temp Folder, 
     <file name="MainWindow.SystemBar.cs">
         - Phương thức UpdateStatus() để hiển thị trạng thái
         - Phương thức UpdateProgress() để cập nhật progress bar
+    </file>
+
+    <file name="MainWindow.SystemDPISCaling.cs">
+        - Entry point cho DPI workflow của parent tab và child tab
+        - MainTabControl_SelectionChanged(), WindowsTabControl_SelectionChanged()
+        - QueueParentTabDpiWorkflow(), QueueChildTabDpiWorkflow()
+        - QueueSelectedTabScaleWorkflow(), ScrollSelectedTabToTop()
+        - Dùng khi thêm tab mới để gắn reset 100% + auto-fit + scroll top
     </file>
 
     <file name="MainWindow.SystemButtons.cs">
