@@ -24,6 +24,8 @@ namespace GMTPC.Tool
     {
         /*
          * AI Summary:
+         * Date: 2026-04-30
+         * - Switched Office Tool Plus to probe latest Office_Tool_with_runtime_*_x64.zip from GitHub Releases, extract to C:\, create desktop shortcut, and open Office Tool Plus.exe
          * Date: 2026-04-17
          * - Added 3 download buttons for Subtitle Edit: Vietnamese Profile, Multiple Replace Template, and Shortcut MMT XML
          * Date: 2026-03-28

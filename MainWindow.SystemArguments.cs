@@ -1,4 +1,5 @@
 ﻿// AI Summary: 2026-04-28 - Added VentoySourceForgeFiles URL and Ventoy checkbox state wiring
+// AI Summary: 2026-04-30 - Added Office Tool Plus Releases URLs for latest x64 runtime zip probing and hover/copy-link flows
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -12,6 +13,8 @@ namespace GMTPC.Tool
 {
     /*
  * AI Summary:
+ * Date: 2026-04-30
+ * - Added Office Tool Plus Releases URLs for latest x64 runtime zip probing and hover/copy-link flows
  * Date: 2026-04-28
  * - Updated VENTOY_RELEASES_URL for the Windows Tools Ventoy GitHub Releases flow
  * Date: 2026-04-25 (2)

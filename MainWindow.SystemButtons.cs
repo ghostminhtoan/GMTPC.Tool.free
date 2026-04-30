@@ -4,6 +4,7 @@
 //            SelectNoneAllTabs, Install, Pause, Resume, Refresh Color,
 //            BtnDownloadPage, DPI controls
 // Cập nhật gần đây:
+//   - 2026-04-30: Added Office Tool Plus Releases URL to hover and copy-link flows
 //   - 2026-04-28: Added Ventoy to Windows Tools selection, hover, and copy-link flows
 //   - 2026-04-25: Locked manual DPI changes to each tab's auto-fit ceiling until the next tab selection resets and recomputes it
 //   - 2026-04-25: Kept window max height independent from DPI so sparse tabs clamp manual zoom before becoming oversized
