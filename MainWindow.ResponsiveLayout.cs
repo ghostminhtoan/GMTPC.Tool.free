@@ -71,56 +71,6 @@ namespace GMTPC.Tool
             }
         }
 
-        private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!ReferenceEquals(sender, MainTabControl)) return;
-            QueueSelectedTabScaleWorkflow();
-        }
-
-        private void WindowsTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!ReferenceEquals(sender, WindowsTabControl)) return;
-            QueueSelectedTabScaleWorkflow();
-            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
-            {
-                ScrollSelectedTabToTop();
-            }));
-        }
-
-        private void ScrollSelectedTabToTop()
-        {
-            try
-            {
-                ScrollViewer selectedScrollViewer = GetSelectedTabScrollViewer();
-                if (selectedScrollViewer != null)
-                {
-                    selectedScrollViewer.ScrollToTop();
-                    selectedScrollViewer.ScrollToLeftEnd();
-                }
-            }
-            catch
-            {
-            }
-        }
-
-        private void QueueSelectedTabScaleWorkflow()
-        {
-            int requestId = ++_tabScaleFitRequestId;
-            _suppressResponsiveAutoFitQueue = true;
-            CancellationTokenSource previousCts = Interlocked.Exchange(ref _tabScaleFitDelayCts, new CancellationTokenSource());
-            if (previousCts != null)
-            {
-                try { previousCts.Cancel(); } catch { }
-                previousCts.Dispose();
-            }
-
-            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
-            {
-                if (requestId != _tabScaleFitRequestId) return;
-                _ = StartSelectedTabScaleWorkflowAsync(requestId, _tabScaleFitDelayCts.Token);
-            }));
-        }
-
         private void ApplyResponsiveLayout()
         {
             if (_isApplyingResponsiveLayout || MainGrid == null) return;
