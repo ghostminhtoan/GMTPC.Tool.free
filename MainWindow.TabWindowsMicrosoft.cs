@@ -1,7 +1,8 @@
-﻿// =======================================================================
+// AI Summary: 2026-04-30 - Fixed Windows Microsoft tab Vietnamese text encoding and preserved Win11 26H1 download flow
+// =======================================================================
 // MainWindow.TabWindowsMicrosoft.cs
-// Chá»©c nÄƒng: Xá»­ lÃ½ checkbox vÃ  cÃ i Ä‘áº·t cho Tab Windows - Microsoft
-// Cáº­p nháº­t: 2026-03-10 - XÃ³a Win 10 20H2 2022 April - onedrive
+// Chức năng: Xử lý checkbox và cài đặt cho Tab Windows - Microsoft
+// Cập nhật: 2026-03-10 - Xóa Win 10 20H2 2022 April - onedrive
 // =======================================================================
 using System;
 using System.Diagnostics;
@@ -25,11 +26,11 @@ namespace GMTPC.Tool
         {
             if (ChkWin11_26H1.IsChecked == true)
             {
-                UpdateStatus("ÄÃ£ chá»n: Win 11 - 26H1 - 2026 Feb - server archive.org", "Green");
+                UpdateStatus("Đã chọn: Win 11 - 26H1 - 2026 Feb - server archive.org", "Green");
             }
             else
             {
-                UpdateStatus("ÄÃ£ há»§y chá»n: Win 11 - 26H1 - 2026 Feb - server archive.org", "Yellow");
+                UpdateStatus("Đã hủy chọn: Win 11 - 26H1 - 2026 Feb - server archive.org", "Yellow");
             }
 
             UpdateInstallButtonState();
@@ -42,7 +43,7 @@ namespace GMTPC.Tool
         {
             try
             {
-                UpdateStatus("Äang táº£i Win 11 - 26H1 - 2026 Feb...", "Cyan");
+                UpdateStatus("Đang tải Win 11 - 26H1 - 2026 Feb...", "Cyan");
                 string win11Path = Path.Combine(GetGMTPCFolder(), "Win11_26H1.iso");
                 await DownloadWithProgressAsync("https://archive.org/download/microsoft-win11-26h2-february-2026/en-us_windows_11_consumer_editions_version_26h1_x64_dvd_5208fe5b.iso", win11Path, "Win 11 26H1");
 
@@ -53,13 +54,12 @@ namespace GMTPC.Tool
                     SpeedTextBlock.Text = "";
                 });
 
-                UpdateStatus("Táº£i Win 11 26H1 hoÃ n táº¥t! File ISO Ä‘Ã£ Ä‘Æ°á»£c lÆ°u táº¡i: " + win11Path, "Green");
+                UpdateStatus("Tải Win 11 26H1 hoàn tất! File ISO đã được lưu tại: " + win11Path, "Green");
             }
             catch (Exception ex)
             {
-                UpdateStatus($"Lá»—i khi táº£i Win 11 26H1: {ex.Message}", "Red");
+                UpdateStatus($"Lỗi khi tải Win 11 26H1: {ex.Message}", "Red");
             }
         }
     }
 }
-
