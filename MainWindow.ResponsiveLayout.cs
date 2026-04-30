@@ -91,6 +91,23 @@ namespace GMTPC.Tool
             }));
         }
 
+        private void WindowsTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source != WindowsTabControl) return;
+
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() =>
+            {
+                ScrollViewer selectedScrollViewer = GetSelectedTabScrollViewer();
+                if (selectedScrollViewer != null)
+                {
+                    selectedScrollViewer.ScrollToTop();
+                    selectedScrollViewer.ScrollToLeftEnd();
+                }
+
+                ApplyResponsiveLayout();
+            }));
+        }
+
         private void ApplyResponsiveLayout()
         {
             if (_isApplyingResponsiveLayout || MainGrid == null) return;
@@ -399,6 +416,7 @@ namespace GMTPC.Tool
         {
             bool isWindowsTab = IsSelectedTab("Windows");
             bool isSparseWindowsTab = isWindowsTab;
+            bool isPortraitLayout = IsPortrait(GetCurrentMonitorWorkAreaDip()) || isCompact;
             double panelMinHeight = isCompact ? 54 : 68;
 
             if (TabHostBorder != null)
@@ -409,13 +427,13 @@ namespace GMTPC.Tool
             if (WindowsPanel != null)
             {
                 WindowsPanel.MinHeight = isWindowsTab ? panelMinHeight : 0;
-                WindowsPanel.VerticalAlignment = isWindowsTab ? VerticalAlignment.Center : VerticalAlignment.Top;
+                WindowsPanel.VerticalAlignment = isWindowsTab ? (isPortraitLayout ? VerticalAlignment.Top : VerticalAlignment.Center) : VerticalAlignment.Top;
             }
 
             if (WindowsToolsPanel != null)
             {
                 WindowsToolsPanel.MinHeight = isWindowsTab ? panelMinHeight : 0;
-                WindowsToolsPanel.VerticalAlignment = isWindowsTab ? VerticalAlignment.Center : VerticalAlignment.Top;
+                WindowsToolsPanel.VerticalAlignment = isWindowsTab ? (isPortraitLayout ? VerticalAlignment.Top : VerticalAlignment.Center) : VerticalAlignment.Top;
             }
         }
 

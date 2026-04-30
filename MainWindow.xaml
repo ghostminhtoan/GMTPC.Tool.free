@@ -616,7 +616,7 @@
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="Windows">
-                    <TabControl Background="#FF1F1F1F" BorderBrush="#FF7A7A7A" Margin="0">
+                    <TabControl x:Name="WindowsTabControl" Background="#FF1F1F1F" BorderBrush="#FF7A7A7A" BorderThickness="2" Margin="0" SelectionChanged="WindowsTabControl_SelectionChanged">
                         <TabControl.Resources>
                             <Style TargetType="TabItem">
                                 <Setter Property="Background" Value="#FF2B2B2B"/>
