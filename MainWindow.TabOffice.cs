@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
@@ -13,6 +14,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Input;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Data;
 
@@ -107,11 +109,32 @@ namespace GMTPC.Tool
         {
             try
             {
-                UpdateStatus("Đang tải Office Tool Plus...", "Cyan");
-                string officeToolPlusPath = Path.Combine(GetGMTPCFolder(), "office.tool.plus.exe");
-                await DownloadWithProgressAsync("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/office.tool.plus.exe", officeToolPlusPath, "Office Tool Plus Installer");
+                string officeToolPlusRootFolder = @"C:\Office Tool Plus";
+                string officeToolPlusDownloadFolder = Path.Combine(officeToolPlusRootFolder, "Download");
 
-                // Đảm bảo progress bar reset sau khi tải
+                if (Directory.Exists(officeToolPlusRootFolder))
+                {
+                    try
+                    {
+                        Directory.Delete(officeToolPlusRootFolder, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        UpdateStatus($"Không xóa được thư mục Office Tool Plus cũ: {ex.Message}", "Orange");
+                    }
+                }
+
+                Directory.CreateDirectory(officeToolPlusDownloadFolder);
+                Directory.CreateDirectory(officeToolPlusRootFolder);
+
+                UpdateStatus("Đang lấy link Office Tool Plus mới nhất từ GitHub Releases...", "Cyan");
+                string officeToolPlusZipUrl = await GetLatestOfficeToolPlusRuntimeZipUrlAsync();
+                string officeToolPlusZipName = Path.GetFileName(new Uri(officeToolPlusZipUrl).LocalPath);
+                string officeToolPlusZipPath = Path.Combine(officeToolPlusDownloadFolder, officeToolPlusZipName);
+
+                UpdateStatus($"Đang tải {officeToolPlusZipName}...", "Cyan");
+                await DownloadWithProgressAsync(officeToolPlusZipUrl, officeToolPlusZipPath, "Office Tool Plus");
+
                 Dispatcher.Invoke(() =>
                 {
                     DownloadProgressBar.Value = 0;
@@ -119,37 +142,114 @@ namespace GMTPC.Tool
                     SpeedTextBlock.Text = "";
                 });
 
-                UpdateStatus("Đang chạy Office Tool Plus installer với lệnh /s...", "Yellow");
+                UpdateStatus("Đang giải nén Office Tool Plus vào ổ C...", "Cyan");
+                ZipFile.ExtractToDirectory(officeToolPlusZipPath, officeToolPlusRootFolder);
+
+                if (File.Exists(officeToolPlusZipPath))
+                {
+                    File.Delete(officeToolPlusZipPath);
+                    UpdateStatus("Đã xóa file zip Office Tool Plus sau khi giải nén", "Cyan");
+                }
+
+                string officeToolPlusExePath = FindOfficeToolPlusExePath(officeToolPlusRootFolder);
+                if (string.IsNullOrEmpty(officeToolPlusExePath))
+                {
+                    throw new FileNotFoundException("Không tìm thấy Office Tool Plus.exe trong thư mục đã giải nén.");
+                }
+
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                string shortcutPath = Path.Combine(desktopPath, "Office Tool Plus.lnk");
+                if (File.Exists(shortcutPath))
+                {
+                    File.Delete(shortcutPath);
+                }
+
+                try
+                {
+                    Type shellType = Type.GetTypeFromProgID("WScript.Shell");
+                    if (shellType != null)
+                    {
+                        object shell = Activator.CreateInstance(shellType);
+                        object shortcut = shellType.InvokeMember("CreateShortcut", System.Reflection.BindingFlags.InvokeMethod, null, shell, new object[] { shortcutPath });
+                        shellType.InvokeMember("TargetPath", System.Reflection.BindingFlags.SetProperty, null, shortcut, new object[] { officeToolPlusExePath });
+                        shellType.InvokeMember("WorkingDirectory", System.Reflection.BindingFlags.SetProperty, null, shortcut, new object[] { Path.GetDirectoryName(officeToolPlusExePath) });
+                        shellType.InvokeMember("Description", System.Reflection.BindingFlags.SetProperty, null, shortcut, new object[] { "Office Tool Plus" });
+                        shellType.InvokeMember("Save", System.Reflection.BindingFlags.InvokeMethod, null, shortcut, null);
+                        UpdateStatus("Đã tạo shortcut Office Tool Plus trên Desktop", "Green");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    UpdateStatus($"Không thể tạo shortcut Office Tool Plus: {ex.Message}", "Orange");
+                }
+
+                UpdateStatus("Đang mở Office Tool Plus...", "Green");
                 ProcessStartInfo startInfo = new ProcessStartInfo
                 {
-                    FileName = officeToolPlusPath,
-                    Arguments = "/s", // Lệnh /s cho chế độ silent
-                    UseShellExecute = true
+                    FileName = officeToolPlusExePath,
+                    UseShellExecute = true,
+                    WorkingDirectory = Path.GetDirectoryName(officeToolPlusExePath)
                 };
+
                 Process process = Process.Start(startInfo);
                 if (process != null)
                 {
-                    await Task.Run(() => process.WaitForExit());
-                    if (process.ExitCode == 0)
-                    {
-                        UpdateStatus("Cài đặt Office Tool Plus thành công!", "Green");
-                    }
-                    else
-                    {
-                        UpdateStatus($"Cài đặt Office Tool Plus thất bại. Mã lỗi: {process.ExitCode}", "Red");
-                    }
-                }
-                // Xóa file installer sau khi chạy xong
-                if (File.Exists(officeToolPlusPath))
-                {
-                    File.Delete(officeToolPlusPath);
-                    UpdateStatus("Đã xóa file Office Tool Plus installer tạm thời", "Cyan");
+                    UpdateStatus("Office Tool Plus đã được mở!", "Green");
                 }
             }
             catch (Exception ex)
             {
                 UpdateStatus($"Lỗi khi tải hoặc cài đặt Office Tool Plus: {ex.Message}", "Red");
             }
+        }
+
+        private async Task<string> GetLatestOfficeToolPlusRuntimeZipUrlAsync()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd("GMTPC-Tool");
+                    client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
+
+                    string json = await client.GetStringAsync(OFFICE_TOOL_PLUS_RELEASES_API_URL);
+                    Match match = Regex.Match(
+                        json,
+                        "\"name\"\\s*:\\s*\"(?<name>Office_Tool_with_runtime_v(?<version>[^\"]+?)_x64\\.zip)\".*?\"browser_download_url\"\\s*:\\s*\"(?<url>[^\"]+)\"",
+                        RegexOptions.Singleline);
+
+                    if (match.Success)
+                    {
+                        string assetName = match.Groups["name"].Value;
+                        string version = match.Groups["version"].Value;
+                        string downloadUrl = match.Groups["url"].Value.Replace("\\/", "/");
+                        UpdateStatus($"Đã tìm thấy Office Tool Plus {version}: {assetName}", "Green");
+                        return downloadUrl;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                UpdateStatus($"Không lấy được link Office Tool Plus mới nhất: {ex.Message}", "Yellow");
+            }
+
+            throw new InvalidOperationException("Không tìm thấy gói Office Tool Plus x64 mới nhất trên GitHub Releases.");
+        }
+
+        private string FindOfficeToolPlusExePath(string searchRoot)
+        {
+            if (!Directory.Exists(searchRoot))
+            {
+                return string.Empty;
+            }
+
+            string[] matches = Directory.GetFiles(searchRoot, "Office Tool Plus.exe", SearchOption.AllDirectories);
+            if (matches != null && matches.Length > 0)
+            {
+                return matches[0];
+            }
+
+            return string.Empty;
         }
 
 

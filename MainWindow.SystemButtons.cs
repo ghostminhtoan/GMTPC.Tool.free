@@ -958,7 +958,7 @@ namespace GMTPC.Tool
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/VMware_Workstation_16.2.2_Lite_Eng_._Rus.exe");
 
             if (ChkOfficeToolPlus?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/office.tool.plus.exe");
+                _cachedDownloadLinks.Add(OFFICE_TOOL_PLUS_RELEASES_URL);
 
             if (ChkOfficeSoftmaker?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Office.Softmaker.exe");
@@ -1299,7 +1299,7 @@ namespace GMTPC.Tool
                         link = "https://www.hibitsoft.ir/HiBitUninstaller/RevoUninstaller-setup.exe";
                         break;
                     case "ChkOfficeToolPlus":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/OfficeToolPlus.exe";
+                        link = OFFICE_TOOL_PLUS_RELEASES_URL;
                         break;
                     case "ChkOfficeSoftmaker":
                         link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/SoftMaker.Office.exe";

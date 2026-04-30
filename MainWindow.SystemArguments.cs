@@ -171,6 +171,10 @@ namespace GMTPC.Tool
         // Checkboxes: ChkActivateOffice, ChkOfficeToolPlus, ChkOfficeSoftmaker,
         //             ChkGMTPCFonts, ChkNotepadPlusPlus
         // ===================================================================
+        // Office Tool Plus
+        private const string OFFICE_TOOL_PLUS_RELEASES_URL = "https://github.com/YerongAI/Office-Tool/releases";
+        private const string OFFICE_TOOL_PLUS_RELEASES_API_URL = "https://api.github.com/repos/YerongAI/Office-Tool/releases/latest";
+
         // GMTPC Fonts (Tab: Office)
         private const string GMTPC_FONTS_DOWNLOAD_URL = "https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/releases/download/subtitle.materials/GMTPC-FONTS.exe";
 

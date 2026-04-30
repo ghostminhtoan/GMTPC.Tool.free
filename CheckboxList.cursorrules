@@ -41,7 +41,7 @@
 
 | Tên Checkbox | Link Download | Argument |
 |-------------|---------------|----------|
-| ChkOfficeToolPlus | *(Office Tool Plus)* | *(tool riêng)* |
+| ChkOfficeToolPlus | https://github.com/YerongAI/Office-Tool/releases | *(probe latest x64 runtime zip, extract to C:\, create desktop shortcut, open Office Tool Plus.exe)* |
 | ChkOfficeSoftmaker | *(Office Softmaker)* | *(tool riêng)* |
 | ChkActivateOffice | (Office Activation) | *(script riêng)* |
 | ChkGMTPCFonts | https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/releases/download/subtitle.materials/GMTPC-FONTS.exe | *(run directly, delete on app exit)* |
