@@ -1,4 +1,4 @@
-﻿<!-- AI Summary: 2026-05-02 - Added MemReduct under Windows Setup and refreshed the tab order -->
+﻿<!-- AI Summary: 2026-05-02 - Refreshed the Windows Setup tab order -->
 <!-- AI Summary: 2026-04-30 - Updated ChkOfficeToolPlus to probe latest Office Tool Plus runtime x64 zip from GitHub Releases -->
 <!-- AI Summary: 2026-05-02 - Moved ChkVentoy to the reusable archive flow backed by MainWindow.SystemArchiveFlow.cs -->
 <!-- AI Summary: 2026-04-25 - Updated ChkSubtitleEdit to the new GMTPC portable release link -->
@@ -133,7 +133,7 @@
 
 | TÃªn Checkbox | Link Download | Argument |
 |-------------|---------------|----------|
-| ChkMemReduct | https://github.com/henrypp/memreduct/releases | `/S` |
+
 | ChkVentoy | https://github.com/ventoy/Ventoy/releases | *(GitHub latest release zip, extract to C:\Ventoy, move ventoy-x.x.x to C:\, run ventoy2disk.exe, delete zip after exit)* |
 | ChkWintoHDD | https://github.com/ghostminhtoan/MMT/releases/download/WinPE/wintohdd.exe | `/S` |
 | BtnWinPEToHDD | `powershell irm bit.ly/mmtwinpe \| iex` | *(button, run as administrator)* |
@@ -171,5 +171,8 @@
 | *(khÃ´ng cÃ³)* | *italic* | KhÃ´ng cáº§n tham sá»‘ |
 | *(tool riÃªng)* | *italic* | Sá»­ dá»¥ng phÆ°Æ¡ng thá»©c cÃ i Ä‘áº·t custom |
 | *(ISO image)* | *italic* | File ISO Windows (khÃ´ng pháº£i installer thÃ´ng thÆ°á»ng) |
+
+
+
 
 
