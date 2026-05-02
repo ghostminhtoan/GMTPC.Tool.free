@@ -51,17 +51,17 @@ namespace GMTPC.Tool
                     throw new InvalidOperationException("Không tìm thấy MemReduct release mới nhất.");
                 }
 
-                string latestMemReductTag = memReductReleaseInfo.Item1;
                 string memReductDownloadUrl = memReductReleaseInfo.Item2;
                 string memReductFileName = memReductReleaseInfo.Item3;
                 string latestMemReductVersion = memReductFileName
                     .Replace("memreduct-", string.Empty)
                     .Replace("-setup.exe", string.Empty);
+                string normalizedMemReductTag = $"v{latestMemReductVersion}";
 
                 string gmtPCFolder = GetGMTPCFolder();
                 string memReductPath = Path.Combine(gmtPCFolder, memReductFileName);
 
-                UpdateStatus($"Đã chọn MemReduct {latestMemReductVersion} ({latestMemReductTag})", "Green");
+                UpdateStatus($"Đã chọn MemReduct {latestMemReductVersion} ({normalizedMemReductTag})", "Green");
                 UpdateStatus($"Đang tải {memReductFileName}...", "Cyan");
                 await DownloadWithProgressAsync(memReductDownloadUrl, memReductPath, "MemReduct");
                 if (!File.Exists(memReductPath))
@@ -145,14 +145,15 @@ namespace GMTPC.Tool
                 string releaseTag = tagMatch.Groups["tag"].Value;
                 string assetVersion = assetMatch.Groups["ver"].Value;
                 string assetName = assetMatch.Groups["name"].Value;
+                string normalizedReleaseTag = $"v{assetVersion}";
 
                 if (!string.Equals(releaseTag.TrimStart('v', '.'), assetVersion, StringComparison.OrdinalIgnoreCase))
                 {
                     return null;
                 }
 
-                string downloadUrl = $"{MEMREDUCT_DOWNLOAD_BASE_URL}/{releaseTag}/{assetName}";
-                return Tuple.Create(releaseTag, downloadUrl, assetName);
+                string downloadUrl = $"{MEMREDUCT_DOWNLOAD_BASE_URL}/{normalizedReleaseTag}/{assetName}";
+                return Tuple.Create(normalizedReleaseTag, downloadUrl, assetName);
             }
         }
 
