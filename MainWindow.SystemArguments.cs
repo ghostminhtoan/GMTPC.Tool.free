@@ -113,6 +113,7 @@ namespace GMTPC.Tool
         // ===================================================================
         private const string MEMREDUCT_RELEASES_URL = "https://github.com/henrypp/memreduct/releases";
         private const string MEMREDUCT_RELEASES_API_URL = "https://api.github.com/repos/henrypp/memreduct/releases/latest";
+        private const string MEMREDUCT_DOWNLOAD_BASE_URL = "https://github.com/henrypp/memreduct/releases/download";
         private const string MEMREDUCT_INSTALL_ARGUMENTS = "/S";
         private const string WINTOHDD_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/WinPE/wintohdd.exe";
         private const string WINTOHDD_INSTALL_ARGUMENTS = "/S";

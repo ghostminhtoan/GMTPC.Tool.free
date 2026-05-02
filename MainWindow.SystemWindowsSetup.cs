@@ -54,12 +54,14 @@ namespace GMTPC.Tool
                 string latestMemReductTag = memReductReleaseInfo.Item1;
                 string memReductDownloadUrl = memReductReleaseInfo.Item2;
                 string memReductFileName = memReductReleaseInfo.Item3;
-                string latestMemReductVersion = latestMemReductTag.TrimStart('v');
+                string latestMemReductVersion = memReductFileName
+                    .Replace("memreduct-", string.Empty)
+                    .Replace("-setup.exe", string.Empty);
 
                 string gmtPCFolder = GetGMTPCFolder();
                 string memReductPath = Path.Combine(gmtPCFolder, memReductFileName);
 
-                UpdateStatus($"Đã chọn MemReduct {latestMemReductVersion}", "Green");
+                UpdateStatus($"Đã chọn MemReduct {latestMemReductVersion} ({latestMemReductTag})", "Green");
                 UpdateStatus($"Đang tải {memReductFileName}...", "Cyan");
                 await DownloadWithProgressAsync(memReductDownloadUrl, memReductPath, "MemReduct");
 
@@ -111,7 +113,7 @@ namespace GMTPC.Tool
                 client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
                 string json = await client.GetStringAsync(MEMREDUCT_RELEASES_API_URL);
 
-                Match tagMatch = Regex.Match(json ?? string.Empty, @"""tag_name""\s*:\s*""(?<tag>v?\d+\.\d+\.\d+)""", RegexOptions.IgnoreCase);
+                Match tagMatch = Regex.Match(json ?? string.Empty, @"""tag_name""\s*:\s*""(?<tag>v\.?\d+\.\d+\.\d+)""", RegexOptions.IgnoreCase);
                 if (!tagMatch.Success)
                 {
                     return null;
@@ -119,14 +121,24 @@ namespace GMTPC.Tool
 
                 Match assetMatch = Regex.Match(
                     json ?? string.Empty,
-                    @"""name""\s*:\s*""(?<name>memreduct-(?<ver>\d+\.\d+\.\d+)-setup\.exe)""[\s\S]*?""browser_download_url""\s*:\s*""(?<url>https:\/\/github\.com\/henrypp\/memreduct\/releases\/download\/[^""]+)""",
+                    @"""name""\s*:\s*""(?<name>memreduct-(?<ver>\d+\.\d+\.\d+)-setup\.exe)""",
                     RegexOptions.IgnoreCase);
                 if (!assetMatch.Success)
                 {
                     return null;
                 }
 
-                return Tuple.Create(tagMatch.Groups["tag"].Value, assetMatch.Groups["url"].Value, assetMatch.Groups["name"].Value);
+                string releaseTag = tagMatch.Groups["tag"].Value;
+                string assetVersion = assetMatch.Groups["ver"].Value;
+                string assetName = assetMatch.Groups["name"].Value;
+
+                if (!string.Equals(releaseTag.TrimStart('v', '.'), assetVersion, StringComparison.OrdinalIgnoreCase))
+                {
+                    return null;
+                }
+
+                string downloadUrl = $"{MEMREDUCT_DOWNLOAD_BASE_URL}/{releaseTag}/{assetName}";
+                return Tuple.Create(releaseTag, downloadUrl, assetName);
             }
         }
 
