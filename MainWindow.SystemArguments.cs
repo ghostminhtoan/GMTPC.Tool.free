@@ -2,6 +2,7 @@
 // AI Summary: 2026-04-30 - Added Office Tool Plus Releases URLs for latest x64 runtime zip probing and hover/copy-link flows
 // AI Summary: 2026-05-12 - Moved TeraCopy Defender exclusions before download, removed temp exclusion after install, and kept %ProgramFiles%\TeraCopy permanent
 // AI Summary: 2026-05-02 - Updated Windows Setup constants for Ventoy and WintoHDD
+// AI Summary: 2026-05-12 - Added ChkDeactivateWindows wiring for the built-in slmgr /dlv -> slmgr /upk x flow
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -351,7 +352,7 @@ namespace GMTPC.Tool
                     File.Delete(neatDMPath);
                 }
 
-                UpdateStatus("Đang má»Ÿ Neat Download Manager...", "Cyan");
+                UpdateStatus("Đang mở Neat Download Manager...", "Cyan");
                 string neatDMExePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Neat Download Manager", "NeatDM.exe");
                 if (File.Exists(neatDMExePath))
                 {
@@ -362,7 +363,7 @@ namespace GMTPC.Tool
                     });
                 }
 
-                UpdateStatus("Đang má»Ÿ trang extension Neat Download Manager...", "Cyan");
+                UpdateStatus("Đang mở trang extension Neat Download Manager...", "Cyan");
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = "cmd",
@@ -658,6 +659,7 @@ namespace GMTPC.Tool
             bool hasChecked = ChkInstallIDM.IsChecked == true ||
                              ChkInstallNeatDM.IsChecked == true ||
                              ChkActivateWindows.IsChecked == true ||
+                             ChkDeactivateWindows.IsChecked == true ||
                              ChkActivateOffice.IsChecked == true ||
                              ChkOfficeToolPlus.IsChecked == true ||
                              ChkPauseWindowsUpdate.IsChecked == true ||
@@ -974,12 +976,12 @@ namespace GMTPC.Tool
         {
             try
             {
-                UpdateStatus("Má»Ÿ cá»­a sá»• kÃ­ch hoáº¡t NetLimiter...", "Cyan");
+                UpdateStatus("mở cá»­a sá»• kÃ­ch hoáº¡t NetLimiter...", "Cyan");
                 ShowNetLimiterKeyDialog();
             }
             catch (Exception ex)
             {
-                UpdateStatus($"Lỗi khi má»Ÿ NetLimiter Key Dialog: {ex.Message}", "Red");
+                UpdateStatus($"Lỗi khi mở NetLimiter Key Dialog: {ex.Message}", "Red");
             }
         }
 

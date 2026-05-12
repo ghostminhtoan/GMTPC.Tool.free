@@ -11,10 +11,12 @@
 //                 instead of DownloadSingleConnectionAsync
 //   - 2026-03-17: Updated GetGMTPCFolder() to use _selectedTempDrivePath
 // =======================================================================
+// AI Summary: 2026-05-12 - Added built-in Windows deactivation flow to capture DLV output, extract Activation ID, and run slmgr /upk x
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -151,6 +153,164 @@ namespace GMTPC.Tool
                 MessageBox.Show("Press \"0\" to continue", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex) { UpdateStatus($"Lỗi: {ex.Message}", "Red"); }
+        }
+
+        private string GetSlmgrVbsPath()
+        {
+            string windowsFolder = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+
+            if (Environment.Is64BitOperatingSystem && !Environment.Is64BitProcess)
+            {
+                string sysnativePath = Path.Combine(windowsFolder, "Sysnative", "slmgr.vbs");
+                if (File.Exists(sysnativePath))
+                {
+                    return sysnativePath;
+                }
+            }
+
+            return Path.Combine(windowsFolder, "System32", "slmgr.vbs");
+        }
+
+        private string ExtractActivationIdFromSlmgrOutput(string output)
+        {
+            if (string.IsNullOrWhiteSpace(output))
+            {
+                return null;
+            }
+
+            string[] labels =
+            {
+                "Activation ID",
+                "ID kích hoạt",
+                "ActivationId"
+            };
+
+            foreach (string label in labels)
+            {
+                int index = output.IndexOf(label, StringComparison.OrdinalIgnoreCase);
+                if (index < 0)
+                {
+                    continue;
+                }
+
+                string snippet = output.Substring(index);
+                Match match = Regex.Match(snippet, @"(?i)" + Regex.Escape(label) + @"\s*[:=]\s*([0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12})");
+                if (match.Success)
+                {
+                    return match.Groups[1].Value;
+                }
+
+                match = Regex.Match(snippet, @"([0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12})");
+                if (match.Success)
+                {
+                    return match.Groups[1].Value;
+                }
+            }
+
+            return null;
+        }
+
+        private void DeactivateWindows()
+        {
+            UpdateStatus("Đang gỡ kích hoạt Windows...", "Cyan");
+
+            string slmgrPath = GetSlmgrVbsPath();
+            string cscriptPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "cscript.exe");
+            string outputPath = Path.Combine(GetGMTPCFolder(), "SLMGR_DLV_OUTPUT.txt");
+            string upkOutputPath = Path.Combine(GetGMTPCFolder(), "SLMGR_UPK_OUTPUT.txt");
+
+            try
+            {
+                string dlvCommand = $"/c \"\"{cscriptPath}\" //nologo \"{slmgrPath}\" /dlv > \"{outputPath}\" 2>&1\"";
+                ProcessStartInfo dlvStartInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = dlvCommand,
+                    UseShellExecute = true,
+                    Verb = "runas",
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden
+                };
+
+                using (Process process = Process.Start(dlvStartInfo))
+                {
+                    if (process != null)
+                    {
+                        process.WaitForExit();
+                    }
+                }
+
+                string dlvOutput = File.Exists(outputPath) ? File.ReadAllText(outputPath) : string.Empty;
+                if (string.IsNullOrWhiteSpace(dlvOutput))
+                {
+                    UpdateStatus("Không đọc được kết quả slmgr /DLV", "Red");
+                    return;
+                }
+
+                string activationId = ExtractActivationIdFromSlmgrOutput(dlvOutput);
+                if (string.IsNullOrWhiteSpace(activationId))
+                {
+                    Dispatcher.Invoke(() => Clipboard.SetText(dlvOutput));
+                    UpdateStatus("Đã copy kết quả slmgr /DLV nhưng không tìm thấy Activation ID", "Yellow");
+                    return;
+                }
+
+                Dispatcher.Invoke(() =>
+                {
+                    Clipboard.SetText(dlvOutput + Environment.NewLine + Environment.NewLine + "Activation ID: " + activationId);
+                });
+
+                UpdateStatus($"Đã copy kết quả slmgr /DLV và Activation ID: {activationId}", "Green");
+
+                string upkCommand = $"/c \"\"{cscriptPath}\" //nologo \"{slmgrPath}\" /upk {activationId} > \"{upkOutputPath}\" 2>&1\"";
+                ProcessStartInfo upkStartInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = upkCommand,
+                    UseShellExecute = true,
+                    Verb = "runas",
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden
+                };
+
+                using (Process process = Process.Start(upkStartInfo))
+                {
+                    if (process != null)
+                    {
+                        process.WaitForExit();
+                    }
+                }
+
+                UpdateStatus("Đã chạy slmgr /upk x", "Green");
+            }
+            catch (Exception ex)
+            {
+                UpdateStatus($"Lỗi khi gỡ kích hoạt Windows: {ex.Message}", "Red");
+            }
+            finally
+            {
+                try
+                {
+                    if (File.Exists(outputPath))
+                    {
+                        File.Delete(outputPath);
+                    }
+                }
+                catch
+                {
+                }
+
+                try
+                {
+                    if (File.Exists(upkOutputPath))
+                    {
+                        File.Delete(upkOutputPath);
+                    }
+                }
+                catch
+                {
+                }
+            }
         }
 
         private void PauseWindowsUpdate()

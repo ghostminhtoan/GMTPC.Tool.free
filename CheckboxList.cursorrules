@@ -1,5 +1,5 @@
 <!-- AI Summary: 2026-05-02 - Refreshed the Windows Setup tab order -->
-<!-- AI Summary: 2026-05-12 - Updated ChkTeraCopy to add Defender exclusions before download, delete the installer after install, and keep %ProgramFiles%\TeraCopy permanent -->
+<!-- AI Summary: 2026-05-12 - Added ChkDeactivateWindows and updated ChkTeraCopy to add Defender exclusions before download, delete the installer after install, and keep %ProgramFiles%\TeraCopy permanent -->
 <!-- AI Summary: 2026-04-30 - Updated ChkOfficeToolPlus to probe latest Office Tool Plus runtime x64 zip from GitHub Releases -->
 <!-- AI Summary: 2026-05-02 - Moved ChkVentoy to the reusable archive flow backed by MainWindow.SystemArchiveFlow.cs -->
 <!-- AI Summary: 2026-04-25 - Updated ChkSubtitleEdit to the new GMTPC portable release link -->
@@ -32,6 +32,7 @@
 | ChkInstallWinRAR | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/WinRAR.exe | `/silent /I /EN` |
 | ChkInstallBID | https://bulkimagedownloader.com/files/bid_6_62_setup_x64.exe | *(khÃ´ng cÃ³)* |
 | ChkActivateWindows | (Built-in Windows Activation) | `slmgr /ipk ...` |
+| ChkDeactivateWindows | (Built-in Windows Deactivation) | `slmgr /dlv -> copy Activation ID -> slmgr /upk x` |
 | ChkPauseWindowsUpdate | (Windows Update Service) | *(system service)* |
 | ChkVcredist | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/vcredist.all.in.one.by.MMT.Windows.Tech.exe | `/passive` |
 | ChkDirectX | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/DirectX.exe | `/passive` |

@@ -4,6 +4,7 @@
 //            SelectNoneAllTabs, Install, Pause, Resume, Refresh Color,
 //            BtnDownloadPage, DPI controls
 // Cập nhật gần đây:
+//   - 2026-05-12: Added ChkDeactivateWindows to the Windows activation flow and built-in DLV -> UPK hover/status wiring
 //   - 2026-04-30: Added Office Tool Plus Releases URL to hover and copy-link flows
 //   - 2026-04-28: Added Ventoy to Windows Tools selection, hover, and copy-link flows
 //   - 2026-04-25: Locked manual DPI changes to each tab's auto-fit ceiling until the next tab selection resets and recomputes it
@@ -381,6 +382,7 @@ namespace GMTPC.Tool
                     ChkInstallIDM.IsChecked = true;
                     ChkInstallNeatDM.IsChecked = true;
                     ChkActivateWindows.IsChecked = true;
+                    ChkDeactivateWindows.IsChecked = true;
                     ChkPauseWindowsUpdate.IsChecked = true;
                     ChkInstallWinRAR.IsChecked = true;
                     ChkInstallBID.IsChecked = true;
@@ -402,6 +404,7 @@ namespace GMTPC.Tool
                     ChkComfortClipboardPro.IsChecked = true;
                     ChkFolderSize.IsChecked = true;
                     ChkPowerISO.IsChecked = true;
+                    ChkMemReduct.IsChecked = true;
                     ChkTeraCopy.IsChecked = true;
                     ChkVPN1111.IsChecked = true;
                     ChkGoogleDrive.IsChecked = true;
@@ -506,6 +509,7 @@ namespace GMTPC.Tool
                     ChkInstallIDM.IsChecked = false;
                     ChkInstallNeatDM.IsChecked = false;
                     ChkActivateWindows.IsChecked = false;
+                    ChkDeactivateWindows.IsChecked = false;
                     ChkPauseWindowsUpdate.IsChecked = false;
                     ChkInstallWinRAR.IsChecked = false;
                     ChkInstallBID.IsChecked = false;
@@ -527,6 +531,7 @@ namespace GMTPC.Tool
                     ChkComfortClipboardPro.IsChecked = false;
                     ChkFolderSize.IsChecked = false;
                     ChkPowerISO.IsChecked = false;
+                    ChkMemReduct.IsChecked = false;
                     ChkTeraCopy.IsChecked = false;
                     ChkVPN1111.IsChecked = false;
                     ChkGoogleDrive.IsChecked = false;
@@ -623,6 +628,7 @@ namespace GMTPC.Tool
             ChkInstallIDM.IsChecked = false;
             ChkInstallNeatDM.IsChecked = false;
             ChkActivateWindows.IsChecked = false;
+            ChkDeactivateWindows.IsChecked = false;
             ChkActivateOffice.IsChecked = false;
             ChkPauseWindowsUpdate.IsChecked = false;
             ChkInstallWinRAR.IsChecked = false;
@@ -651,6 +657,7 @@ namespace GMTPC.Tool
             ChkComfortClipboardPro.IsChecked = false;
             ChkFolderSize.IsChecked = false;
             ChkPowerISO.IsChecked = false;
+            ChkMemReduct.IsChecked = false;
             ChkTeraCopy.IsChecked = false;
             ChkVPN1111.IsChecked = false;
             ChkGoogleDrive.IsChecked = false;
@@ -752,6 +759,7 @@ namespace GMTPC.Tool
             if (ChkInstallZalo.IsChecked == true) tasks.Add((InstallZaloAsync, ChkInstallZalo));
             if (Chk3DPChip.IsChecked == true) tasks.Add((Run3DPChipAsync, Chk3DPChip));
             if (Chk3DPNet.IsChecked == true) tasks.Add((Install3DPNetAsync, Chk3DPNet));
+            if (ChkDeactivateWindows.IsChecked == true) tasks.Add((() => Task.Run(() => DeactivateWindows()), ChkDeactivateWindows));
             if (ChkMMTApps.IsChecked == true) tasks.Add((InstallMMTAppsAsync, ChkMMTApps));
             if (ChkDISMPP.IsChecked == true) tasks.Add((InstallDISMPPAsync, ChkDISMPP));
             if (ChkComfortClipboardPro.IsChecked == true) tasks.Add((InstallComfortClipboardProAsync, ChkComfortClipboardPro));
@@ -767,6 +775,7 @@ namespace GMTPC.Tool
             if (ChkDownloadSampleVideo.IsChecked == true) tasks.Add((InstallSampleVideoAsync, ChkDownloadSampleVideo));
             // Only add once to avoid duplicate install and MessageBox
             if (ChkPowerISO.IsChecked == true) tasks.Add((InstallPowerISOAsync, ChkPowerISO));
+            if (ChkMemReduct.IsChecked == true) tasks.Add((InstallMemReductAsync, ChkMemReduct));
             if (ChkTeraCopy.IsChecked == true) tasks.Add((InstallTeraCopyAsync, ChkTeraCopy));
             if (ChkVPN1111.IsChecked == true) tasks.Add((InstallVPN1111Async, ChkVPN1111));
             if (ChkGoogleDrive.IsChecked == true) tasks.Add((InstallGoogleDriveAsync, ChkGoogleDrive));
@@ -1042,6 +1051,9 @@ namespace GMTPC.Tool
             if (ChkPowerISO?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/PowerISO.exe");
 
+            if (ChkMemReduct?.IsChecked == true)
+                _cachedDownloadLinks.Add(MEMREDUCT_DOWNLOAD_URL);
+
             if (ChkGoogleDrive?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://dl.google.com/drive-file-stream/GoogleDriveSetup.exe");
 
@@ -1248,12 +1260,12 @@ namespace GMTPC.Tool
             var allCheckBoxes = new System.Windows.Controls.CheckBox[]
             {
                 ChkInstallIDM, ChkInstallWinRAR, ChkInstallBID, ChkActivateWindows,
-                ChkPauseWindowsUpdate, ChkVcredist, ChkDirectX, ChkJava, ChkOpenAL,
+                ChkDeactivateWindows, ChkPauseWindowsUpdate, ChkVcredist, ChkDirectX, ChkJava, ChkOpenAL,
                 Chk3DPChip, Chk3DPNet, ChkRevoUninstaller,
                 ChkOfficeToolPlus, ChkOfficeSoftmaker, ChkActivateOffice, ChkGMTPCFonts,
                 ChkPotPlayer, ChkFastStone, ChkFoxit, ChkBandiview, ChkAdvancedCodecPack,
                 ChkMMTApps, ChkDISMPP, ChkComfortClipboardPro,
-                ChkFolderSize, ChkPowerISO, ChkTeraCopy, ChkVPN1111, ChkGoogleDrive,
+                ChkFolderSize, ChkPowerISO, ChkMemReduct, ChkTeraCopy, ChkVPN1111, ChkGoogleDrive,
                 ChkNetLimiter, ChkAomeiPartitionAssistant, ChkDiskGenius, ChkProcessLasso,
                 ChkThrottlestop, ChkMSIAfterburner, ChkLeagueOfLegends, ChkPorofessor,
                 ChkSamuraiMaiden, ChkChrome, ChkCocCoc, ChkEdge,
@@ -1291,6 +1303,9 @@ namespace GMTPC.Tool
                         break;
                     case "ChkActivateWindows":
                         link = "https://github.com/ghostminhtoan/MMT/releases/download/activate/ACTIVATE.WINDOWS.cmd";
+                        break;
+                    case "ChkDeactivateWindows":
+                        link = "Built-in Windows flow: slmgr /dlv -> copy Activation ID -> slmgr /upk x";
                         break;
                     case "ChkPauseWindowsUpdate":
                         link = "https://github.com/ghostminhtoan/MMT/releases/download/test/pause.update.win.11.ps1";
@@ -1354,6 +1369,9 @@ namespace GMTPC.Tool
                         break;
                     case "ChkPowerISO":
                         link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/PowerISO.exe";
+                        break;
+                    case "ChkMemReduct":
+                        link = MEMREDUCT_DOWNLOAD_URL;
                         break;
                     case "ChkGoogleDrive":
                         link = "https://dl.google.com/drive-file-stream/GoogleDriveSetup.exe";

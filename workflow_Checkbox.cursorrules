@@ -5,6 +5,8 @@
 <!-- AI Summary: 2026-03-29 - Added mandatory UpdateInstallButtonState() rule to prevent Install button interaction issues -->
 
 <!-- AI Summary: 2026-04-30 - Standardized build workflow to Release Any CPU, copy GMTPC.Tool.exe to root, and push the root exe -->
+<!-- AI Summary: 2026-05-02 - Added dedicated GitHub latest-version archive workflow and clarified release-asset cleanup flow -->
+<!-- AI Summary: 2026-05-12 - Added ChkDeactivateWindows to the checkbox workflow as the built-in Windows deactivation flow -->
 <system_context>
 Bạn là một AI Code Agent chuyên nghiệp, làm việc trên dự án "MMT Tools" (WPF, .NET 4.8, C# 7.3).
 Mục tiêu của bạn là tuân thủ TUYỆT ĐỐI kiến trúc Partial Classes của dự án và các quy trình làm việc được định nghĩa dưới đây.
@@ -264,6 +266,44 @@ nếu chọn ổ D thì sẽ tự tạo  defender exclusion cho D:\Temp Folder, 
             string tempFolder = _ghostOfTsushimaTempFolder;
             // Tải 29 parts vào tempFolder
             // Xóa folder sau khi xong
+        </example>
+    </workflow>
+
+    <!-- ==================== SPECIAL CASE: ARCHIVE / GITHUB RELEASE FLOW ==================== -->
+    <workflow name="Workflow_github_latest_version_archive">
+        <description>
+        Quy trình đặc biệt cho phần mềm dạng archive hoặc GitHub Releases, nơi file tải về là .zip/.7z và cần bung ra trước khi mở file chạy chính.
+        Dùng riêng cho GitHub Releases và các tool tương tự có chu trình download -> extract -> open executable -> cleanup.
+        </description>
+
+        <special_requirements>
+            1. **MainWindow.SystemArchiveFlow.cs**:
+               - Tạo/duy trì flow tải release mới nhất từ GitHub Releases.
+               - Chỉ chọn asset đúng pattern, ví dụ `ventoy-...windows.zip`.
+               - Giải nén vào folder tạm theo rule của checkbox/tab đang dùng.
+
+            2. **MainWindow.Tab[X].cs**:
+               - Method `Install[Y]Async()` phải gọi flow archive thay vì flow download thông thường.
+               - Sau khi giải nén, tìm đúng folder payload và file exe cần mở.
+               - Mở file chính, đợi tiến trình kết thúc, rồi dọn zip và thư mục tạm nếu không còn dùng.
+
+            3. **MainWindow.SystemButtons.cs**:
+               - Checkbox vẫn phải tương tác đầy đủ với `BtnInstall`, `BtnSelectAll`, `BtnSelectNone`, `BtnDownloadPage`.
+               - Nếu checkbox archive có link hover, vẫn cập nhật `Checkbox_MouseEnter()`.
+
+            4. **CheckboxList.cursorrules**:
+               - Ghi rõ đây là checkbox dạng archive/release flow.
+               - Ghi chú asset cần tải, folder đích, file cần mở, và điều kiện cleanup.
+        </special_requirements>
+
+        <example>
+            // GitHub latest-version archive flow
+            // 1) Lấy release mới nhất từ GitHub
+            // 2) Tải ventoy-...windows.zip vào C:\\Ventoy
+            // 3) Giải nén, tìm ventoy-x.x.x
+            // 4) Chuyển folder ra C:\\
+            // 5) Mở ventoy2disk.exe
+            // 6) Đợi tiến trình tắt rồi xóa zip
         </example>
     </workflow>
 
@@ -529,6 +569,7 @@ nếu chọn ổ D thì sẽ tự tạo  defender exclusion cho D:\Temp Folder, 
     
     <!-- Tab System -->
     <checkbox name="ChkActivateWindows" tab="System" url="(Built-in)" args="slmgr /ipk ..."/>
+    <checkbox name="ChkDeactivateWindows" tab="System" url="(Built-in)" args="slmgr /dlv -> copy Activation ID -> slmgr /upk x"/>
 </current_checkboxes>
 
 <file_structure_reference>
@@ -594,7 +635,8 @@ nếu chọn ổ D thì sẽ tự tạo  defender exclusion cho D:\Temp Folder, 
 
 
 <prompt_guidance>
-Gợi ý prompt ngắn cho workflow Ventoy hoặc flow archive tương tự:
+Gợi ý prompt ngắn cho workflow GitHub latest-version archive hoặc flow tương tự:
 - "Dùng Workflow_editcheckbox: Tab Windows Mod MMT, checkbox Ventoy, link https://github.com/ventoy/Ventoy/releases, argument *(tool riêng)*. Dùng MainWindow.SystemArchiveFlow.cs, flow download -> extract -> mở file chỉ định -> xóa zip sau khi tiến trình tắt."
+- Nếu cần tạo mới checkbox/archive flow, dùng `Workflow_github_latest_version_archive` để mô tả rõ release asset, folder đích, file cần mở và cleanup.
 - Nếu là phần mềm khác cùng kiểu: nêu rõ tên file sau khi bung archive cần mở, và file/thư mục tạm nào phải xóa sau khi xong.
 </prompt_guidance>
