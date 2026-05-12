@@ -1,5 +1,6 @@
 ﻿// AI Summary: 2026-04-28 - Added VentoySourceForgeFiles URL and Ventoy checkbox state wiring
 // AI Summary: 2026-04-30 - Added Office Tool Plus Releases URLs for latest x64 runtime zip probing and hover/copy-link flows
+// AI Summary: 2026-05-11 - Kept TeraCopy Defender exclusion on %ProgramFiles%\TeraCopy permanently
 // AI Summary: 2026-05-02 - Updated Windows Setup constants for Ventoy and WintoHDD
 using System;
 using System.Diagnostics;
@@ -263,6 +264,9 @@ namespace GMTPC.Tool
         private const string POWERISO_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/PowerISO.exe";
         private const string POWERISO_INSTALL_ARGUMENTS = "/S";
 
+        // MemReduct (GitHub Releases direct download)
+        private const string MEMREDUCT_DOWNLOAD_URL = "https://github.com/henrypp/memreduct/releases/download/v.3.5.2/memreduct-3.5.2-setup.exe";
+
         // TeraCopy
         private const string TERACOPY_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/TeraCopy.Pro.v3.17.0.0.exe";
         private const string TERACOPY_INSTALL_ARGUMENTS = "/S";
@@ -457,6 +461,44 @@ namespace GMTPC.Tool
             catch (Exception ex)
             {
                 UpdateStatus($"Lá»—i khi cÃ i Ä‘áº·t Google Drive: {ex.Message}", "Red");
+            }
+        }
+
+        private async Task InstallMemReductAsync()
+        {
+            try
+            {
+                UpdateStatus("Đang tải MemReduct...", "Cyan");
+                string memReductPath = Path.Combine(GetGMTPCFolder(), "memreduct-3.5.2-setup.exe");
+                await DownloadWithProgressAsync(MEMREDUCT_DOWNLOAD_URL, memReductPath, "MemReduct");
+
+                Dispatcher.Invoke(() =>
+                {
+                    DownloadProgressBar.Value = 0;
+                    ProgressTextBlock.Text = "";
+                    SpeedTextBlock.Text = "";
+                });
+
+                UpdateStatus("Đang cài đặt MemReduct (silent)...", "Yellow");
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    FileName = memReductPath,
+                    Arguments = "/S",
+                    UseShellExecute = true
+                };
+                Process process = Process.Start(startInfo);
+
+                if (process != null)
+                {
+                    await Task.Run(() => process.WaitForExit());
+                    UpdateStatus("MemReduct đã hoàn tất.", "Green");
+                }
+
+                if (File.Exists(memReductPath)) File.Delete(memReductPath);
+            }
+            catch (Exception ex)
+            {
+                UpdateStatus($"Lỗi khi cài MemReduct: {ex.Message}", "Red");
             }
         }
 
@@ -1254,10 +1296,10 @@ namespace GMTPC.Tool
         {
             try
             {
-                // Add Windows Defender exclusion for %TEMP%\TeraCopy before download
-                string tempTeraCopyFolder = Path.Combine(Path.GetTempPath(), "TeraCopy");
-                UpdateStatus($"Äang thÃªm Windows Defender exclusion: {tempTeraCopyFolder}...", "Yellow");
-                AddDefenderExclusion(tempTeraCopyFolder);
+                // Keep the installed TeraCopy folder permanently excluded from Defender
+                string teraCopyInstallFolder = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                    "TeraCopy");
 
                 UpdateStatus("Äang táº£i TeraCopy...", "Cyan");
                 string teraPath = Path.Combine(GetGMTPCFolder(), "TeraCopy.Pro.v3.17.0.0.exe");
@@ -1283,13 +1325,11 @@ namespace GMTPC.Tool
                 {
                     await Task.Run(() => process.WaitForExit());
                     UpdateStatus("TeraCopy Ä‘Ã£ hoÃ n táº¥t.", "Green");
+                    UpdateStatus($"Äang thÃªm Windows Defender exclusion: {teraCopyInstallFolder}...", "Yellow");
+                    AddDefenderExclusion(teraCopyInstallFolder);
                 }
 
                 if (File.Exists(teraPath)) File.Delete(teraPath);
-
-                // Remove Windows Defender exclusion after installation
-                UpdateStatus("Äang xÃ³a Windows Defender exclusion...", "Yellow");
-                RemoveDefenderExclusion(tempTeraCopyFolder);
             }
             catch (Exception ex)
             {

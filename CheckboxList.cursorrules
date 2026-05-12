@@ -1,4 +1,5 @@
-﻿<!-- AI Summary: 2026-05-02 - Refreshed the Windows Setup tab order -->
+<!-- AI Summary: 2026-05-02 - Refreshed the Windows Setup tab order -->
+<!-- AI Summary: 2026-05-11 - Marked ChkVMWare162Lite as no-argument install and kept TeraCopy exclusion permanent -->
 <!-- AI Summary: 2026-04-30 - Updated ChkOfficeToolPlus to probe latest Office Tool Plus runtime x64 zip from GitHub Releases -->
 <!-- AI Summary: 2026-05-02 - Moved ChkVentoy to the reusable archive flow backed by MainWindow.SystemArchiveFlow.cs -->
 <!-- AI Summary: 2026-04-25 - Updated ChkSubtitleEdit to the new GMTPC portable release link -->
@@ -80,6 +81,7 @@
 | ChkComfortClipboardPro | *(Comfort Clipboard Pro)* | *(tool riÃªng)* |
 | ChkFolderSize | *(FolderSize)* | *(tool riÃªng)* |
 | ChkPowerISO | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/PowerISO.exe | `/S` |
+| ChkMemReduct | https://github.com/henrypp/memreduct/releases/download/v.3.5.2/memreduct-3.5.2-setup.exe | `/S` |
 | ChkTeraCopy | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/TeraCopy.Pro.v3.17.0.0.exe | `/S` |
 | ChkVPN1111 | https://1111-releases.cloudflareclient.com/win/latest | `/passive` |
 | ChkGoogleDrive | *(Google Drive)* | *(tool riÃªng)* |
@@ -120,7 +122,7 @@
 | ChkTeamViewerQS | *(TeamViewer QuickSupport)* | *(tool riÃªng)* |
 | ChkTeamViewerFull | *(TeamViewer Full)* | *(tool riÃªng)* |
 | ChkAnyDesk | *(AnyDesk)* | *(tool riÃªng)* |
-| ChkVMWare162Lite | *(VMWare 16.2 lite)* | *(tool riÃªng)* |
+| ChkVMWare162Lite | *(VMWare 16.2 lite)* | *(không cần argument)* |
 
 ## Tab Driver
 
@@ -152,7 +154,7 @@
 | ChkWin10_22H2_2024_December | GitHub (5 parts - auto merge):<br>https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.001<br>https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.002<br>https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.003<br>https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.004<br>https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.005 | *(ISO image - 5-part download, auto merge)* |
 ---
 
-**Tá»•ng sá»‘:** 56 checkboxes
+**Tá»•ng sá»‘:** 57 checkboxes
 
 **Ghi chÃº:**
 - CÃ¡c checkbox Ä‘Æ°á»£c phÃ¢n loáº¡i theo Tab tÆ°Æ¡ng á»©ng trong giao diá»‡n (MainWindow.xaml)

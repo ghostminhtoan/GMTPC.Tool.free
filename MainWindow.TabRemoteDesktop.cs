@@ -1,4 +1,6 @@
-﻿using System;
+// AI Summary: 2026-05-11 - Removed explicit VMware install arguments so it runs without extra parameters
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -237,6 +239,8 @@ namespace GMTPC.Tool
         }
 
 
+        // AI Summary: 2026-05-11 - Removed explicit VMware install arguments so it runs without extra parameters
+
         private void ChkVMWare162Lite_Click(object sender, RoutedEventArgs e)
         {
             if (ChkVMWare162Lite.IsChecked == true)
@@ -270,7 +274,6 @@ namespace GMTPC.Tool
                 ProcessStartInfo startInfo = new ProcessStartInfo
                 {
                     FileName = vmwarePath,
-                    Arguments = "",
                     UseShellExecute = true
                 };
                 Process process = Process.Start(startInfo);
