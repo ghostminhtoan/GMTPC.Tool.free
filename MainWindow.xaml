@@ -255,9 +255,11 @@
                                    Foreground="Cyan"
                                    TextWrapping="Wrap"
                                    MinWidth="0"
+                                   MaxWidth="285"
                                    VerticalAlignment="Center">
                                     Windows Defender: không
-                                    cần tắt, Antivirus khác phải tắt
+                                    cần tắt<LineBreak/>
+                                    Antivirus khác phải tắt
                                 </TextBlock>
                     </Grid>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
