@@ -4,6 +4,7 @@
 // AI Summary: 2026-04-25 - Rebalanced per-tab fit limits so Office/Multimedia/Remote Desktop clamp earlier while Driver/Browser/Windows tabs can scale larger.
 // AI Summary: 2026-04-23 - Added sparse Windows tab overflow detection so DPI reduces before content overlaps buttons.
 // AI Summary: 2026-05-15 - Updated the command bar sizing to match the new two-row button layout
+// AI Summary: 2026-05-15 - Relaxed DPI auto-fit clamping for Subtitle, Partition, and Driver so they can scale beyond 100% in portrait and landscape
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
@@ -317,7 +318,7 @@ namespace GMTPC.Tool
 
         private bool ApplyPortraitStrictPanelSizing(WrapPanel panel, double monitorWidth, bool isMonitorPortrait, bool isCompact)
         {
-            bool isStrictPortraitPanel = panel == PartitionPanel || panel == DriverPanel || panel == BrowserPanel;
+            bool isStrictPortraitPanel = panel == BrowserPanel;
             if (!isStrictPortraitPanel) return false;
             if (!isMonitorPortrait && !isCompact) return false;
 
@@ -973,6 +974,7 @@ namespace GMTPC.Tool
                 Rect workArea = GetCurrentMonitorWorkAreaDip();
                 if (!IsPortrait(workArea)) return false;
                 if (IsSystemInformationTabSelected()) return false;
+                if (IsSelectedTab("Subtitle") || IsSelectedTab("Partition") || IsSelectedTab("Driver")) return false;
 
                 WrapPanel panel = GetSelectedInstallPanel();
                 if (panel == null) return false;
