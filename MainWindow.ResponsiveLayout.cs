@@ -7,6 +7,7 @@
 // AI Summary: 2026-05-15 - Relaxed DPI auto-fit clamping for Subtitle, Partition, and Driver so they can scale beyond 100% in portrait and landscape
 // AI Summary: 2026-05-15 - Relaxed landscape overflow detection for non-core tabs so Office, Subtitle, Multimedia, Gaming, Browser, and Remote Desktop can zoom past 100%
 // AI Summary: 2026-05-15 - Added a direct TabHostBorder footer check so landscape auto-fit stops before the yellow frame collides with the buttons
+// AI Summary: 2026-05-15 - Fixed chrome overflow detection to measure the visible ScrollViewer bounds instead of the full scrollable content
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
@@ -756,11 +757,6 @@ namespace GMTPC.Tool
 
             if (IsSystemInformationTabSelected()) return false;
 
-            if (HasSelectedTabChromeOverflow())
-            {
-                return true;
-            }
-
             if (HasPortraitSingleColumnLayout())
             {
                 return true;
@@ -1071,10 +1067,11 @@ namespace GMTPC.Tool
 
                 ScrollViewer selectedScrollViewer = GetSelectedTabScrollViewer();
                 if (selectedScrollViewer == null || selectedScrollViewer.ActualWidth <= 0 || selectedScrollViewer.ActualHeight <= 0) return false;
-                if (!(selectedScrollViewer.Content is FrameworkElement content) || content.ActualWidth <= 0 || content.ActualHeight <= 0) return false;
 
                 Rect hostBounds = TabHostBorder.TransformToAncestor(MainGrid)
                                                .TransformBounds(new Rect(0, 0, TabHostBorder.ActualWidth, TabHostBorder.ActualHeight));
+                Rect scrollBounds = selectedScrollViewer.TransformToAncestor(MainGrid)
+                                                         .TransformBounds(new Rect(0, 0, selectedScrollViewer.ActualWidth, selectedScrollViewer.ActualHeight));
 
                 double leftLimit = hostBounds.Left + TabHostBorder.Padding.Left + 2;
                 double rightLimit = hostBounds.Right - TabHostBorder.Padding.Right - 2;
@@ -1085,51 +1082,11 @@ namespace GMTPC.Tool
                     Rect buttonsBounds = ButtonsBorder.TransformToAncestor(MainGrid)
                                                       .TransformBounds(new Rect(0, 0, ButtonsBorder.ActualWidth, ButtonsBorder.ActualHeight));
                     bottomLimit = Math.Min(bottomLimit, buttonsBounds.Top - 2);
-                    if (hostBounds.Bottom > bottomLimit + tolerance)
-                    {
-                        return true;
-                    }
                 }
 
-                double minChildLeft = double.MaxValue;
-                double maxChildRight = double.MinValue;
-                double maxChildBottom = double.MinValue;
-
-                void AccumulateBounds(FrameworkElement element)
-                {
-                    if (element == null || !element.IsVisible || element.ActualWidth <= 0 || element.ActualHeight <= 0) return;
-
-                    try
-                    {
-                        Rect bounds = element.TransformToAncestor(MainGrid)
-                                             .TransformBounds(new Rect(0, 0, element.ActualWidth, element.ActualHeight));
-                        minChildLeft = Math.Min(minChildLeft, bounds.Left);
-                        maxChildRight = Math.Max(maxChildRight, bounds.Right);
-                        maxChildBottom = Math.Max(maxChildBottom, bounds.Bottom);
-                    }
-                    catch
-                    {
-                    }
-                }
-
-                AccumulateBounds(content);
-
-                if (content is Panel contentPanel)
-                {
-                    foreach (FrameworkElement child in contentPanel.Children.OfType<FrameworkElement>())
-                    {
-                        AccumulateBounds(child);
-                    }
-                }
-
-                if (double.IsInfinity(minChildLeft) || double.IsInfinity(maxChildRight) || double.IsInfinity(maxChildBottom))
-                {
-                    return false;
-                }
-
-                return minChildLeft < leftLimit - tolerance ||
-                       maxChildRight > rightLimit + tolerance ||
-                       maxChildBottom > bottomLimit + tolerance;
+                return scrollBounds.Left < leftLimit - tolerance ||
+                       scrollBounds.Right > rightLimit + tolerance ||
+                       scrollBounds.Bottom > bottomLimit + tolerance;
             }
             catch
             {
