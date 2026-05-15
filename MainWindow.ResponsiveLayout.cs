@@ -6,6 +6,7 @@
 // AI Summary: 2026-05-15 - Updated the command bar sizing to match the new two-row button layout
 // AI Summary: 2026-05-15 - Relaxed DPI auto-fit clamping for Subtitle, Partition, and Driver so they can scale beyond 100% in portrait and landscape
 // AI Summary: 2026-05-15 - Relaxed landscape overflow detection for non-core tabs so Office, Subtitle, Multimedia, Gaming, Browser, and Remote Desktop can zoom past 100%
+// AI Summary: 2026-05-15 - Added a direct TabHostBorder footer check so landscape auto-fit stops before the yellow frame collides with the buttons
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
@@ -755,6 +756,11 @@ namespace GMTPC.Tool
 
             if (IsSystemInformationTabSelected()) return false;
 
+            if (HasSelectedTabChromeOverflow())
+            {
+                return true;
+            }
+
             if (HasPortraitSingleColumnLayout())
             {
                 return true;
@@ -1079,6 +1085,10 @@ namespace GMTPC.Tool
                     Rect buttonsBounds = ButtonsBorder.TransformToAncestor(MainGrid)
                                                       .TransformBounds(new Rect(0, 0, ButtonsBorder.ActualWidth, ButtonsBorder.ActualHeight));
                     bottomLimit = Math.Min(bottomLimit, buttonsBounds.Top - 2);
+                    if (hostBounds.Bottom > bottomLimit + tolerance)
+                    {
+                        return true;
+                    }
                 }
 
                 double minChildLeft = double.MaxValue;
