@@ -7,6 +7,7 @@
 <!-- AI Summary: 2026-04-30 - Added Ventoy checkbox to Windows Mod MMT with GitHub Releases-based download flow -->
 <!-- AI Summary: 2026-05-02 - Reordered the Windows child tabs -->
 <!-- AI Summary: 2026-05-12 - Added ChkDeactivateWindows next to ChkActivateWindows for built-in slmgr DLV/UPK flow -->
+<!-- AI Summary: 2026-05-15 - Reworked the top action bar layout and updated the header/download texts for cleaner wrapping -->
 <Window x:Class="GMTPC.Tool.MainWindow"
          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -249,13 +250,15 @@
                                 Margin="0,0,12,0"
                                 HorizontalAlignment="Left"
                                 Click="BtnExit_Click" Height="22" Width="90"/>
-                        <TextBlock Grid.Column="2"
-                                   Text="Windows Defender: không cần tắt, Antivirus khác: phải tắt."
+                                <TextBlock Grid.Column="2"
                                    FontSize="15"
                                    Foreground="Cyan"
                                    TextWrapping="Wrap"
                                    MinWidth="0"
-                                   VerticalAlignment="Center"/>
+                                   VerticalAlignment="Center">
+                                    Windows Defender: không
+                                    cần tắt, Antivirus khác phải tắt
+                                </TextBlock>
                     </Grid>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,10,0">
@@ -718,8 +721,18 @@
         <!-- Buttons Section -->
         <Border x:Name="ButtonsBorder" Grid.Row="2" Background="Transparent" Margin="0,0,19,10" Grid.ColumnSpan="2">
             <StackPanel Orientation="Vertical">
-                <WrapPanel x:Name="CommandWrapPanel" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,10">
-                    <Border BorderBrush="#FF7A7A7A" BorderThickness="1" CornerRadius="5" Width="210">
+                <WrapPanel x:Name="CommandTopWrapPanel" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,8">
+                    <Button x:Name="BtnSelectAll" Content="Select All" Width="67" Height="28" Click="BtnSelectAll_Click"/>
+                    <Button x:Name="BtnSelectNone" Content="Select None" Width="77" Height="28" Click="BtnSelectNone_Click"/>
+                    <Button x:Name="BtnSelectNoneAllTabs" Width="102" Height="40" Background="DarkCyan" BorderBrush="darkcyan" Click="BtnSelectNoneAllTabs_Click">
+                        <TextBlock TextAlignment="Center" TextWrapping="Wrap">Select none<LineBreak/>for all tabs</TextBlock>
+                    </Button>
+                    <Button x:Name="BtnInstall" Content="Install" Width="50" Height="28" Background="DarkBlue" BorderBrush="#FF005FB8" Click="BtnInstall_Click" IsEnabled="False"/>
+                    <Button x:Name="BtnPause" Content="Pause" Width="47" Height="28" Background="#FFD87F00" BorderBrush="#FFD87F00" Click="BtnPause_Click" IsEnabled="False"/>
+                    <Button x:Name="BtnStop" Content="Stop" Width="45" Height="28" Background="#FFB80000" BorderBrush="#FFB80000" Click="BtnStop_Click" IsEnabled="False"/>
+                </WrapPanel>
+                <WrapPanel x:Name="CommandBottomWrapPanel" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Border BorderBrush="#FF7A7A7A" BorderThickness="1" CornerRadius="5" Width="210" Margin="0,0,8,0">
                         <StackPanel Orientation="Horizontal" Margin="3,0,0,0">
                             <StackPanel Margin="0,0,10,0">
                                 <TextBlock Text="Temp folder" Foreground="#FFE6E6E6" FontSize="10" Margin="3,3,3,0" Width="69"/>
@@ -735,15 +748,11 @@
                             <Button x:Name="BtnOpenFolder" Content="Open folder" Width="75" Height="22" Margin="0,3,3,3" Background="DarkCyan" BorderBrush="darkcyan" Click="BtnOpenFolder_Click" VerticalAlignment="Bottom"/>
                         </StackPanel>
                     </Border>
-                    <Button x:Name="BtnSelectAll" Content="Select All" Width="67" Height="28" Click="BtnSelectAll_Click"/>
-                    <Button x:Name="BtnSelectNone" Content="Select None" Width="77" Height="28" Click="BtnSelectNone_Click"/>
-                    <Button x:Name="BtnSelectNoneAllTabs" Content="Select none for all tabs" Width="128" Height="28" Background="DarkCyan" BorderBrush="darkcyan" Click="BtnSelectNoneAllTabs_Click"/>
-                    <Button x:Name="BtnInstall" Content="Install" Width="50" Height="28" Background="DarkBlue" BorderBrush="#FF005FB8" Click="BtnInstall_Click" IsEnabled="False"/>
-                    <Button x:Name="BtnPause" Content="Pause" Width="47" Height="28" Background="#FFD87F00" BorderBrush="#FFD87F00" Click="BtnPause_Click" IsEnabled="False"/>
-                    <Button x:Name="BtnStop" Content="Stop" Width="45" Height="28" Background="#FFB80000" BorderBrush="#FFB80000" Click="BtnStop_Click" IsEnabled="False"/>
-                    <Button x:Name="BtnRefreshColor" Content="Refresh Color" Width="84" Height="28" Background="DarkMagenta" BorderBrush="DarkCyan" Click="BtnRefreshColor_Click"/>
+                    <Button x:Name="BtnRefreshColor" Content="Refresh Color" Width="84" Height="28" Margin="0,0,8,0" Background="DarkMagenta" BorderBrush="DarkCyan" Click="BtnRefreshColor_Click"/>
+                    <Button x:Name="BtnDownloadPage" Width="362" Height="56" Background="DarkGreen" BorderBrush="black" Click="BtnDownloadPage_Click" MouseEnter="BtnDownloadPage_MouseEnter" MouseRightButtonUp="BtnDownloadPage_MouseRightButtonUp">
+                        <TextBlock TextAlignment="Center" TextWrapping="Wrap">Mạng chậm thì chọn nút rồi click<LineBreak/>vào đây để đến trang downlaod gốc</TextBlock>
+                    </Button>
                 </WrapPanel>
-                <Button x:Name="BtnDownloadPage" Content="Mạng chậm thì chọn nút rồi click vào đây để đến trang download gốc" Width="362" Height="50" Background="DarkGreen" BorderBrush="black" Click="BtnDownloadPage_Click" MouseEnter="BtnDownloadPage_MouseEnter" MouseRightButtonUp="BtnDownloadPage_MouseRightButtonUp"/>
             </StackPanel>
         </Border>
 

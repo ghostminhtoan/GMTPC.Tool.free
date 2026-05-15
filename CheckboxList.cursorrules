@@ -6,6 +6,7 @@
 <!-- AI Summary: 2026-04-24 (2) - Updated ChkDownloadSampleVideo to save into %USERPROFILE%\Videos -->
 <!-- AI Summary: 2026-04-24 - Added ChkDownloadSampleVideo to Tab Subtitle -->
 <!-- AI Summary: 2026-04-13 - Added ChkSubtitleDraftGMTPC to Tab Subtitle -->
+<!-- AI Summary: 2026-05-15 - Documented the final extra IDM launch after 5 open/close cycles -->
 
 # Danh sÃ¡ch Checkbox
 
@@ -28,6 +29,7 @@
 | TÃªn Checkbox | Link Download | Argument |
 |-------------|---------------|----------|
 | ChkInstallIDM | https://tinyurl.com/idmhcmvn | `/s /a /u /o /quiet /skipdlgst` |
+| *(note)* | Sau 5 lần mở/tắt, mở thêm một lần nữa tại %ProgramFiles(x86)%\Internet Download Manager\IDMan.exe |  |
 | ChkInstallNeatDM | https://neatdownloadmanager.com/file/NeatDM_setup.exe | `/silent` |
 | ChkInstallWinRAR | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/WinRAR.exe | `/silent /I /EN` |
 | ChkInstallBID | https://bulkimagedownloader.com/files/bid_6_62_setup_x64.exe | *(khÃ´ng cÃ³)* |

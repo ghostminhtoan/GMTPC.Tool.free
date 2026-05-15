@@ -3,6 +3,6 @@ namespace GMTPC.Tool
 { 
     public static class BuildInfo 
     { 
-        public const string BUILD_NUMBER = "2026-05-12 / 10:15:02"; 
+        public const string BUILD_NUMBER = "2026-05-15 / 09:08:44"; 
     } 
 }

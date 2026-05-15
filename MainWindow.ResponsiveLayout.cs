@@ -3,6 +3,7 @@
 // AI Summary: 2026-04-25 - Added maximize-then-fit DPI logic for tab switching so each selected tab auto-zooms to the largest fully visible scale.
 // AI Summary: 2026-04-25 - Rebalanced per-tab fit limits so Office/Multimedia/Remote Desktop clamp earlier while Driver/Browser/Windows tabs can scale larger.
 // AI Summary: 2026-04-23 - Added sparse Windows tab overflow detection so DPI reduces before content overlaps buttons.
+// AI Summary: 2026-05-15 - Updated the command bar sizing to match the new two-row button layout
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
@@ -417,10 +418,16 @@ namespace GMTPC.Tool
         {
             double available = Math.Max(260, windowWidth - (isCompact ? 42 : 82));
 
-            if (CommandWrapPanel != null)
+            if (CommandTopWrapPanel != null)
             {
-                CommandWrapPanel.HorizontalAlignment = isCompact ? HorizontalAlignment.Left : HorizontalAlignment.Center;
-                CommandWrapPanel.Margin = isCompact ? new Thickness(0, 0, 0, 8) : new Thickness(0, 0, 0, 10);
+                CommandTopWrapPanel.HorizontalAlignment = isCompact ? HorizontalAlignment.Left : HorizontalAlignment.Center;
+                CommandTopWrapPanel.Margin = isCompact ? new Thickness(0, 0, 0, 6) : new Thickness(0, 0, 0, 8);
+            }
+
+            if (CommandBottomWrapPanel != null)
+            {
+                CommandBottomWrapPanel.HorizontalAlignment = isCompact ? HorizontalAlignment.Left : HorizontalAlignment.Center;
+                CommandBottomWrapPanel.Margin = isCompact ? new Thickness(0, 0, 0, 8) : new Thickness(0, 0, 0, 0);
             }
 
             if (BtnDownloadPage != null)

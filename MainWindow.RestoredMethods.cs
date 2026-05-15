@@ -11,6 +11,8 @@
 //                 instead of DownloadSingleConnectionAsync
 //   - 2026-03-17: Updated GetGMTPCFolder() to use _selectedTempDrivePath
 // =======================================================================
+// AI Summary: 2026-05-15 - Switched IDM final open to the explicit %programfiles(x86)% path with retry wait before launching
+// AI Summary: 2026-05-15 - Updated IDM flow to open IDMan.exe one more time after the 5 open/close cycles
 // AI Summary: 2026-05-12 - Added built-in Windows deactivation flow to capture DLV output, extract Activation ID, and run slmgr /upk x
 using System;
 using System.Diagnostics;
@@ -479,8 +481,8 @@ namespace GMTPC.Tool
         {
             string idmPath = Path.Combine(GetGMTPCFolder(), "idman625build3.exe");
             string activatePath = Path.Combine(GetGMTPCFolder(), "IDM_6.4x_rabbit.exe");
-            string idmExePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Internet Download Manager", "IDMan.exe");
-            string idmBackupPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Internet Download Manager", "IDMan.exe.bak");
+            string idmExePath = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Internet Download Manager\IDMan.exe");
+            string idmBackupPath = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Internet Download Manager\IDMan.exe.bak");
             string tempCheckPath = Path.Combine(Path.GetTempPath(), "IDM_Setup_Temp", "IDM0.tmp");
             try
             {
@@ -583,7 +585,7 @@ namespace GMTPC.Tool
                     if (File.Exists(idmExePath))
                     {
                         UpdateStatus($"Lần {i + 1}/5: Đang mở IDM...", "Cyan");
-                        Process.Start(idmExePath);
+                        StartProcessWithShell(idmExePath);
                     }
 
                     await Task.Delay(1500);
@@ -595,6 +597,16 @@ namespace GMTPC.Tool
                     {
                         await Task.Delay(1500);
                     }
+                }
+
+                if (await WaitForFileAsync(idmExePath, 10000, 500))
+                {
+                    UpdateStatus("Đang mở IDM thêm một lần nữa...", "Cyan");
+                    StartProcessWithShell(idmExePath);
+                }
+                else
+                {
+                    UpdateStatus("Không tìm thấy IDMan.exe ở %programfiles(x86)%\\Internet Download Manager\\IDMan.exe", "Yellow");
                 }
 
                 UpdateStatus("Đã cài xong IDM!", "Green");
@@ -637,6 +649,33 @@ namespace GMTPC.Tool
             {
                 // Ignore if cannot get processes by name
             }
+        }
+
+        private async Task<bool> WaitForFileAsync(string filePath, int timeoutMilliseconds, int pollIntervalMilliseconds)
+        {
+            int elapsed = 0;
+            while (elapsed < timeoutMilliseconds)
+            {
+                if (File.Exists(filePath))
+                {
+                    return true;
+                }
+
+                await Task.Delay(pollIntervalMilliseconds);
+                elapsed += pollIntervalMilliseconds;
+            }
+
+            return File.Exists(filePath);
+        }
+
+        private void StartProcessWithShell(string filePath)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = filePath,
+                WorkingDirectory = Path.GetDirectoryName(filePath),
+                UseShellExecute = true
+            });
         }
 
         private async Task InstallVcredistAsync()
