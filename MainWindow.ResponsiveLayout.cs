@@ -5,6 +5,7 @@
 // AI Summary: 2026-04-23 - Added sparse Windows tab overflow detection so DPI reduces before content overlaps buttons.
 // AI Summary: 2026-05-15 - Updated the command bar sizing to match the new two-row button layout
 // AI Summary: 2026-05-15 - Relaxed DPI auto-fit clamping for Subtitle, Partition, and Driver so they can scale beyond 100% in portrait and landscape
+// AI Summary: 2026-05-15 - Relaxed landscape overflow detection for non-core tabs so Office, Subtitle, Multimedia, Gaming, Browser, and Remote Desktop can zoom past 100%
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
@@ -759,7 +760,11 @@ namespace GMTPC.Tool
                 return true;
             }
 
-            if (HasSelectedTabBottomOverflow())
+            bool isRelaxedLandscapeTab = !IsSelectedTab("Partition") &&
+                                         !IsSelectedTab("Driver") &&
+                                         !IsSelectedTab("Windows");
+
+            if (!isRelaxedLandscapeTab && HasSelectedTabBottomOverflow())
             {
                 return true;
             }
