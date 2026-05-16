@@ -11,6 +11,7 @@
 // AI Summary: 2026-05-15 - Restored shared footer overflow guarding for install tabs during landscape auto-fit
 // AI Summary: 2026-05-16 - Split tab footer overflow from visible checkbox overflow so hidden spacers no longer clamp normal tabs at 100%
 // AI Summary: 2026-05-16 - Switched normal tab auto-fit to the visible yellow tab frame bounds so checkbox count and hidden spacers do not pin DPI at 100%
+// AI Summary: 2026-05-16 - Treat missing or collapsed yellow tab bounds as overflow so non-Windows tabs cannot jump past the visible tab frame
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
@@ -788,11 +789,13 @@ namespace GMTPC.Tool
 
             try
             {
-                if (MainTabControl == null || TabHostBorder == null) return false;
-                if (MainTabControl.ActualWidth <= 0 || MainTabControl.ActualHeight <= 0) return false;
+                if (MainTabControl == null || TabHostBorder == null) return true;
+                if (MainTabControl.ActualWidth <= 0 || MainTabControl.ActualHeight <= 0) return true;
+                if (MainTabControl.ActualHeight * currentDPIScale < 48) return true;
 
-                if (!TryGetElementBoundsInWindow(MainTabControl, out Rect tabBounds)) return false;
-                if (!TryGetElementBoundsInWindow(TabHostBorder, out Rect hostBounds)) return false;
+                if (!TryGetElementBoundsInWindow(MainTabControl, out Rect tabBounds)) return true;
+                if (!TryGetElementBoundsInWindow(TabHostBorder, out Rect hostBounds)) return true;
+                if (tabBounds.Width < 160 || tabBounds.Height < 48) return true;
 
                 double leftLimit = hostBounds.Left + (TabHostBorder.Padding.Left * currentDPIScale);
                 double topLimit = hostBounds.Top + (TabHostBorder.Padding.Top * currentDPIScale);
