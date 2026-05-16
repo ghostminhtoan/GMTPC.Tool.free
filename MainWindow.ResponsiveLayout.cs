@@ -12,6 +12,7 @@
 // AI Summary: 2026-05-16 - Split tab footer overflow from visible checkbox overflow so hidden spacers no longer clamp normal tabs at 100%
 // AI Summary: 2026-05-16 - Switched normal tab auto-fit to the visible yellow tab frame bounds so checkbox count and hidden spacers do not pin DPI at 100%
 // AI Summary: 2026-05-16 - Treat missing or collapsed yellow tab bounds as overflow so non-Windows tabs cannot jump past the visible tab frame
+// AI Summary: 2026-05-16 - Added visible checkbox bounds checks against the yellow tab content panel so auto-fit keeps the last real checkbox visible
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
@@ -766,7 +767,7 @@ namespace GMTPC.Tool
                 return true;
             }
 
-            if (HasSelectedTabFrameOverflow())
+            if (HasSelectedTabFrameOverflow() || HasSelectedTabVisibleContentOverflow())
             {
                 return true;
             }
@@ -824,6 +825,96 @@ namespace GMTPC.Tool
             catch
             {
                 return false;
+            }
+        }
+
+        private bool HasSelectedTabVisibleContentOverflow()
+        {
+            const double tolerance = 2.0;
+            const double minContentHeight = 42.0;
+
+            try
+            {
+                ScrollViewer selectedScrollViewer = GetSelectedTabScrollViewer();
+                WrapPanel selectedPanel = GetSelectedInstallPanel();
+                FrameworkElement contentPanel = GetMainTabContentPanel();
+                if (selectedScrollViewer == null || selectedPanel == null || contentPanel == null) return true;
+                if (selectedScrollViewer.ActualWidth <= 0 || selectedScrollViewer.ActualHeight <= 0) return true;
+                if (selectedPanel.ActualWidth <= 0 || selectedPanel.ActualHeight <= 0) return true;
+                if (contentPanel.ActualWidth <= 0 || contentPanel.ActualHeight <= 0) return true;
+
+                if (!TryGetElementBoundsInWindow(contentPanel, out Rect contentBounds)) return true;
+                if (!TryGetElementBoundsInWindow(selectedScrollViewer, out Rect scrollBounds)) return true;
+                if (contentBounds.Height < minContentHeight) return true;
+
+                double leftLimit = contentBounds.Left + tolerance;
+                double topLimit = contentBounds.Top + tolerance;
+                double rightLimit = contentBounds.Right - tolerance;
+                double bottomLimit = contentBounds.Bottom - tolerance;
+
+                if (ButtonsBorder != null &&
+                    ButtonsBorder.IsVisible &&
+                    ButtonsBorder.ActualWidth > 0 &&
+                    ButtonsBorder.ActualHeight > 0 &&
+                    TryGetElementBoundsInWindow(ButtonsBorder, out Rect buttonsBounds))
+                {
+                    bottomLimit = Math.Min(bottomLimit, buttonsBounds.Top - tolerance);
+                }
+
+                if (scrollBounds.Left < leftLimit - tolerance ||
+                    scrollBounds.Top < topLimit - tolerance ||
+                    scrollBounds.Right > rightLimit + tolerance ||
+                    scrollBounds.Bottom > bottomLimit + tolerance)
+                {
+                    return true;
+                }
+
+                bool hasVisibleChild = false;
+                double minChildLeft = double.MaxValue;
+                double minChildTop = double.MaxValue;
+                double maxChildRight = double.MinValue;
+                double maxChildBottom = double.MinValue;
+
+                foreach (FrameworkElement child in selectedPanel.Children.OfType<FrameworkElement>())
+                {
+                    if (!child.IsVisible || child.ActualWidth <= 0 || child.ActualHeight <= 0) continue;
+
+                    if (!TryGetElementBoundsInWindow(child, out Rect childBounds))
+                    {
+                        return true;
+                    }
+
+                    hasVisibleChild = true;
+                    minChildLeft = Math.Min(minChildLeft, childBounds.Left);
+                    minChildTop = Math.Min(minChildTop, childBounds.Top);
+                    maxChildRight = Math.Max(maxChildRight, childBounds.Right);
+                    maxChildBottom = Math.Max(maxChildBottom, childBounds.Bottom);
+                }
+
+                if (!hasVisibleChild) return true;
+
+                return minChildLeft < leftLimit - tolerance ||
+                       minChildTop < topLimit - tolerance ||
+                       maxChildRight > rightLimit + tolerance ||
+                       maxChildBottom > bottomLimit + tolerance;
+            }
+            catch
+            {
+                return true;
+            }
+        }
+
+        private FrameworkElement GetMainTabContentPanel()
+        {
+            try
+            {
+                if (MainTabControl == null) return null;
+                MainTabControl.ApplyTemplate();
+                return MainTabControl.Template?.FindName("ContentPanel", MainTabControl) as FrameworkElement;
+            }
+            catch
+            {
+                return null;
             }
         }
 
