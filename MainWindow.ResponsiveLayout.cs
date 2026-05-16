@@ -8,6 +8,7 @@
 // AI Summary: 2026-05-15 - Relaxed landscape overflow detection for non-core tabs so Office, Subtitle, Multimedia, Gaming, Browser, and Remote Desktop can zoom past 100%
 // AI Summary: 2026-05-15 - Added a direct TabHostBorder footer check so landscape auto-fit stops before the yellow frame collides with the buttons
 // AI Summary: 2026-05-15 - Fixed chrome overflow detection to measure the visible ScrollViewer bounds instead of the full scrollable content
+// AI Summary: 2026-05-15 - Reinstated footer overflow guarding for non-core landscape tabs so only Partition, Driver, and Windows keep the relaxed scaling path
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
@@ -762,11 +763,11 @@ namespace GMTPC.Tool
                 return true;
             }
 
-            bool isRelaxedLandscapeTab = !IsSelectedTab("Partition") &&
-                                         !IsSelectedTab("Driver") &&
-                                         !IsSelectedTab("Windows");
+            bool isCoreLandscapeTab = IsSelectedTab("Partition") ||
+                                      IsSelectedTab("Driver") ||
+                                      IsSelectedTab("Windows");
 
-            if (!isRelaxedLandscapeTab && HasSelectedTabBottomOverflow())
+            if (!isCoreLandscapeTab && HasSelectedTabBottomOverflow())
             {
                 return true;
             }
