@@ -8,7 +8,8 @@
 // AI Summary: 2026-05-15 - Relaxed landscape overflow detection for non-core tabs so Office, Subtitle, Multimedia, Gaming, Browser, and Remote Desktop can zoom past 100%
 // AI Summary: 2026-05-15 - Added a direct TabHostBorder footer check so landscape auto-fit stops before the yellow frame collides with the buttons
 // AI Summary: 2026-05-15 - Fixed chrome overflow detection to measure the visible ScrollViewer bounds instead of the full scrollable content
-// AI Summary: 2026-05-15 - Reinstated footer overflow guarding for non-core landscape tabs so only Partition, Driver, and Windows keep the relaxed scaling path
+// AI Summary: 2026-05-15 - Restored shared footer overflow guarding for install tabs during landscape auto-fit
+// AI Summary: 2026-05-16 - Split tab footer overflow from visible checkbox overflow so hidden spacers no longer clamp normal tabs at 100%
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
@@ -763,11 +764,7 @@ namespace GMTPC.Tool
                 return true;
             }
 
-            bool isCoreLandscapeTab = IsSelectedTab("Partition") ||
-                                      IsSelectedTab("Driver") ||
-                                      IsSelectedTab("Windows");
-
-            if (!isCoreLandscapeTab && HasSelectedTabBottomOverflow())
+            if (HasSelectedTabBottomOverflow())
             {
                 return true;
             }
@@ -1016,10 +1013,19 @@ namespace GMTPC.Tool
         {
             const double tolerance = 1.0;
             ScrollViewer selectedScrollViewer = GetSelectedTabScrollViewer();
-            if (selectedScrollViewer == null || selectedScrollViewer.ActualWidth <= 0 || selectedScrollViewer.ActualHeight <= 0) return false;
+            if (selectedScrollViewer == null || selectedScrollViewer.ActualWidth <= 0 || selectedScrollViewer.ActualHeight <= 0)
+            {
+                return HasSelectedTabFooterOverflow();
+            }
+
+            if (selectedScrollViewer.ActualHeight < 42)
+            {
+                return true;
+            }
+
             if (!(selectedScrollViewer.Content is WrapPanel panel)) return false;
 
-            if (HasSelectedTabChromeOverflow()) return true;
+            if (HasSelectedTabFooterOverflow()) return true;
 
             double leftLimit = 0;
             double rightLimit = selectedScrollViewer.ActualWidth;
@@ -1027,11 +1033,10 @@ namespace GMTPC.Tool
 
             try
             {
-                Rect panelBounds = panel.TransformToAncestor(selectedScrollViewer)
-                                        .TransformBounds(new Rect(0, 0, panel.ActualWidth, panel.ActualHeight));
-
-                double maxChildRight = panelBounds.Right;
-                double maxChildBottom = panelBounds.Bottom;
+                bool hasVisibleChild = false;
+                double minChildLeft = double.MaxValue;
+                double maxChildRight = double.MinValue;
+                double maxChildBottom = double.MinValue;
                 foreach (FrameworkElement child in panel.Children.OfType<FrameworkElement>())
                 {
                     if (!child.IsVisible || child.ActualWidth <= 0 || child.ActualHeight <= 0) continue;
@@ -1040,6 +1045,8 @@ namespace GMTPC.Tool
                     {
                         Rect childBounds = child.TransformToAncestor(selectedScrollViewer)
                                                 .TransformBounds(new Rect(0, 0, child.ActualWidth, child.ActualHeight));
+                        hasVisibleChild = true;
+                        minChildLeft = Math.Min(minChildLeft, childBounds.Left);
                         maxChildRight = Math.Max(maxChildRight, childBounds.Right);
                         maxChildBottom = Math.Max(maxChildBottom, childBounds.Bottom);
                     }
@@ -1048,9 +1055,35 @@ namespace GMTPC.Tool
                     }
                 }
 
-                return panelBounds.Left < leftLimit - tolerance ||
+                if (!hasVisibleChild) return false;
+
+                return minChildLeft < leftLimit - tolerance ||
                        maxChildRight > rightLimit + tolerance ||
                        maxChildBottom > bottomLimit + tolerance;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool HasSelectedTabFooterOverflow()
+        {
+            const double tolerance = 2.0;
+
+            try
+            {
+                if (MainGrid == null || TabHostBorder == null || ButtonsBorder == null) return false;
+                if (!ButtonsBorder.IsVisible) return false;
+                if (TabHostBorder.ActualWidth <= 0 || TabHostBorder.ActualHeight <= 0) return false;
+                if (ButtonsBorder.ActualWidth <= 0 || ButtonsBorder.ActualHeight <= 0) return false;
+
+                Rect tabBounds = TabHostBorder.TransformToAncestor(MainGrid)
+                                              .TransformBounds(new Rect(0, 0, TabHostBorder.ActualWidth, TabHostBorder.ActualHeight));
+                Rect buttonsBounds = ButtonsBorder.TransformToAncestor(MainGrid)
+                                                  .TransformBounds(new Rect(0, 0, ButtonsBorder.ActualWidth, ButtonsBorder.ActualHeight));
+
+                return tabBounds.Bottom > buttonsBounds.Top - tolerance;
             }
             catch
             {
