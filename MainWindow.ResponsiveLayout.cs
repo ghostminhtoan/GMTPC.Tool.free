@@ -14,6 +14,7 @@
 // AI Summary: 2026-05-16 - Treat missing or collapsed yellow tab bounds as overflow so non-Windows tabs cannot jump past the visible tab frame
 // AI Summary: 2026-05-16 - Added visible checkbox bounds checks against the yellow tab content panel so auto-fit keeps the last real checkbox visible
 // AI Summary: 2026-05-16 - Measure the last visible checkbox inside the selected tab ScrollViewer to avoid false 100% DPI clamps from window-level bounds
+// AI Summary: 2026-05-16 - Let multi-column tabs scale past 100% by using the last checkbox vertical bounds instead of its right edge
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
@@ -861,9 +862,7 @@ namespace GMTPC.Tool
                 Rect lastChildBounds = lastMeasuredChild.TransformToAncestor(selectedScrollViewer)
                                                         .TransformBounds(new Rect(0, 0, lastMeasuredChild.ActualWidth, lastMeasuredChild.ActualHeight));
 
-                return lastChildBounds.Left < -tolerance ||
-                       lastChildBounds.Top < -tolerance ||
-                       lastChildBounds.Right > selectedScrollViewer.ActualWidth + tolerance ||
+                return lastChildBounds.Top < -tolerance ||
                        lastChildBounds.Bottom > selectedScrollViewer.ActualHeight + tolerance;
             }
             catch
