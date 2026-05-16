@@ -10,6 +10,7 @@
 // AI Summary: 2026-05-15 - Fixed chrome overflow detection to measure the visible ScrollViewer bounds instead of the full scrollable content
 // AI Summary: 2026-05-15 - Restored shared footer overflow guarding for install tabs during landscape auto-fit
 // AI Summary: 2026-05-16 - Split tab footer overflow from visible checkbox overflow so hidden spacers no longer clamp normal tabs at 100%
+// AI Summary: 2026-05-16 - Switched normal tab auto-fit to the visible yellow tab frame bounds so checkbox count and hidden spacers do not pin DPI at 100%
 // WrapPanels now size to the computed column count instead of stretching across the whole monitor.
 // =======================================================================
 // MainWindow.ResponsiveLayout.cs
@@ -764,7 +765,7 @@ namespace GMTPC.Tool
                 return true;
             }
 
-            if (HasSelectedTabBottomOverflow())
+            if (HasSelectedTabFrameOverflow())
             {
                 return true;
             }
@@ -779,6 +780,65 @@ namespace GMTPC.Tool
             bool tooTall = desiredHeight > maxAllowedHeight + 1;
 
             return tooWide || tooTall || HasSparseWindowsTabOverflow();
+        }
+
+        private bool HasSelectedTabFrameOverflow()
+        {
+            const double tolerance = 2.0;
+
+            try
+            {
+                if (MainTabControl == null || TabHostBorder == null) return false;
+                if (MainTabControl.ActualWidth <= 0 || MainTabControl.ActualHeight <= 0) return false;
+
+                if (!TryGetElementBoundsInWindow(MainTabControl, out Rect tabBounds)) return false;
+                if (!TryGetElementBoundsInWindow(TabHostBorder, out Rect hostBounds)) return false;
+
+                double leftLimit = hostBounds.Left + (TabHostBorder.Padding.Left * currentDPIScale);
+                double topLimit = hostBounds.Top + (TabHostBorder.Padding.Top * currentDPIScale);
+                double rightLimit = hostBounds.Right - (TabHostBorder.Padding.Right * currentDPIScale);
+                double bottomLimit = hostBounds.Bottom - (TabHostBorder.Padding.Bottom * currentDPIScale);
+
+                if (ButtonsBorder != null &&
+                    ButtonsBorder.IsVisible &&
+                    ButtonsBorder.ActualWidth > 0 &&
+                    ButtonsBorder.ActualHeight > 0 &&
+                    TryGetElementBoundsInWindow(ButtonsBorder, out Rect buttonsBounds))
+                {
+                    bottomLimit = Math.Min(bottomLimit, buttonsBounds.Top - tolerance);
+                }
+
+                double windowRightLimit = Math.Max(0, ActualWidth - tolerance);
+                double windowBottomLimit = Math.Max(0, ActualHeight - tolerance);
+                rightLimit = Math.Min(rightLimit, windowRightLimit);
+                bottomLimit = Math.Min(bottomLimit, windowBottomLimit);
+
+                return tabBounds.Left < leftLimit - tolerance ||
+                       tabBounds.Top < topLimit - tolerance ||
+                       tabBounds.Right > rightLimit + tolerance ||
+                       tabBounds.Bottom > bottomLimit + tolerance;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool TryGetElementBoundsInWindow(FrameworkElement element, out Rect bounds)
+        {
+            bounds = Rect.Empty;
+
+            try
+            {
+                if (element == null || element.ActualWidth <= 0 || element.ActualHeight <= 0) return false;
+                bounds = element.TransformToAncestor(this)
+                                .TransformBounds(new Rect(0, 0, element.ActualWidth, element.ActualHeight));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private int GetClosestDpiStepIndex(int percent)
@@ -1016,11 +1076,6 @@ namespace GMTPC.Tool
             if (selectedScrollViewer == null || selectedScrollViewer.ActualWidth <= 0 || selectedScrollViewer.ActualHeight <= 0)
             {
                 return HasSelectedTabFooterOverflow();
-            }
-
-            if (selectedScrollViewer.ActualHeight < 42)
-            {
-                return true;
             }
 
             if (!(selectedScrollViewer.Content is WrapPanel panel)) return false;
