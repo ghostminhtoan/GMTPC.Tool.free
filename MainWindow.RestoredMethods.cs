@@ -1,3 +1,4 @@
+// AI Summary: 2026-05-29 - Removed install and activation methods, click event handlers, and cleaned up RunAutomatedProcessAsync for deleted checkboxes.
 // =======================================================================
 // MainWindow.RestoredMethods.cs
 // Chức năng: Hàm bổ trợ, phương thức dùng chung cho toàn ứng dụng
@@ -129,33 +130,6 @@ namespace GMTPC.Tool
         }
 
         private void ScrollToBottom() { /* Không dùng */ }
-        private void ActivateWindows()
-        {
-            UpdateStatus("Đang kích hoạt Windows...", "Cyan");
-            string activateWindowsCmdPath = Path.Combine(GetGMTPCFolder(), "ACTIVATE.WINDOWS.cmd");
-            try
-            {
-                using (System.Net.WebClient client = new System.Net.WebClient())
-                {
-                     client.DownloadFile("https://github.com/ghostminhtoan/MMT/releases/download/activate/ACTIVATE.WINDOWS.cmd", activateWindowsCmdPath);
-                }
-                ProcessStartInfo startInfo = new ProcessStartInfo { FileName = activateWindowsCmdPath, UseShellExecute = true, Verb = "runas" };
-                Process process = Process.Start(startInfo);
-                if (process != null)
-                {
-                    process.WaitForExit();
-                }
-                UpdateStatus("Đã mở cửa sổ kích hoạt Windows", "Green");
-                
-                // Wait 2 seconds before showing message
-                System.Threading.Thread.Sleep(2000);
-                
-                // Show message after activation completes
-                UpdateStatus("Press \"0\" to continue", "Yellow");
-                MessageBox.Show("Press \"0\" to continue", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex) { UpdateStatus($"Lỗi: {ex.Message}", "Red"); }
-        }
 
         private string GetSlmgrVbsPath()
         {
@@ -347,10 +321,6 @@ namespace GMTPC.Tool
             await InstallWinRARAsync();
         }
 
-        private async Task InstallAndActivateBIDAsync()
-        {
-            await InstallBIDAsync();
-        }
 
         private async Task InstallWinRARAsync()
         {
@@ -371,251 +341,12 @@ namespace GMTPC.Tool
             catch (Exception ex) { UpdateStatus($"Lỗi: {ex.Message}", "Red"); }
         }
 
-        private async Task InstallBIDAsync()
-        {
-            string bidPath = Path.Combine(GetGMTPCFolder(), "bid_setup_x64.exe");
-            string bidActivatePath = Path.Combine(GetGMTPCFolder(), "Bulk.image.downloader.patch.exe");
-            string bidExePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Bulk Image Downloader", "BID.exe");
-            try
-            {
-                // ===== Step 1: Download and Install BID =====
-                UpdateStatus("Đang tải Bulk Image Downloader...", "Cyan");
-                string downloadUrl = await GetBIDDownloadLinkAsync();
-
-                await DownloadWithProgressAsync(downloadUrl, bidPath, "Bulk Image Downloader");
-                Dispatcher.Invoke(() => { DownloadProgressBar.Value = 0; ProgressTextBlock.Text = ""; SpeedTextBlock.Text = ""; });
-
-                UpdateStatus("Đang chạy BID installer...", "Yellow");
-                ProcessStartInfo installStartInfo = new ProcessStartInfo { FileName = bidPath, Arguments = BID_INSTALL_ARGUMENTS, UseShellExecute = true };
-                Process installProcess = Process.Start(installStartInfo);
-                if (installProcess != null)
-                {
-                    await Task.Run(() => installProcess.WaitForExit());
-                    UpdateStatus("Cài đặt BID hoàn tất.", "Green");
-                }
-                if (File.Exists(bidPath)) File.Delete(bidPath);
-
-                // ===== Step 2: Show message BEFORE activation =====
-                UpdateStatus("Click vào nút Install rồi tắt", "Yellow");
-                MessageBox.Show("Click vào nút Install rồi tắt", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                // ===== Step 3: Download and Run Activation =====
-                await Task.Delay(1000);
-                UpdateStatus("Đang tải BID patch...", "Cyan");
-                await DownloadWithProgressAsync("https://github.com/ghostminhtoan/MMT/releases/download/activate/Bulk.image.downloader.patch.exe", bidActivatePath, "BID Patch");
-                Dispatcher.Invoke(() => { DownloadProgressBar.Value = 0; ProgressTextBlock.Text = ""; SpeedTextBlock.Text = ""; });
-
-                UpdateStatus("Đang chạy BID patch...", "Yellow");
-                ProcessStartInfo activateStartInfo = new ProcessStartInfo { FileName = bidActivatePath, UseShellExecute = true };
-                Process activateProcess = Process.Start(activateStartInfo);
-                if (activateProcess != null)
-                {
-                    await Task.Run(() => activateProcess.WaitForExit());
-                }
-                if (File.Exists(bidActivatePath)) File.Delete(bidActivatePath);
-
-                // ===== Step 4: Wait for BID to close =====
-                UpdateStatus("Đang chờ BID tắt...", "Cyan");
-                while (true)
-                {
-                    Process[] bidProcesses = Process.GetProcessesByName("BID");
-                    if (bidProcesses.Length == 0) break;
-                    await Task.Delay(500);
-                }
-                await Task.Delay(1000);
-
-                // ===== Step 5: Open BID.exe =====
-                if (File.Exists(bidExePath))
-                {
-                    UpdateStatus("Đang mở BID...", "Green");
-                    Process.Start(bidExePath);
-                }
-                else
-                {
-                    UpdateStatus("Không tìm thấy BID.exe", "Yellow");
-                }
-            }
-            catch (Exception ex) { UpdateStatus($"Lỗi: {ex.Message}", "Red"); }
-        }
 
         /// <summary>
         /// Lấy link tải BID mới nhất từ bulkimagedownloader.com
         /// Tìm link có dạng: bid_*_*_setup_x64.exe
         /// </summary>
-        private async Task<string> GetBIDDownloadLinkAsync()
-        {
-            try
-            {
-                UpdateStatus("Đang lấy link tải BID mới nhất...", "Cyan");
-                
-                using (HttpClient client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-                    
-                    // Tải trang download
-                    string html = await client.GetStringAsync("https://bulkimagedownloader.com/download");
-                    
-                    // Tìm link có dạng bid_*_*_setup_x64.exe
-                    string pattern = @"/files/bid_\d+_\d+_setup_x64\.exe";
-                    System.Text.RegularExpressions.Match match = System.Text.RegularExpressions.Regex.Match(html, pattern);
-                    
-                    if (match.Success)
-                    {
-                        string downloadPath = match.Value;
-                        string fullUrl = "https://bulkimagedownloader.com" + downloadPath;
-                        UpdateStatus($"Đã tìm thấy link BID mới: {fullUrl}", "Green");
-                        return fullUrl;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Không thể lấy link tự động, dùng link dự phòng: {ex.Message}", "Yellow");
-            }
-            
-            // Fallback link cũ nếu không tìm thấy
-            return "https://bulkimagedownloader.com/files/bid_6_62_setup_x64.exe";
-        }
 
-        private async Task InstallIDMAsync()
-        {
-            string idmPath = Path.Combine(GetGMTPCFolder(), "idman625build3.exe");
-            string activatePath = Path.Combine(GetGMTPCFolder(), "IDM_6.4x_rabbit.exe");
-            string idmExePath = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Internet Download Manager\IDMan.exe");
-            string idmBackupPath = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Internet Download Manager\IDMan.exe.bak");
-            string tempCheckPath = Path.Combine(Path.GetTempPath(), "IDM_Setup_Temp", "IDM0.tmp");
-            try
-            {
-                // ===== Step 1: Kill IDM =====
-                UpdateStatus("Đang đóng IDM (nếu đang chạy)...", "Cyan");
-                KillProcessByName("idman");
-                await Task.Delay(500);
-
-                // ===== Step 2: Delete backup file if exists =====
-                if (File.Exists(idmBackupPath))
-                {
-                    UpdateStatus("Đang dọn dẹp tệp sao lưu cũ...", "Cyan");
-                    File.Delete(idmBackupPath);
-                }
-
-                // ===== Step 3: Download and install IDM =====
-                UpdateStatus("Đang tải Internet Download Manager...", "Cyan");
-                await DownloadWithProgressAsync(IDM_DOWNLOAD_URL, idmPath, "Internet Download Manager");
-
-                // Reset progress bar
-                Dispatcher.Invoke(() =>
-                {
-                    DownloadProgressBar.Value = 0;
-                    ProgressTextBlock.Text = "";
-                    SpeedTextBlock.Text = "";
-                });
-
-                // Run installer with arguments
-                UpdateStatus("Đang chạy IDM installer ( " + IDM_INSTALL_ARGUMENTS + " )...", "Yellow");
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    FileName = idmPath,
-                    Arguments = IDM_INSTALL_ARGUMENTS,
-                    UseShellExecute = true
-                };
-                Process process = Process.Start(startInfo);
-                if (process != null)
-                {
-                    await Task.Run(() => process.WaitForExit());
-                }
-
-                // ===== Step 4: Download and run activate tool =====
-                UpdateStatus("Đang tải công cụ kích hoạt...", "Cyan");
-                await DownloadWithProgressAsync(IDM_ACTIVATE_URL, activatePath, "IDM Activate");
-
-                // Reset progress bar
-                Dispatcher.Invoke(() =>
-                {
-                    DownloadProgressBar.Value = 0;
-                    ProgressTextBlock.Text = "";
-                    SpeedTextBlock.Text = "";
-                });
-
-                // ===== Step 4.1: Wait for IDM0.tmp to disappear before running crack =====
-                UpdateStatus("Đang chờ IDM hoàn tất cài đặt (IDM0.tmp biến mất)...", "Yellow");
-                while (File.Exists(tempCheckPath))
-                {
-                    await Task.Delay(500);
-                }
-                await Task.Delay(1000); // Thêm delay nhỏ để đảm bảo ổn định
-
-                // Run activate tool
-                UpdateStatus("Click IDM to activate, có thể bỏ qua update.", "Yellow");
-                ProcessStartInfo activateStartInfo = new ProcessStartInfo
-                {
-                    FileName = activatePath,
-                    UseShellExecute = true
-                };
-                Process activateProcess = Process.Start(activateStartInfo);
-                if (activateProcess != null)
-                {
-                    await Task.Run(() => activateProcess.WaitForExit());
-
-                    if (File.Exists(activatePath))
-                    {
-                        File.Delete(activatePath);
-                        UpdateStatus("Đã xóa công cụ kích hoạt", "Cyan");
-                    }
-                }
-
-                // ===== Step 5: Open browser tabs for IDM integration =====
-                UpdateStatus("Đang mở trang tích hợp IDM cho trình duyệt...", "Cyan");
-                Process.Start("https://microsoftedge.microsoft.com/addons/detail/idm-integration-module/llbjbkhnmlidjebalopleeepgdfgcpec");
-                Process.Start("https://chromewebstore.google.com/detail/idm-integration-module/ngpampappnmepgilojfohadhhmbhlaek");
-                await Task.Delay(1000);
-
-                // ===== Step 6: Check temp file and delete installer =====
-                if (!File.Exists(tempCheckPath))
-                {
-                    if (File.Exists(idmPath))
-                    {
-                        File.Delete(idmPath);
-                        UpdateStatus("Đã xóa file cài đặt IDM", "Cyan");
-                    }
-                }
-
-                // ===== Step 7: Post-Install Loop (5 times: Open IDM -> Kill IDM) =====
-                for (int i = 0; i < 5; i++)
-                {
-                    if (File.Exists(idmExePath))
-                    {
-                        UpdateStatus($"Lần {i + 1}/5: Đang mở IDM...", "Cyan");
-                        StartProcessWithShell(idmExePath);
-                    }
-
-                    await Task.Delay(1500);
-
-                    UpdateStatus($"Lần {i + 1}/5: Đang đóng IDM...", "Cyan");
-                    KillProcessByName("idman");
-
-                    if (i < 4)
-                    {
-                        await Task.Delay(1500);
-                    }
-                }
-
-                if (await WaitForFileAsync(idmExePath, 10000, 500))
-                {
-                    UpdateStatus("Đang mở IDM thêm một lần nữa...", "Cyan");
-                    StartProcessWithShell(idmExePath);
-                }
-                else
-                {
-                    UpdateStatus("Không tìm thấy IDMan.exe ở %programfiles(x86)%\\Internet Download Manager\\IDMan.exe", "Yellow");
-                }
-
-                UpdateStatus("Đã cài xong IDM!", "Green");
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi cài IDM: {ex.Message}", "Red");
-            }
-        }
 
         /// <summary>
         /// Kills all processes with the specified name
@@ -745,22 +476,13 @@ namespace GMTPC.Tool
             _ = InstallVcredistAsync();
         }
 
-        private void BtnInstallIDM_Click(object sender, RoutedEventArgs e)
-        {
-            ChkInstallIDM.IsChecked = true;
-            _ = InstallIDMAsync();
-        }
 
         private async Task RunAutomatedProcessAsync()
+        
         {
-            await InstallIDMAsync();
+            await Task.CompletedTask;
         }
 
-        private void BtnActivateWindows_Click(object sender, RoutedEventArgs e)
-        {
-            ChkActivateWindows.IsChecked = true;
-            _ = Task.Run(() => ActivateWindows());
-        }
 
         private void BtnPauseWindowsUpdate_Click(object sender, RoutedEventArgs e)
         {
@@ -774,79 +496,9 @@ namespace GMTPC.Tool
             _ = InstallWinRARAsync();
         }
 
-        private void BtnInstallBID_Click(object sender, RoutedEventArgs e)
-        {
-            ChkInstallBID.IsChecked = true;
-            _ = InstallBIDAsync();
-        }
 
-        private void BtnFixIDMExtension_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateStatus("Đang mở các liên kết extension...", "Cyan");
-            Process.Start("https://microsoftedge.microsoft.com/addons/detail/idm-integration-module/llbjbkhnmlidjebalopleeepgdfgcpec");
-            Process.Start("https://chromewebstore.google.com/detail/idm-integration-module/ngpampappnmepgilojfohadhhmbhlaek");
-        }
 
-        private async void BtnCrackIDM_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateStatus("Đang tải và chạy IDM crack...", "Cyan");
-            string idmCrackPath = Path.Combine(GetGMTPCFolder(), "IDM_6.4x_Crack.exe");
-            try
-            {
-                await DownloadWithProgressAsync("https://github.com/ghostminhtoan/MMT/releases/download/activate/IDM_6.4x_Crack.exe", idmCrackPath, "IDM Crack");
-                Process.Start(idmCrackPath);
-            }
-            catch (Exception ex) { UpdateStatus($"Lỗi: {ex.Message}", "Red"); }
-        }
 
-        private async void BtnRunBIDActivation_Click(object sender, RoutedEventArgs e)
-        {
-            string bidActivatePath = Path.Combine(GetGMTPCFolder(), "Bulk.image.downloader.patch.exe");
-            string bidExePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Bulk Image Downloader", "BID.exe");
-            try
-            {
-                // ===== Step 1: Show message =====
-                UpdateStatus("Click vào nút Install rồi tắt", "Yellow");
-                MessageBox.Show("Click vào nút Install rồi tắt", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                // ===== Step 2: Download and Run Activation =====
-                await Task.Delay(1000);
-                UpdateStatus("Đang tải BID patch...", "Cyan");
-                await DownloadWithProgressAsync("https://github.com/ghostminhtoan/MMT/releases/download/activate/Bulk.image.downloader.patch.exe", bidActivatePath, "BID Patch");
-                Dispatcher.Invoke(() => { DownloadProgressBar.Value = 0; ProgressTextBlock.Text = ""; SpeedTextBlock.Text = ""; });
-
-                UpdateStatus("Đang chạy BID patch...", "Yellow");
-                ProcessStartInfo activateStartInfo = new ProcessStartInfo { FileName = bidActivatePath, UseShellExecute = true };
-                Process activateProcess = Process.Start(activateStartInfo);
-                if (activateProcess != null)
-                {
-                    await Task.Run(() => activateProcess.WaitForExit());
-                }
-                if (File.Exists(bidActivatePath)) File.Delete(bidActivatePath);
-
-                // ===== Step 3: Wait for BID to close =====
-                UpdateStatus("Đang chờ BID tắt...", "Cyan");
-                while (true)
-                {
-                    Process[] bidProcesses = Process.GetProcessesByName("BID");
-                    if (bidProcesses.Length == 0) break;
-                    await Task.Delay(500);
-                }
-                await Task.Delay(1000);
-
-                // ===== Step 4: Open BID.exe =====
-                if (File.Exists(bidExePath))
-                {
-                    UpdateStatus("Đang mở BID...", "Green");
-                    Process.Start(bidExePath);
-                }
-                else
-                {
-                    UpdateStatus("Không tìm thấy BID.exe", "Yellow");
-                }
-            }
-            catch (Exception ex) { UpdateStatus($"Lỗi: {ex.Message}", "Red"); }
-        }
 
         // ===================== TabPopular — Button Click Handlers =====================
         private async void BtnDirectX_Click(object sender, RoutedEventArgs e)

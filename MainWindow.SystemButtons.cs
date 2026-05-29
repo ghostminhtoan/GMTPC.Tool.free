@@ -1,3 +1,4 @@
+// AI Summary: 2026-05-29 - Removed 25 target checkboxes from Select All, Select None, MouseEnter, and Install tasks lists.
 ﻿// =======================================================================
 // MainWindow.SystemButtons.cs
 // Chức năng: Logic các nút điều khiển chung: Select All, Select None,
@@ -12,19 +13,19 @@
 //   - 2026-04-25: Added Brave to Browser tab selection, install, hover, and download-link cache flows
 //   - 2026-04-25: Suppressed repetitive primary DPI status messages while auto-fitting scale for the selected tab
 //   - 2026-04-25: Updated Subtitle Edit cached download link to the new GMTPC portable release URL
-//   - 2026-04-24: Added ChkDownloadSampleVideo to Subtitle select/install flows, download-link cache, and hover tooltip
+//   - 2026-04-24: Added to Subtitle select/install flows, download-link cache, and hover tooltip
 //   - 2026-04-23: Fixed Ghost of Tsushima copy-link cache and added WintoHDD to Select None flows
 //   - 2026-04-19: Added ChkInstallNeatDM to BtnSelectNoneAllTabs for proper interaction with Select None All Tabs button
 //   - 2026-04-22: Replaced ChkGouenjiFonts with ChkGMTPCFonts
 //   - 2026-04-19: Added missing checkbox cases in Checkbox_MouseEnter for office/subtitle checkboxes; Added ChkSubtitleDraftGMTPC to _cachedDownloadLinks
-//   - 2026-04-19: Added missing checkboxes to Checkbox_MouseEnter: ChkInstallZalo, ChkJumpForce, ChkWintoHDD; Added missing checkboxes to _cachedDownloadLinks for hover and copy functionality
-//   - 2026-03-29 (5): Added ChkBoilsoftVideoSplitter, ChkVibe, ChkMKVToolNix
+//   - 2026-04-19: Added missing checkboxes to Checkbox_MouseEnter: ChkInstallZalo, ; Added missing checkboxes to _cachedDownloadLinks for hover and copy functionality
+//   - 2026-03-29 (5): Added ChkVibe, ChkMKVToolNix
 //   - 2026-03-29: Added ChkVidCoder and new Subtitle tab support
 //   - 2026-03-28: Added ChkSubtitleEdit to BtnSelectAll, BtnSelectNone,
 //                 BtnSelectNoneAllTabs, UpdateInstallButtonState, BtnInstall_Click
-//   - 2026-03-26: Added ChkJumpForce and ChkWintoHDD to BtnSelectAll,
+//   - 2026-03-26: Added and to BtnSelectAll,
 //                 BtnSelectNone, BtnSelectNoneAllTabs, BtnInstall_Click
-//   - 2026-03-11: Added ChkGhostOfTsushima to BtnSelectAll, BtnSelectNone,
+//   - 2026-03-11: Added to BtnSelectAll, BtnSelectNone,
 //                 BtnSelectNoneAllTabs, UpdateInstallButtonState, BtnInstall_Click
 //   - 2026-03-05: Thêm currentDPIScale, DPI_STEPS, ApplyDPIScale từ xaml.cs
 //                 theo AI_WORKFLOW.md
@@ -379,42 +380,31 @@ namespace GMTPC.Tool
                 if (tabHeader == "Popular")
                 {
                     // Chọn tất cả các checkbox trong tab Popular
-                    ChkInstallIDM.IsChecked = true;
                     ChkInstallNeatDM.IsChecked = true;
-                    ChkActivateWindows.IsChecked = true;
                     ChkDeactivateWindows.IsChecked = true;
                     ChkPauseWindowsUpdate.IsChecked = true;
                     ChkInstallWinRAR.IsChecked = true;
-                    ChkInstallBID.IsChecked = true;
                     ChkVcredist.IsChecked = true;
                     ChkDirectX.IsChecked = true;
                     ChkJava.IsChecked = true;
                     ChkOpenAL.IsChecked = true;
                     Chk3DPChip.IsChecked = true;
                     Chk3DPNet.IsChecked = true;
-                    ChkRevoUninstaller.IsChecked = true;
                     ChkInstallZalo.IsChecked = true;
                 }
                 // Nếu tab là "System"
                 else if (tabHeader == "System")
                 {
                     // Chọn checkbox trong tab System
-                    ChkMMTApps.IsChecked = true;
                     ChkDISMPP.IsChecked = true;
-                    ChkComfortClipboardPro.IsChecked = true;
                     ChkFolderSize.IsChecked = true;
-                    ChkPowerISO.IsChecked = true;
                     ChkMemReduct.IsChecked = true;
-                    ChkTeraCopy.IsChecked = true;
                     ChkVPN1111.IsChecked = true;
                     ChkGoogleDrive.IsChecked = true;
-                    ChkNetLimiter.IsChecked = true;
                 }
                 else if (tabHeader == "Office")
                 {
                     ChkOfficeToolPlus.IsChecked = true;
-                    ChkOfficeSoftmaker.IsChecked = true;
-                    ChkActivateOffice.IsChecked = true;
                     ChkGMTPCFonts.IsChecked = true;
                     ChkNotepadPlusPlus.IsChecked = true;
                 }
@@ -422,31 +412,23 @@ namespace GMTPC.Tool
                 {
                     ChkSubtitleEdit.IsChecked = true;
                     ChkVidCoder.IsChecked = true;
-                    ChkBoilsoftVideoSplitter.IsChecked = true;
                     ChkVibe.IsChecked = true;
                     ChkMKVToolNix.IsChecked = true;
                     ChkSubtitleDraftGMTPC.IsChecked = true;
-                    ChkDownloadSampleVideo.IsChecked = true;
                 }
                 // Nếu tab là "Partition"
                 else if (tabHeader == "Partition")
                 {
                     // Chọn checkbox trong tab Partition
-                    ChkAomeiPartitionAssistant.IsChecked = true;
-                    ChkDiskGenius.IsChecked = true;
                 }
                 // Nếu tab là "Gaming"
                 else if (tabHeader == "Gaming")
                 {
                     // Chọn checkbox trong tab Gaming
-                    ChkProcessLasso.IsChecked = true;
                     ChkThrottlestop.IsChecked = true;
                     ChkMSIAfterburner.IsChecked = true;
                     ChkLeagueOfLegends.IsChecked = true;
                     ChkPorofessor.IsChecked = true;
-                    ChkSamuraiMaiden.IsChecked = true;
-                    ChkGhostOfTsushima.IsChecked = true;
-                    ChkJumpForce.IsChecked = true;
                 }
                 // Nếu tab là "Browser"
                 else if (tabHeader == "Browser")
@@ -461,9 +443,7 @@ namespace GMTPC.Tool
                     // Chọn checkbox trong tab Multimedia
                     ChkAdvancedCodecPack.IsChecked = true;
                     ChkPotPlayer.IsChecked = true;
-                    ChkFastStone.IsChecked = true;
                     ChkFoxit.IsChecked = true;
-                    ChkBandiview.IsChecked = true;
                 }
                 // Nếu tab là "Remote Desktop"
                 else if (tabHeader == "Remote Desktop")
@@ -473,7 +453,6 @@ namespace GMTPC.Tool
                     ChkTeamViewerQS.IsChecked = true;
                     ChkTeamViewerFull.IsChecked = true;
                     ChkAnyDesk.IsChecked = true;
-                    ChkVMWare162Lite.IsChecked = true;
                 }
                 else if (tabHeader == "Driver")
                 {
@@ -483,10 +462,7 @@ namespace GMTPC.Tool
                 else if (tabHeader == "Windows")
                 {
                     ChkWin11_26H1.IsChecked = true;
-                    ChkWin10LtscIot21H2.IsChecked = true;
-                    ChkWin10_22H2_2024_December.IsChecked = true;
                     ChkVentoy.IsChecked = true;
-                    ChkWintoHDD.IsChecked = true;
                 }
             }
 
@@ -506,42 +482,31 @@ namespace GMTPC.Tool
                 if (tabHeader == "Popular")
                 {
                     // Bỏ chọn tất cả các checkbox trong tab Popular
-                    ChkInstallIDM.IsChecked = false;
                     ChkInstallNeatDM.IsChecked = false;
-                    ChkActivateWindows.IsChecked = false;
                     ChkDeactivateWindows.IsChecked = false;
                     ChkPauseWindowsUpdate.IsChecked = false;
                     ChkInstallWinRAR.IsChecked = false;
-                    ChkInstallBID.IsChecked = false;
                     ChkVcredist.IsChecked = false;
                     ChkDirectX.IsChecked = false;
                     ChkJava.IsChecked = false;
                     ChkOpenAL.IsChecked = false;
                     Chk3DPChip.IsChecked = false;
                     Chk3DPNet.IsChecked = false;
-                    ChkRevoUninstaller.IsChecked = false;
                     ChkInstallZalo.IsChecked = false;
                 }
                 // Nếu tab là "System"
                 else if (tabHeader == "System")
                 {
                     // Bỏ chọn checkbox trong tab System
-                    ChkMMTApps.IsChecked = false;
                     ChkDISMPP.IsChecked = false;
-                    ChkComfortClipboardPro.IsChecked = false;
                     ChkFolderSize.IsChecked = false;
-                    ChkPowerISO.IsChecked = false;
                     ChkMemReduct.IsChecked = false;
-                    ChkTeraCopy.IsChecked = false;
                     ChkVPN1111.IsChecked = false;
                     ChkGoogleDrive.IsChecked = false;
-                    ChkNetLimiter.IsChecked = false;
                 }
                 else if (tabHeader == "Office")
                 {
                     ChkOfficeToolPlus.IsChecked = false;
-                    ChkOfficeSoftmaker.IsChecked = false;
-                    ChkActivateOffice.IsChecked = false;
                     ChkGMTPCFonts.IsChecked = false;
                     ChkNotepadPlusPlus.IsChecked = false;
                 }
@@ -549,31 +514,23 @@ namespace GMTPC.Tool
                 {
                     ChkSubtitleEdit.IsChecked = false;
                     ChkVidCoder.IsChecked = false;
-                    ChkBoilsoftVideoSplitter.IsChecked = false;
                     ChkVibe.IsChecked = false;
                     ChkMKVToolNix.IsChecked = false;
                     ChkSubtitleDraftGMTPC.IsChecked = false;
-                    ChkDownloadSampleVideo.IsChecked = false;
                 }
                 // Nếu tab là "Partition"
                 else if (tabHeader == "Partition")
                 {
                     // Bỏ chọn checkbox trong tab Partition
-                    ChkAomeiPartitionAssistant.IsChecked = false;
-                    ChkDiskGenius.IsChecked = false;
                 }
                 // Nếu tab là "Gaming"
                 else if (tabHeader == "Gaming")
                 {
                     // Bỏ chọn checkbox trong tab Gaming
-                    ChkProcessLasso.IsChecked = false;
                     ChkThrottlestop.IsChecked = false;
                     ChkMSIAfterburner.IsChecked = false;
                     ChkLeagueOfLegends.IsChecked = false;
                     ChkPorofessor.IsChecked = false;
-                    ChkSamuraiMaiden.IsChecked = false;
-                    ChkGhostOfTsushima.IsChecked = false;
-                    ChkJumpForce.IsChecked = false;
                 }
                 // Nếu tab là "Browser"
                 else if (tabHeader == "Browser")
@@ -588,9 +545,7 @@ namespace GMTPC.Tool
                     // Bỏ chọn checkbox trong tab Multimedia
                     ChkAdvancedCodecPack.IsChecked = false;
                     ChkPotPlayer.IsChecked = false;
-                    ChkFastStone.IsChecked = false;
                     ChkFoxit.IsChecked = false;
-                    ChkBandiview.IsChecked = false;
                 }
                 // Nếu tab là "Remote Desktop"
                 else if (tabHeader == "Remote Desktop")
@@ -600,7 +555,6 @@ namespace GMTPC.Tool
                     ChkTeamViewerQS.IsChecked = false;
                     ChkTeamViewerFull.IsChecked = false;
                     ChkAnyDesk.IsChecked = false;
-                    ChkVMWare162Lite.IsChecked = false;
                 }
                 else if (tabHeader == "Driver")
                 {
@@ -610,10 +564,7 @@ namespace GMTPC.Tool
                 else if (tabHeader == "Windows")
                 {
                     ChkWin11_26H1.IsChecked = false;
-                    ChkWin10LtscIot21H2.IsChecked = false;
-                    ChkWin10_22H2_2024_December.IsChecked = false;
                     ChkVentoy.IsChecked = false;
-                    ChkWintoHDD.IsChecked = false;
                 }
             }
 
@@ -625,14 +576,10 @@ namespace GMTPC.Tool
             UpdateStatus("Đã hủy chọn tất cả trong tất cả các tab", "Yellow");
 
             // Bỏ chọn tất cả các checkbox trong tab Popular
-            ChkInstallIDM.IsChecked = false;
             ChkInstallNeatDM.IsChecked = false;
-            ChkActivateWindows.IsChecked = false;
             ChkDeactivateWindows.IsChecked = false;
-            ChkActivateOffice.IsChecked = false;
             ChkPauseWindowsUpdate.IsChecked = false;
             ChkInstallWinRAR.IsChecked = false;
-            ChkInstallBID.IsChecked = false;
             ChkVcredist.IsChecked = false;
             ChkDirectX.IsChecked = false;
             ChkJava.IsChecked = false;
@@ -644,45 +591,30 @@ namespace GMTPC.Tool
             ChkEdge.IsChecked = false;
             ChkBrave.IsChecked = false;
             ChkPotPlayer.IsChecked = false;
-            ChkFastStone.IsChecked = false;
             ChkFoxit.IsChecked = false;
-            ChkBandiview.IsChecked = false;
             ChkAdvancedCodecPack.IsChecked = false;
-            ChkRevoUninstaller.IsChecked = false;
             ChkInstallZalo.IsChecked = false;
 
             // Bỏ chọn checkbox trong tab System
-            ChkMMTApps.IsChecked = false;
             ChkDISMPP.IsChecked = false;
-            ChkComfortClipboardPro.IsChecked = false;
             ChkFolderSize.IsChecked = false;
-            ChkPowerISO.IsChecked = false;
             ChkMemReduct.IsChecked = false;
-            ChkTeraCopy.IsChecked = false;
             ChkVPN1111.IsChecked = false;
             ChkGoogleDrive.IsChecked = false;
-            ChkNetLimiter.IsChecked = false;
 
             // Bỏ chọn checkbox trong tab Partition
-            ChkAomeiPartitionAssistant.IsChecked = false;
-            ChkDiskGenius.IsChecked = false;
 
             // Bỏ chọn checkbox trong tab Gaming
-            ChkProcessLasso.IsChecked = false;
             ChkThrottlestop.IsChecked = false;
             ChkMSIAfterburner.IsChecked = false;
             ChkLeagueOfLegends.IsChecked = false;
             ChkPorofessor.IsChecked = false;
-            ChkSamuraiMaiden.IsChecked = false;
-            ChkGhostOfTsushima.IsChecked = false;
-            ChkJumpForce.IsChecked = false;
 
             // Bỏ chọn checkbox trong tab Remote Desktop
             ChkUltraviewer.IsChecked = false;
             ChkTeamViewerQS.IsChecked = false;
             ChkTeamViewerFull.IsChecked = false;
             ChkAnyDesk.IsChecked = false;
-            ChkVMWare162Lite.IsChecked = false;
 
             // Bỏ chọn checkbox trong tab Driver
             Chk3DPChip.IsChecked = false;
@@ -690,28 +622,21 @@ namespace GMTPC.Tool
 
             // Bỏ chọn checkbox trong tab Office
             ChkOfficeToolPlus.IsChecked = false;
-            ChkOfficeSoftmaker.IsChecked = false;
-            ChkActivateOffice.IsChecked = false;
             ChkGMTPCFonts.IsChecked = false;
             ChkNotepadPlusPlus.IsChecked = false;
 
             // Bỏ chọn checkbox trong tab Subtitle
             ChkSubtitleEdit.IsChecked = false;
             ChkVidCoder.IsChecked = false;
-            ChkBoilsoftVideoSplitter.IsChecked = false;
             ChkVibe.IsChecked = false;
             ChkMKVToolNix.IsChecked = false;
             ChkSubtitleDraftGMTPC.IsChecked = false;
-            ChkDownloadSampleVideo.IsChecked = false;
 
             // Bỏ chọn checkbox trong tab Windows - Microsoft
             ChkWin11_26H1.IsChecked = false;
 
             // Bỏ chọn checkbox trong tab Windows Tools
-            ChkWin10LtscIot21H2.IsChecked = false;
-            ChkWin10_22H2_2024_December.IsChecked = false;
             ChkVentoy.IsChecked = false;
-            ChkWintoHDD.IsChecked = false;
 
             UpdateInstallButtonState();
         }
@@ -734,14 +659,10 @@ namespace GMTPC.Tool
 
             var tasks = new List<(Func<Task> Action, CheckBox CheckBox)>();
 
-            if (ChkInstallIDM.IsChecked == true) tasks.Add((() => RunAutomatedProcessAsync(), ChkInstallIDM));
             if (ChkInstallNeatDM.IsChecked == true) tasks.Add((InstallNeatDMAsync, ChkInstallNeatDM));
-            if (ChkActivateWindows.IsChecked == true) tasks.Add((() => Task.Run(() => ActivateWindows()), ChkActivateWindows));
-            if (ChkActivateOffice.IsChecked == true) tasks.Add((() => Task.Run(() => ActivateOffice()), ChkActivateOffice));
             if (ChkOfficeToolPlus.IsChecked == true) tasks.Add((InstallOfficeToolPlusAsync, ChkOfficeToolPlus)); // Thêm task cho Office Tool Plus
             if (ChkPauseWindowsUpdate.IsChecked == true) tasks.Add((() => Task.Run(() => PauseWindowsUpdate()), ChkPauseWindowsUpdate));
             if (ChkInstallWinRAR.IsChecked == true) tasks.Add((InstallAndActivateWinRARAsync, ChkInstallWinRAR));
-            if (ChkInstallBID.IsChecked == true) tasks.Add((InstallAndActivateBIDAsync, ChkInstallBID));
             if (ChkVcredist.IsChecked == true) tasks.Add((InstallVcredistAsync, ChkVcredist));
             if (ChkDirectX.IsChecked == true) tasks.Add((InstallDirectXAsync, ChkDirectX));
             if (ChkJava.IsChecked == true) tasks.Add((InstallJavaAsync, ChkJava));
@@ -751,56 +672,35 @@ namespace GMTPC.Tool
             if (ChkEdge.IsChecked == true) tasks.Add((InstallEdgeAsync, ChkEdge));
             if (ChkBrave.IsChecked == true) tasks.Add((InstallBraveAsync, ChkBrave));
             if (ChkPotPlayer.IsChecked == true) tasks.Add((InstallPotPlayerAsync, ChkPotPlayer));
-            if (ChkFastStone.IsChecked == true) tasks.Add((InstallFastStoneAsync, ChkFastStone));
             if (ChkFoxit.IsChecked == true) tasks.Add((InstallFoxitAsync, ChkFoxit));
-            if (ChkBandiview.IsChecked == true) tasks.Add((InstallBandiviewAsync, ChkBandiview));
             if (ChkAdvancedCodecPack.IsChecked == true) tasks.Add((InstallAdvancedCodecPackAsync, ChkAdvancedCodecPack));
-            if (ChkRevoUninstaller.IsChecked == true) tasks.Add((InstallHibitUninstallerAsync, ChkRevoUninstaller));
             if (ChkInstallZalo.IsChecked == true) tasks.Add((InstallZaloAsync, ChkInstallZalo));
             if (Chk3DPChip.IsChecked == true) tasks.Add((Run3DPChipAsync, Chk3DPChip));
             if (Chk3DPNet.IsChecked == true) tasks.Add((Install3DPNetAsync, Chk3DPNet));
             if (ChkDeactivateWindows.IsChecked == true) tasks.Add((() => Task.Run(() => DeactivateWindows()), ChkDeactivateWindows));
-            if (ChkMMTApps.IsChecked == true) tasks.Add((InstallMMTAppsAsync, ChkMMTApps));
             if (ChkDISMPP.IsChecked == true) tasks.Add((InstallDISMPPAsync, ChkDISMPP));
-            if (ChkComfortClipboardPro.IsChecked == true) tasks.Add((InstallComfortClipboardProAsync, ChkComfortClipboardPro));
-            if (ChkOfficeSoftmaker.IsChecked == true) tasks.Add((InstallOfficeSoftmakerAsync, ChkOfficeSoftmaker));
             if (ChkGMTPCFonts.IsChecked == true) tasks.Add((InstallGMTPCFontsAsync, ChkGMTPCFonts));
             if (ChkNotepadPlusPlus.IsChecked == true) tasks.Add((InstallNotepadPlusPlusAsync, ChkNotepadPlusPlus));
             if (ChkSubtitleEdit.IsChecked == true) tasks.Add((InstallSubtitleEditAsync, ChkSubtitleEdit));
             if (ChkVidCoder.IsChecked == true) tasks.Add((InstallVidCoderAsync, ChkVidCoder));
-            if (ChkBoilsoftVideoSplitter.IsChecked == true) tasks.Add((InstallBoilsoftVideoSplitterAsync, ChkBoilsoftVideoSplitter));
             if (ChkVibe.IsChecked == true) tasks.Add((InstallVibeAsync, ChkVibe));
             if (ChkMKVToolNix.IsChecked == true) tasks.Add((InstallMKVToolNixAsync, ChkMKVToolNix));
             if (ChkSubtitleDraftGMTPC.IsChecked == true) tasks.Add((InstallSubtitleDraftGMTPCAsync, ChkSubtitleDraftGMTPC));
-            if (ChkDownloadSampleVideo.IsChecked == true) tasks.Add((InstallSampleVideoAsync, ChkDownloadSampleVideo));
             // Only add once to avoid duplicate install and MessageBox
-            if (ChkPowerISO.IsChecked == true) tasks.Add((InstallPowerISOAsync, ChkPowerISO));
             if (ChkMemReduct.IsChecked == true) tasks.Add((InstallMemReductAsync, ChkMemReduct));
-            if (ChkTeraCopy.IsChecked == true) tasks.Add((InstallTeraCopyAsync, ChkTeraCopy));
             if (ChkVPN1111.IsChecked == true) tasks.Add((InstallVPN1111Async, ChkVPN1111));
             if (ChkGoogleDrive.IsChecked == true) tasks.Add((InstallGoogleDriveAsync, ChkGoogleDrive));
-            if (ChkNetLimiter.IsChecked == true) tasks.Add((InstallNetLimiterAsync, ChkNetLimiter));
             if (ChkFolderSize.IsChecked == true) tasks.Add((InstallFolderSizeAsync, ChkFolderSize));
-            if (ChkDiskGenius.IsChecked == true) tasks.Add((InstallDiskGeniusAsync, ChkDiskGenius));
-            if (ChkProcessLasso.IsChecked == true) tasks.Add((InstallProcessLassoAsync, ChkProcessLasso));
             if (ChkThrottlestop.IsChecked == true) tasks.Add((InstallThrottlestopAsync, ChkThrottlestop));
             if (ChkMSIAfterburner.IsChecked == true) tasks.Add((InstallMSIAfterburnerAsync, ChkMSIAfterburner));
             if (ChkLeagueOfLegends.IsChecked == true) tasks.Add((InstallLeagueOfLegendsVNAsync, ChkLeagueOfLegends));
             if (ChkPorofessor.IsChecked == true) tasks.Add((InstallPorofessorAsync, ChkPorofessor));
-            if (ChkSamuraiMaiden.IsChecked == true) tasks.Add((InstallSamuraiMaidenAsync, ChkSamuraiMaiden));
-            if (ChkGhostOfTsushima.IsChecked == true) tasks.Add((InstallGhostOfTsushimaAsync, ChkGhostOfTsushima));
-            if (ChkJumpForce.IsChecked == true) tasks.Add((InstallJumpForceAsync, ChkJumpForce));
-            if (ChkAomeiPartitionAssistant.IsChecked == true) tasks.Add((InstallAomeiPartitionAssistantAsync, ChkAomeiPartitionAssistant));
             if (ChkUltraviewer.IsChecked == true) tasks.Add((InstallUltraviewerAsync, ChkUltraviewer));
             if (ChkTeamViewerQS.IsChecked == true) tasks.Add((InstallTeamViewerQuickSupportAsync, ChkTeamViewerQS));
             if (ChkTeamViewerFull.IsChecked == true) tasks.Add((InstallTeamViewerFullAsync, ChkTeamViewerFull));
             if (ChkAnyDesk.IsChecked == true) tasks.Add((InstallAnyDeskAsync, ChkAnyDesk));
-            if (ChkVMWare162Lite.IsChecked == true) tasks.Add((InstallVMWare162LiteAsync, ChkVMWare162Lite));
             if (ChkWin11_26H1.IsChecked == true) tasks.Add((InstallWin11_26H1Async, ChkWin11_26H1));
-            if (ChkWin10LtscIot21H2.IsChecked == true) tasks.Add((InstallWin10LtscIot21H2Async, ChkWin10LtscIot21H2));
-            if (ChkWin10_22H2_2024_December.IsChecked == true) tasks.Add((InstallWin10_22H2_2024_DecemberAsync, ChkWin10_22H2_2024_December));
             if (ChkVentoy.IsChecked == true) tasks.Add((InstallVentoyAsync, ChkVentoy));
-            if (ChkWintoHDD.IsChecked == true) tasks.Add((InstallWintoHDDAsync, ChkWintoHDD));
 
             CheckBox currentTaskCheckBox = null;
             bool hadError = false;
@@ -889,17 +789,11 @@ namespace GMTPC.Tool
             // Xây dựng danh sách link download khi hover
             _cachedDownloadLinks.Clear();
 
-            if (ChkInstallIDM?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://tinyurl.com/idmhcmvn");
 
             if (ChkInstallWinRAR?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/WinRAR.7.13.exe");
 
-            if (ChkInstallBID?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://bulkimagedownloader.com/download");
 
-            if (ChkActivateWindows?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/activate/ACTIVATE.WINDOWS.cmd");
 
             if (ChkPauseWindowsUpdate?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/test/pause.update.win.11.ps1");
@@ -928,8 +822,6 @@ namespace GMTPC.Tool
             if (ChkBrave?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://laptop-updates.brave.com/download/BRV010?bitness=64");
 
-            if (ChkRevoUninstaller?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://www.hibitsoft.ir/HiBitUninstaller/RevoUninstaller-setup.exe");
 
             if (Chk3DPNet?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/3DP.Net.exe");
@@ -937,17 +829,11 @@ namespace GMTPC.Tool
             if (Chk3DPChip?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/3DP.Chip.exe");
 
-            if (ChkMMTApps?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/MMT.Apps.exe");
 
             if (ChkDISMPP?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/WinPE/DISM++.exe");
 
-            if (ChkComfortClipboardPro?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Comfort.Clipboard.Pro.exe");
 
-            if (ChkAomeiPartitionAssistant?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/AOMEI.Partition.Assistant.exe");
 
             if (ChkUltraviewer?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://dl2.ultraviewer.net/UltraViewer_setup_6.6_vi.exe");
@@ -955,20 +841,14 @@ namespace GMTPC.Tool
             if (ChkPotPlayer?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://t1.daumcdn.net/potplayer/PotPlayer/Version/Latest/PotPlayerSetup64.exe");
 
-            if (ChkFastStone?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/FastStone.Capture.exe");
 
             if (ChkFoxit?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://cdn01.foxitsoftware.com/product/reader/desktop/win/2025.2.0/FoxitPDFReader20252_L10N_Setup_Prom_x64.exe");
 
-            if (ChkBandiview?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Bandiview.exe");
 
             if (ChkAdvancedCodecPack?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/ADVANCED_Codec_Pack.exe");
 
-            if (ChkTeraCopy?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/TeraCopy.Pro.v3.17.0.0.exe");
 
             if (ChkVPN1111?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://1111-releases.cloudflareclient.com/win/latest");
@@ -982,17 +862,11 @@ namespace GMTPC.Tool
             if (ChkAnyDesk?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://tinyurl.com/anydesk621");
 
-            if (ChkVMWare162Lite?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/VMware_Workstation_16.2.2_Lite_Eng_._Rus.exe");
 
             if (ChkOfficeToolPlus?.IsChecked == true)
                 _cachedDownloadLinks.Add(OFFICE_TOOL_PLUS_RELEASES_URL);
 
-            if (ChkOfficeSoftmaker?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Office.Softmaker.exe");
 
-            if (ChkActivateOffice?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/activate/ACTIVATE.OFFICE.cmd");
 
             if (ChkGMTPCFonts?.IsChecked == true)
                 _cachedDownloadLinks.Add(GMTPC_FONTS_DOWNLOAD_URL);
@@ -1006,26 +880,10 @@ namespace GMTPC.Tool
             if (ChkInstallZalo?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://zalo.me/download/zalo-pc?utm=90000");
 
-            if (ChkJumpForce?.IsChecked == true)
-            {
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part01.exe");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part02.rar");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part03.rar");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part04.rar");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part05.rar");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part06.rar");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part07.rar");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part08.rar");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part09.rar");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part10.rar");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part11.rar");
-            }
 
             if (ChkVentoy?.IsChecked == true)
                 _cachedDownloadLinks.Add(VENTOY_RELEASES_URL);
 
-            if (ChkWintoHDD?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/WinPE/wintohdd.exe");
 
             if (ChkSubtitleEdit?.IsChecked == true)
                 _cachedDownloadLinks.Add(SUBTITLE_EDIT_DOWNLOAD_URL);
@@ -1033,8 +891,6 @@ namespace GMTPC.Tool
             if (ChkVidCoder?.IsChecked == true)
                 _cachedDownloadLinks.Add(VIDCODER_DOWNLOAD_URL);
 
-            if (ChkBoilsoftVideoSplitter?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/BoilsoftVideoSplitter.8.3.3.by.elchupacabra.exe");
 
             if (ChkVibe?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/vibe.exe");
@@ -1045,11 +901,7 @@ namespace GMTPC.Tool
             if (ChkSubtitleDraftGMTPC?.IsChecked == true)
                 _cachedDownloadLinks.Add(SUBTITLE_DRAFT_GMTPC_DOWNLOAD_URL);
 
-            if (ChkDownloadSampleVideo?.IsChecked == true)
-                _cachedDownloadLinks.Add(SAMPLE_VIDEO_DOWNLOAD_URL);
 
-            if (ChkPowerISO?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/PowerISO.exe");
 
             if (ChkMemReduct?.IsChecked == true)
                 _cachedDownloadLinks.Add(MEMREDUCT_DOWNLOAD_URL);
@@ -1057,17 +909,11 @@ namespace GMTPC.Tool
             if (ChkGoogleDrive?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://dl.google.com/drive-file-stream/GoogleDriveSetup.exe");
 
-            if (ChkNetLimiter?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/netlimiter-4.1.12.0.exe");
 
             if (ChkFolderSize?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/FolderSize-2.6-x64.msi");
 
-            if (ChkDiskGenius?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Disk.Genius.exe");
 
-            if (ChkProcessLasso?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Process.Lasso.exe");
 
             if (ChkThrottlestop?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Throttlestop.zip");
@@ -1081,56 +927,11 @@ namespace GMTPC.Tool
             if (ChkPorofessor?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://download.overwolf.com/installer/prod/339334cdda5e1ea8a3c8a31ba816fb37/Porofessor%20Standalone%20-%20Installer.exe");
 
-            if (ChkSamuraiMaiden?.IsChecked == true)
-            {
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/SAMURAI.MAIDEN_LinkNeverDie.Com.part1.exe");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/SAMURAI.MAIDEN_LinkNeverDie.Com.part2.rar");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/SAMURAI.MAIDEN_LinkNeverDie.Com.part3.rar");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/game/SAMURAI.MAIDEN_LinkNeverDie.Com.part4.rar");
-            }
 
-            if (ChkGhostOfTsushima?.IsChecked == true)
-            {
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART01_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART02_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART03_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART04_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART05_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART06_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART07_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART08_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART09_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART10_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART11_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART12_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART13_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART14_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART15_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART16_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART17_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART18_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART19_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART20_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART21_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART22_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART23_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART24_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART25_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART26_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART27_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART28_URL);
-                _cachedDownloadLinks.Add(GHOST_OF_TSUSHIMA_PART29_URL);
-            }
 
             if (ChkWin11_26H1?.IsChecked == true)
                 _cachedDownloadLinks.Add("https://archive.org/download/microsoft-win11-26h2-february-2026/en-us_windows_11_consumer_editions_version_26h1_x64_dvd_5208fe5b.iso");
 
-            if (ChkWin10LtscIot21H2?.IsChecked == true)
-            {
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/windows/LTSC.IOT.21H2.-.2021.10.-.gaming.-.Office.365.-.win.10.MMTPC.3.0.boot.windowsRE.iso.001");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/windows/LTSC.IOT.21H2.-.2021.10.-.gaming.-.Office.365.-.win.10.MMTPC.3.0.boot.windowsRE.iso.002");
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/windows/LTSC.IOT.21H2.-.2021.10.-.gaming.-.Office.365.-.win.10.MMTPC.3.0.boot.windowsRE.iso.003");
-            }
 
             // Hiển thị tooltip với danh sách link
             string tooltipText;
@@ -1259,19 +1060,14 @@ namespace GMTPC.Tool
         {
             var allCheckBoxes = new System.Windows.Controls.CheckBox[]
             {
-                ChkInstallIDM, ChkInstallWinRAR, ChkInstallBID, ChkActivateWindows,
-                ChkDeactivateWindows, ChkPauseWindowsUpdate, ChkVcredist, ChkDirectX, ChkJava, ChkOpenAL,
-                Chk3DPChip, Chk3DPNet, ChkRevoUninstaller,
-                ChkOfficeToolPlus, ChkOfficeSoftmaker, ChkActivateOffice, ChkGMTPCFonts,
-                ChkPotPlayer, ChkFastStone, ChkFoxit, ChkBandiview, ChkAdvancedCodecPack,
-                ChkMMTApps, ChkDISMPP, ChkComfortClipboardPro,
-                ChkFolderSize, ChkPowerISO, ChkMemReduct, ChkTeraCopy, ChkVPN1111, ChkGoogleDrive,
-                ChkNetLimiter, ChkAomeiPartitionAssistant, ChkDiskGenius, ChkProcessLasso,
+                ChkInstallWinRAR, ChkDeactivateWindows, ChkPauseWindowsUpdate, ChkVcredist, ChkDirectX, ChkJava, ChkOpenAL,
+                Chk3DPChip, Chk3DPNet, ChkOfficeToolPlus, ChkGMTPCFonts,
+                ChkPotPlayer, ChkFoxit, ChkAdvancedCodecPack,
+                ChkDISMPP, ChkFolderSize, ChkMemReduct, ChkVPN1111, ChkGoogleDrive,
                 ChkThrottlestop, ChkMSIAfterburner, ChkLeagueOfLegends, ChkPorofessor,
-                ChkSamuraiMaiden, ChkChrome, ChkCocCoc, ChkEdge,
+                ChkChrome, ChkCocCoc, ChkEdge,
                 ChkBrave,
-                ChkUltraviewer, ChkTeamViewerQS, ChkTeamViewerFull, ChkAnyDesk, ChkVMWare162Lite,
-                // ChkWin10ProWorkstations22H2 removed
+                ChkUltraviewer, ChkTeamViewerQS, ChkTeamViewerFull, ChkAnyDesk, // ChkWin10ProWorkstations22H2 removed
             };
 
             foreach (var chk in allCheckBoxes)
@@ -1289,20 +1085,11 @@ namespace GMTPC.Tool
                 string link = null;
                 switch (checkBox.Name)
                 {
-                    case "ChkInstallIDM":
-                        link = "https://tinyurl.com/idmhcmvn";
-                        break;
                     case "ChkInstallNeatDM":
                         link = "https://neatdownloadmanager.com/file/NeatDM_setup.exe";
                         break;
                     case "ChkInstallWinRAR":
                         link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/WinRAR.7.13.exe";
-                        break;
-                    case "ChkInstallBID":
-                        link = "https://bulkimagedownloader.com/download";
-                        break;
-                    case "ChkActivateWindows":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/activate/ACTIVATE.WINDOWS.cmd";
                         break;
                     case "ChkDeactivateWindows":
                         link = "Built-in Windows flow: slmgr /dlv -> copy Activation ID -> slmgr /upk x";
@@ -1328,65 +1115,29 @@ namespace GMTPC.Tool
                     case "Chk3DPNet":
                         link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/3DP.Net.exe";
                         break;
-                    case "ChkRevoUninstaller":
-                        link = "https://www.hibitsoft.ir/HiBitUninstaller/RevoUninstaller-setup.exe";
-                        break;
                     case "ChkOfficeToolPlus":
                         link = OFFICE_TOOL_PLUS_RELEASES_URL;
-                        break;
-                    case "ChkOfficeSoftmaker":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/SoftMaker.Office.exe";
                         break;
                     case "ChkPotPlayer":
                         link = "https://t1.daumcdn.net/potplayer/PotPlayer/Version/Latest/PotPlayerSetup64.exe";
                         break;
-                    case "ChkFastStone":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/FastStone.Capture.exe";
-                        break;
                     case "ChkFoxit":
                         link = "https://cdn01.foxitsoftware.com/product/reader/desktop/win/2025.2.0/FoxitPDFReader20252_L10N_Setup_Prom_x64.exe";
-                        break;
-                    case "ChkBandiview":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Bandiview.exe";
                         break;
                     case "ChkAdvancedCodecPack":
                         link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/ADVANCED_Codec_Pack.exe";
                         break;
-                    case "ChkTeraCopy":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/TeraCopy.Pro.v3.17.0.0.exe";
-                        break;
                     case "ChkVPN1111":
                         link = "https://1111-releases.cloudflareclient.com/win/latest";
                         break;
-                    case "ChkMMTApps":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/MMT.Apps.exe";
-                        break;
                     case "ChkDISMPP":
                         link = "https://github.com/ghostminhtoan/MMT/releases/download/WinPE/DISM++.exe";
-                        break;
-                    case "ChkComfortClipboardPro":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Comfort.Clipboard.Pro.exe";
-                        break;
-                    case "ChkPowerISO":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/PowerISO.exe";
                         break;
                     case "ChkMemReduct":
                         link = MEMREDUCT_DOWNLOAD_URL;
                         break;
                     case "ChkGoogleDrive":
                         link = "https://dl.google.com/drive-file-stream/GoogleDriveSetup.exe";
-                        break;
-                    case "ChkNetLimiter":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/netlimiter-4.1.12.0.exe";
-                        break;
-                    case "ChkAomeiPartitionAssistant":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/AOMEI.Partition.Assistant.exe";
-                        break;
-                    case "ChkDiskGenius":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/WinPE/Disk.Genius.exe";
-                        break;
-                    case "ChkProcessLasso":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/ProcessLasso.exe";
                         break;
                     case "ChkThrottlestop":
                         link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Throttlestop.exe";
@@ -1418,12 +1169,6 @@ namespace GMTPC.Tool
                     case "ChkAnyDesk":
                         link = "https://anydesk.com/en/downloads/thank-you?dv=win_exe";
                         break;
-                    case "ChkVMWare162Lite":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/VMware.Workstation.Pro.16.2.Lite.exe";
-                        break;
-                    case "ChkActivateOffice":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/activate/ACTIVATE.OFFICE.cmd";
-                        break;
                     case "ChkGMTPCFonts":
                         link = GMTPC_FONTS_DOWNLOAD_URL;
                         break;
@@ -1442,17 +1187,8 @@ namespace GMTPC.Tool
                     case "ChkPorofessor":
                         link = "https://porofessor.gg/downloads";
                         break;
-                    case "ChkSamuraiMaiden":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/game/SAMURAI.MAIDEN.LinkNeverDie.Com.part1.exe";
-                        break;
-                    case "ChkGhostOfTsushima":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part01.exe (29 parts)";
-                        break;
                     case "ChkVidCoder":
                         link = VIDCODER_DOWNLOAD_URL;
-                        break;
-                    case "ChkBoilsoftVideoSplitter":
-                        link = BOILSOFT_VIDEO_SPLITTER_DOWNLOAD_URL;
                         break;
                     case "ChkVibe":
                         link = VIBE_DOWNLOAD_URL;
@@ -1463,37 +1199,14 @@ namespace GMTPC.Tool
                     case "ChkSubtitleDraftGMTPC":
                         link = SUBTITLE_DRAFT_GMTPC_DOWNLOAD_URL;
                         break;
-                    case "ChkDownloadSampleVideo":
-                        link = SAMPLE_VIDEO_DOWNLOAD_URL;
-                        break;
                     case "ChkWin11_26H1":
                         link = "https://archive.org/download/microsoft-win11-26h2-february-2026/en-us_windows_11_consumer_editions_version_26h1_x64_dvd_5208fe5b.iso";
-                        break;
-                    case "ChkWin10LtscIot21H2":
-                        link = "GitHub (3 parts):\n" +
-                               "https://github.com/ghostminhtoan/MMT/releases/download/windows/LTSC.IOT.21H2.-.2021.10.-.gaming.-.Office.365.-.win.10.MMTPC.3.0.iso.001\n" +
-                               "https://github.com/ghostminhtoan/MMT/releases/download/windows/LTSC.IOT.21H2.-.2021.10.-.gaming.-.Office.365.-.win.10.MMTPC.3.0.iso.002\n" +
-                               "https://github.com/ghostminhtoan/MMT/releases/download/windows/LTSC.IOT.21H2.-.2021.10.-.gaming.-.Office.365.-.win.10.MMTPC.3.0.iso.003";
-                        break;
-                    case "ChkWin10_22H2_2024_December":
-                        link = "GitHub (5 parts):\n" +
-                               "https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.001\n" +
-                               "https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.002\n" +
-                               "https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.003\n" +
-                               "https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.004\n" +
-                               "https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.005";
                         break;
                     case "ChkVentoy":
                         link = VENTOY_RELEASES_URL;
                         break;
                     case "ChkInstallZalo":
                         link = "https://zalo.me/download/zalo-pc?utm=90000";
-                        break;
-                    case "ChkJumpForce":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part01.exe (11 parts)";
-                        break;
-                    case "ChkWintoHDD":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/WinPE/wintohdd.exe";
                         break;
                 }
 

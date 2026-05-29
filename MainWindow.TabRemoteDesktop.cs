@@ -1,3 +1,4 @@
+// AI Summary: 2026-05-29 - Cleaned up deleted checkboxes event handlers.
 // AI Summary: 2026-05-11 - Removed explicit VMware install arguments so it runs without extra parameters
 
 using System;
@@ -241,56 +242,7 @@ namespace GMTPC.Tool
 
         // AI Summary: 2026-05-11 - Removed explicit VMware install arguments so it runs without extra parameters
 
-        private void ChkVMWare162Lite_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkVMWare162Lite.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: VMWare 16.2 lite", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: VMWare 16.2 lite", "Yellow");
-            }
 
-            UpdateInstallButtonState();
-        }
-
-        private async Task InstallVMWare162LiteAsync()
-        {
-            try
-            {
-                UpdateStatus("Đang tải VMWare 16.2 lite...", "Cyan");
-                string vmwarePath = Path.Combine(GetGMTPCFolder(), "VMware_Workstation_16.2.2_Lite.exe");
-                await DownloadWithProgressAsync("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/VMware_Workstation_16.2.2_Lite_Eng_._Rus.exe", vmwarePath, "VMWare 16.2 lite");
-
-                Dispatcher.Invoke(() =>
-                {
-                    DownloadProgressBar.Value = 0;
-                    ProgressTextBlock.Text = "";
-                    SpeedTextBlock.Text = "";
-                });
-
-                UpdateStatus("Đang chạy VMWare 16.2 lite (silent)...", "Yellow");
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    FileName = vmwarePath,
-                    UseShellExecute = true
-                };
-                Process process = Process.Start(startInfo);
-
-                if (process != null)
-                {
-                    await Task.Run(() => process.WaitForExit());
-                    UpdateStatus("VMWare 16.2 lite đã hoàn tất.", "Green");
-                }
-
-                if (File.Exists(vmwarePath)) File.Delete(vmwarePath);
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi cài VMWare 16.2 lite: {ex.Message}", "Red");
-            }
-        }
 
     }
 }

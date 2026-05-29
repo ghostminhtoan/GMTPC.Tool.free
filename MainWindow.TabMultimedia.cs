@@ -1,3 +1,4 @@
+// AI Summary: 2026-05-29 - Cleaned up deleted checkboxes event handlers.
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -66,43 +67,6 @@ namespace GMTPC.Tool
         }
 
 
-        private async Task InstallFastStoneAsync()
-        {
-            try
-            {
-                UpdateStatus("Đang tải FastStone Capture...", "Cyan");
-                string fsPath = Path.Combine(GetGMTPCFolder(), "FastStone.Capture.exe");
-                await DownloadWithProgressAsync("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/FastStone.Capture.exe", fsPath, "FastStone Capture");
-
-                Dispatcher.Invoke(() =>
-                {
-                    DownloadProgressBar.Value = 0;
-                    ProgressTextBlock.Text = "";
-                    SpeedTextBlock.Text = "";
-                });
-
-                UpdateStatus("Đang chạy FastStone Capture installer (silent)...", "Yellow");
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    FileName = fsPath,
-                    Arguments = "/silent",
-                    UseShellExecute = true
-                };
-                Process process = Process.Start(startInfo);
-
-                if (process != null)
-                {
-                    await Task.Run(() => process.WaitForExit());
-                    UpdateStatus("FastStone Capture đã hoàn tất.", "Green");
-                }
-
-                if (File.Exists(fsPath)) File.Delete(fsPath);
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi cài FastStone Capture: {ex.Message}", "Red");
-            }
-        }
 
 
         private async Task InstallFoxitAsync()
@@ -160,43 +124,6 @@ namespace GMTPC.Tool
         }
 
 
-        private async Task InstallBandiviewAsync()
-        {
-            try
-            {
-                UpdateStatus("Đang tải Bandiview...", "Cyan");
-                string bPath = Path.Combine(GetGMTPCFolder(), "Bandiview.exe");
-                await DownloadWithProgressAsync("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Bandiview.exe", bPath, "Bandiview");
-
-                Dispatcher.Invoke(() =>
-                {
-                    DownloadProgressBar.Value = 0;
-                    ProgressTextBlock.Text = "";
-                    SpeedTextBlock.Text = "";
-                });
-
-                UpdateStatus("Đang chạy Bandiview installer (silent)...", "Yellow");
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    FileName = bPath,
-                    Arguments = "/silent",
-                    UseShellExecute = true
-                };
-                Process process = Process.Start(startInfo);
-
-                if (process != null)
-                {
-                    await Task.Run(() => process.WaitForExit());
-                    UpdateStatus("Bandiview đã hoàn tất.", "Green");
-                }
-
-                if (File.Exists(bPath)) File.Delete(bPath);
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi cài Bandiview: {ex.Message}", "Red");
-            }
-        }
 
         private void ChkPotPlayer_Click(object sender, RoutedEventArgs e)
         {
@@ -213,19 +140,6 @@ namespace GMTPC.Tool
         }
 
 
-        private void ChkFastStone_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkFastStone.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: FastStone Capture", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: FastStone Capture", "Yellow");
-            }
-
-            UpdateInstallButtonState();
-        }
 
 
         private void ChkFoxit_Click(object sender, RoutedEventArgs e)
@@ -243,19 +157,6 @@ namespace GMTPC.Tool
         }
 
 
-        private void ChkBandiview_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkBandiview.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: Bandiview (Picture viewer)", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: Bandiview (Picture viewer)", "Yellow");
-            }
-
-            UpdateInstallButtonState();
-        }
 
         private void ChkAdvancedCodecPack_Click(object sender, RoutedEventArgs e)
         {

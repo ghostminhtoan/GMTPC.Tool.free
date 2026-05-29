@@ -1,4 +1,5 @@
-﻿// AI Summary: 2026-04-25 - Forced Windows and Windows Mod landscape layout through the three-column sparse sizing path.
+// AI Summary: 2026-05-29 - Removed layout sizing logic for ChkAomeiPartitionAssistant, ChkDiskGenius, ChkWin10LtscIot21H2, ChkWin10_22H2_2024_December, and ChkWintoHDD.
+// AI Summary: 2026-04-25 - Forced Windows and Windows Mod landscape layout through the three-column sparse sizing path.
 // AI Summary: 2026-04-25 - Limited landscape checkbox layout to three columns.
 // AI Summary: 2026-04-25 - Added maximize-then-fit DPI logic for tab switching so each selected tab auto-zooms to the largest fully visible scale.
 // AI Summary: 2026-04-25 - Rebalanced per-tab fit limits so Office/Multimedia/Remote Desktop clamp earlier while Driver/Browser/Windows tabs can scale larger.
@@ -345,13 +346,7 @@ namespace GMTPC.Tool
             panel.HorizontalAlignment = HorizontalAlignment.Center;
             panel.Margin = new Thickness(0);
 
-            if (panel == PartitionPanel)
-            {
-                double childWidth = Math.Max(200, itemSlotWidth - 8);
-                if (ChkAomeiPartitionAssistant != null) ChkAomeiPartitionAssistant.Width = childWidth;
-                if (ChkDiskGenius != null) ChkDiskGenius.Width = childWidth;
-            }
-            else if (panel == DriverPanel)
+            if (panel == DriverPanel)
             {
                 double childWidth = Math.Max(200, itemSlotWidth - 8);
                 if (Chk3DPChip != null) Chk3DPChip.Width = childWidth;
@@ -379,17 +374,9 @@ namespace GMTPC.Tool
                 return;
             }
 
-            if (panel == WindowsToolsPanel)
-            {
-                if (ChkWin10LtscIot21H2 != null) ChkWin10LtscIot21H2.Width = childWidth;
-                if (ChkWin10_22H2_2024_December != null) ChkWin10_22H2_2024_December.Width = childWidth;
-                return;
-            }
-
             if (panel == WindowsSetupPanel)
             {
                 if (ChkVentoy != null) ChkVentoy.Width = Math.Max(200, childWidth);
-                if (ChkWintoHDD != null) ChkWintoHDD.Width = childWidth;
                 if (BtnWinPEToHDD != null) BtnWinPEToHDD.Width = childWidth;
             }
         }

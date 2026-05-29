@@ -1,3 +1,4 @@
+// AI Summary: 2026-05-29 - Cleaned up deleted checkboxes event handlers.
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,19 +28,6 @@ namespace GMTPC.Tool
 {
     public partial class MainWindow
     {
-        private void ChkTeraCopy_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkTeraCopy.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: TeraCopy", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: TeraCopy", "Yellow");
-            }
-
-            UpdateInstallButtonState();
-        }
 
         private void ChkDeactivateWindows_Click(object sender, RoutedEventArgs e)
         {

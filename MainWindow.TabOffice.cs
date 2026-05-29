@@ -1,3 +1,4 @@
+// AI Summary: 2026-05-29 - Cleaned up deleted checkboxes event handlers.
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,59 +37,11 @@ namespace GMTPC.Tool
          * - Added ChkNotepadPlusPlus_Click and InstallNotepadPlusPlusAsync
          */
 
-        private async void BtnActivateOffice_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateStatus("Đã chọn: Tự động kích hoạt Office", "Green");
-            await Task.Run(() => ActivateOffice());
-        }
 
 
         // ===================== Chức năng kích hoạt Office =====================
-        private void ActivateOffice()
-        {
-            try
-            {
-                UpdateStatus("Đang kích hoạt Office...", "Cyan");
-                string activateOfficeCmdPath = Path.Combine(GetGMTPCFolder(), "ACTIVATE.OFFICE.cmd");
-
-                // Tải file ACTIVATE.OFFICE.cmd
-                using (WebClient client = new WebClient())
-                {
-                    client.DownloadFile("https://github.com/ghostminhtoan/MMT/releases/download/activate/ACTIVATE.OFFICE.cmd", activateOfficeCmdPath);
-                }
-                UpdateStatus("Đã tải file ACTIVATE.OFFICE.cmd", "Cyan");
-
-                // Chạy script với quyền admin
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    FileName = activateOfficeCmdPath,
-                    UseShellExecute = true,
-                    Verb = "runas"
-                };
-
-                Process.Start(startInfo);
-                UpdateStatus("Đã mở cửa sổ kích hoạt Office", "Green");
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi kích hoạt Office: {ex.Message}", "Red");
-            }
-        }
 
 
-        private void ChkActivateOffice_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkActivateOffice.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: Tự động kích hoạt Office", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: Tự động kích hoạt Office", "Yellow");
-            }
-
-            UpdateInstallButtonState();
-        }
 
 
         private void ChkOfficeToolPlus_Click(object sender, RoutedEventArgs e)
@@ -256,94 +209,9 @@ namespace GMTPC.Tool
 
 
         // Thêm phương thức xử lý sự kiện Click cho Office Softmaker
-        private void ChkOfficeSoftmaker_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkOfficeSoftmaker.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: Office Softmaker", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: Office Softmaker", "Yellow");
-            }
-
-            UpdateInstallButtonState();
-        }
 
 
         // Thêm phương thức cài đặt Office Softmaker
-        private async Task InstallOfficeSoftmakerAsync()
-        {
-            try
-            {
-                UpdateStatus("Đang tải Office Softmaker...", "Cyan");
-                string officeSoftmakerPath = Path.Combine(GetGMTPCFolder(), "Office.Softmaker.exe");
-                await DownloadWithProgressAsync("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Office.Softmaker.exe", officeSoftmakerPath, "Office Softmaker Installer");
-
-                // Đảm bảo progress bar reset sau khi tải
-                Dispatcher.Invoke(() =>
-                {
-                    DownloadProgressBar.Value = 0;
-                    ProgressTextBlock.Text = "";
-                    SpeedTextBlock.Text = "";
-                });
-
-                // Hiển thị popup để hỏi người dùng chọn cài đặt
-                MessageBoxResult result = MessageBox.Show("Yes = Cài đặt tự động vào ổ C\nNo = Cài vào ổ khác", "Cài đặt tự động Office Softmaker", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    FileName = officeSoftmakerPath,
-                    UseShellExecute = true
-                };
-
-                if (result == MessageBoxResult.Yes) // Cài đặt tự động vào ổ C
-                {
-                    startInfo.Arguments = "/passive"; // Sử dụng /passive như yêu cầu
-                    UpdateStatus("1 = Cài đặt tự động vào ổ C", "Yellow");
-                }
-                else if (result == MessageBoxResult.No) // Cài vào ổ khác
-                {
-                    UpdateStatus("2 = Cài vào ổ khác", "Yellow");
-                }
-                else // Hủy
-                {
-                    UpdateStatus("Đã hủy cài đặt Office Softmaker", "Yellow");
-                    if (File.Exists(officeSoftmakerPath))
-                    {
-                        File.Delete(officeSoftmakerPath);
-                    }
-                    return;
-                }
-
-                Process process = Process.Start(startInfo);
-
-                if (process != null)
-                {
-                    await Task.Run(() => process.WaitForExit());
-
-                    if (process.ExitCode == 0)
-                    {
-                        UpdateStatus("Cài đặt Office Softmaker thành công!", "Green");
-                    }
-                    else
-                    {
-                        UpdateStatus($"Cài đặt Office Softmaker thất bại. Mã lỗi: {process.ExitCode}", "Red");
-                    }
-                }
-
-                // Xóa file sau khi cài đặt xong
-                if (File.Exists(officeSoftmakerPath))
-                {
-                    File.Delete(officeSoftmakerPath);
-                    UpdateStatus("Đã xóa file Office.Softmaker.exe", "Cyan");
-                }
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi cài đặt Office Softmaker: {ex.Message}", "Red");
-            }
-        }
 
         // ===================================================================
         // TabOffice — GMTPC Fonts

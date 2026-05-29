@@ -1,3 +1,4 @@
+// AI Summary: 2026-05-29 - Cleaned up deleted checkboxes event handlers.
 ﻿// =======================================================================
 // MainWindow.TabPopular.cs
 // Chức năng: Xử lý logic cho các checkbox/button trong tab Popular
@@ -134,19 +135,6 @@ namespace GMTPC.Tool
             catch { }
         }
 
-        private void ChkInstallIDM_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkInstallIDM.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: Internet Download Manager", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: Internet Download Manager", "Yellow");
-            }
-
-            UpdateInstallButtonState();
-        }
 
 
         private void ChkInstallNeatDM_Click(object sender, RoutedEventArgs e)
@@ -179,34 +167,8 @@ namespace GMTPC.Tool
         }
 
 
-        private void ChkInstallBID_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkInstallBID.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: Bulk Image Downloader", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: Bulk Image Downloader", "Yellow");
-            }
-
-            UpdateInstallButtonState();
-        }
 
 
-        private void ChkActivateWindows_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkActivateWindows.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: Tự động kích hoạt Windows", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: Tự động kích hoạt Windows", "Yellow");
-            }
-
-            UpdateInstallButtonState();
-        }
 
 
         private void ChkPauseWindowsUpdate_Click(object sender, RoutedEventArgs e)
@@ -283,19 +245,6 @@ namespace GMTPC.Tool
             UpdateInstallButtonState();
         }
 
-        private void ChkRevoUninstaller_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkRevoUninstaller.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: Revo Uninstaller", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: Revo Uninstaller", "Yellow");
-            }
-
-            UpdateInstallButtonState();
-        }
 
 
         private void ChkInstallZalo_Click(object sender, RoutedEventArgs e)

@@ -1,3 +1,4 @@
+// AI Summary: 2026-05-29 - Removed constants, click handlers, install methods, and UpdateInstallButtonState conditions for 25 target checkboxes.
 ﻿// AI Summary: 2026-04-28 - Added VentoySourceForgeFiles URL and Ventoy checkbox state wiring
 // AI Summary: 2026-04-30 - Added Office Tool Plus Releases URLs for latest x64 runtime zip probing and hover/copy-link flows
 // AI Summary: 2026-05-12 - Moved TeraCopy Defender exclusions before download, removed temp exclusion after install, and kept %ProgramFiles%\TeraCopy permanent
@@ -63,17 +64,12 @@ namespace GMTPC.Tool
         //             ChkDirectX, ChkJava, ChkOpenAL, ChkRevoUninstaller
         // ===================================================================
         // IDM
-        private const string IDM_DOWNLOAD_URL = "https://tinyurl.com/idmhcmvn";
-        private const string IDM_ACTIVATE_URL = "https://github.com/ghostminhtoan/MMT/releases/download/activate/IDM_6.4x_rabbit.exe";
-        private const string IDM_INSTALL_ARGUMENTS = "/s /a /u /o /quiet /skipdlgst";
 
         // WinRAR
         private const string WINRAR_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/WinRAR.exe";
         private const string WINRAR_INSTALL_ARGUMENTS = "/silent /I /EN";
 
         // BID (Bulk Image Downloader)
-        private const string BID_DOWNLOAD_URL = "https://bulkimagedownloader.com/files/bid_6_62_setup_x64.exe";
-        private const string BID_INSTALL_ARGUMENTS = "";
 
         // Neat Download Manager
         private const string NEATDM_DOWNLOAD_URL = "https://neatdownloadmanager.com/file/NeatDM_setup.exe";
@@ -97,8 +93,6 @@ namespace GMTPC.Tool
         private const string OPENAL_INSTALL_ARGUMENTS = "/S";
 
         // Revo Uninstaller
-        private const string REVO_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/RevoUninstallerPro.exe";
-        private const string REVO_INSTALL_ARGUMENTS = "/S";
 
         // Zalo
         private const string ZALO_DOWNLOAD_URL = "https://zalo.me/download/zalo-pc?utm=90000";
@@ -113,8 +107,6 @@ namespace GMTPC.Tool
         // TabItem Header: "Windows"
         // Checkbox: ChkWintoHDD, ChkVentoy
         // ===================================================================
-        private const string WINTOHDD_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/WinPE/wintohdd.exe";
-        private const string WINTOHDD_INSTALL_ARGUMENTS = "/S";
         private const string VENTOY_RELEASES_URL = "https://github.com/ventoy/Ventoy/releases";
 
         // ===================================================================
@@ -122,18 +114,6 @@ namespace GMTPC.Tool
         // TabItem Header: "Gaming"
         // Checkbox: ChkJumpForce
         // ===================================================================
-        private const string JUMP_FORCE_PART01_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part01.exe";
-        private const string JUMP_FORCE_PART02_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part02.rar";
-        private const string JUMP_FORCE_PART03_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part03.rar";
-        private const string JUMP_FORCE_PART04_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part04.rar";
-        private const string JUMP_FORCE_PART05_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part05.rar";
-        private const string JUMP_FORCE_PART06_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part06.rar";
-        private const string JUMP_FORCE_PART07_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part07.rar";
-        private const string JUMP_FORCE_PART08_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part08.rar";
-        private const string JUMP_FORCE_PART09_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part09.rar";
-        private const string JUMP_FORCE_PART10_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part10.rar";
-        private const string JUMP_FORCE_PART11_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/JUMP.FORCE_LinkNeverDie.Com.part11.rar";
-        private const string JUMP_FORCE_FINAL_NAME = "JUMP.FORCE_LinkNeverDie.Com.iso";
 
         // ===================================================================
         // TabGaming â€” Ghost of Tsushima
@@ -141,35 +121,6 @@ namespace GMTPC.Tool
         // Checkbox: ChkGhostOfTsushima
         // ===================================================================
         // Ghost of Tsushima (29 parts)
-        private const string GHOST_OF_TSUSHIMA_PART01_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part01.exe";
-        private const string GHOST_OF_TSUSHIMA_PART02_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part02.rar";
-        private const string GHOST_OF_TSUSHIMA_PART03_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part03.rar";
-        private const string GHOST_OF_TSUSHIMA_PART04_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part04.rar";
-        private const string GHOST_OF_TSUSHIMA_PART05_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part05.rar";
-        private const string GHOST_OF_TSUSHIMA_PART06_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part06.rar";
-        private const string GHOST_OF_TSUSHIMA_PART07_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part07.rar";
-        private const string GHOST_OF_TSUSHIMA_PART08_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part08.rar";
-        private const string GHOST_OF_TSUSHIMA_PART09_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part09.rar";
-        private const string GHOST_OF_TSUSHIMA_PART10_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part10.rar";
-        private const string GHOST_OF_TSUSHIMA_PART11_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part11.rar";
-        private const string GHOST_OF_TSUSHIMA_PART12_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part12.rar";
-        private const string GHOST_OF_TSUSHIMA_PART13_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part13.rar";
-        private const string GHOST_OF_TSUSHIMA_PART14_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part14.rar";
-        private const string GHOST_OF_TSUSHIMA_PART15_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part15.rar";
-        private const string GHOST_OF_TSUSHIMA_PART16_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part16.rar";
-        private const string GHOST_OF_TSUSHIMA_PART17_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part17.rar";
-        private const string GHOST_OF_TSUSHIMA_PART18_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part18.rar";
-        private const string GHOST_OF_TSUSHIMA_PART19_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part19.rar";
-        private const string GHOST_OF_TSUSHIMA_PART20_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part20.rar";
-        private const string GHOST_OF_TSUSHIMA_PART21_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part21.rar";
-        private const string GHOST_OF_TSUSHIMA_PART22_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part22.rar";
-        private const string GHOST_OF_TSUSHIMA_PART23_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part23.rar";
-        private const string GHOST_OF_TSUSHIMA_PART24_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part24.rar";
-        private const string GHOST_OF_TSUSHIMA_PART25_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part25.rar";
-        private const string GHOST_OF_TSUSHIMA_PART26_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part26.rar";
-        private const string GHOST_OF_TSUSHIMA_PART27_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part27.rar";
-        private const string GHOST_OF_TSUSHIMA_PART28_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part28.rar";
-        private const string GHOST_OF_TSUSHIMA_PART29_URL = "https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part29.rar";
 
         // ===================================================================
         // TabOffice â€” Links (B) and Arguments (C)
@@ -198,8 +149,6 @@ namespace GMTPC.Tool
         // Checkboxes: ChkBoilsoftVideoSplitter, ChkVibe, ChkMKVToolNix, ChkSubtitleDraftGMTPC, ChkDownloadSampleVideo
         // ===================================================================
         // Boilsoft Video Splitter (Tab: Subtitle)
-        private const string BOILSOFT_VIDEO_SPLITTER_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/BoilsoftVideoSplitter.8.3.3.by.elchupacabra.exe";
-        private const string BOILSOFT_VIDEO_SPLITTER_INSTALL_ARGUMENTS = "/S";
 
         // Vibe (Tab: Subtitle)
         private const string VIBE_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/vibe.exe";
@@ -213,7 +162,6 @@ namespace GMTPC.Tool
         private const string SUBTITLE_DRAFT_GMTPC_DOWNLOAD_URL = "https://raw.githubusercontent.com/ghostminhtoan/Subtitle-draft-GMTPC/refs/heads/master/Subtitle%20draft%20GMTPC.exe";
 
         // Download sample video (Tab: Subtitle)
-        private const string SAMPLE_VIDEO_DOWNLOAD_URL = "https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/releases/download/subtitle.materials/ReZero.Starting.Life.in.Another.World.S04E01.WEB-DL.1080p.AVC.AAC.Dual.Audio-FBI.mkv";
 
         // ===================================================================
         // TabDriver â€” Links (B) and Arguments (C)
@@ -262,15 +210,11 @@ namespace GMTPC.Tool
         // TabItem Header: "System"
         // Checkboxes: ChkPowerISO, ChkTeraCopy, ChkVPN1111
         // ===================================================================
-        private const string POWERISO_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/PowerISO.exe";
-        private const string POWERISO_INSTALL_ARGUMENTS = "/S";
 
         // MemReduct (GitHub Releases direct download)
         private const string MEMREDUCT_DOWNLOAD_URL = "https://github.com/henrypp/memreduct/releases/download/v.3.5.2/memreduct-3.5.2-setup.exe";
 
         // TeraCopy
-        private const string TERACOPY_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/TeraCopy.Pro.v3.17.0.0.exe";
-        private const string TERACOPY_INSTALL_ARGUMENTS = "/S";
 
         // VPN 1111 (Cloudflare)
         private const string VPN1111_DOWNLOAD_URL = "https://1111-releases.cloudflareclient.com/win/latest";
@@ -378,46 +322,6 @@ namespace GMTPC.Tool
             }
         }
 
-        private async Task InstallPowerISOAsync()
-        {
-            try
-            {
-                UpdateStatus("Đang tải PowerISO...", "Cyan");
-                string powerISOPath = Path.Combine(GetGMTPCFolder(), "PowerISO.exe");
-                await DownloadWithProgressAsync(POWERISO_DOWNLOAD_URL, powerISOPath, "PowerISO");
-
-                Dispatcher.Invoke(() =>
-                {
-                    DownloadProgressBar.Value = 0;
-                    ProgressTextBlock.Text = "";
-                    SpeedTextBlock.Text = "";
-                });
-
-                UpdateStatus("Đang cài đặt PowerISO (silent)...", "Yellow");
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    FileName = powerISOPath,
-                    Arguments = POWERISO_INSTALL_ARGUMENTS,
-                    UseShellExecute = true
-                };
-                Process process = Process.Start(startInfo);
-
-                if (process != null)
-                {
-                    await Task.Run(() => process.WaitForExit());
-                    UpdateStatus("cài đặt PowerISO hoàn tất!", "Green");
-                }
-
-                if (File.Exists(powerISOPath))
-                {
-                    File.Delete(powerISOPath);
-                }
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi cài đặt PowerISO: {ex.Message}", "Red");
-            }
-        }
 
         // ===================================================================
         // TabSystem â€” Google Drive
@@ -552,19 +456,6 @@ namespace GMTPC.Tool
         // ===================================================================
         // TabSystem â€” Checkbox Click Handlers
         // ===================================================================
-        private void ChkMMTApps_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkMMTApps.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: MMT Apps", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: MMT Apps", "Yellow");
-            }
-
-            UpdateInstallButtonState();
-        }
 
         private void ChkDISMPP_Click(object sender, RoutedEventArgs e)
         {
@@ -580,19 +471,6 @@ namespace GMTPC.Tool
             UpdateInstallButtonState();
         }
 
-        private void ChkComfortClipboardPro_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkComfortClipboardPro.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: Comfort Clipboard Pro", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: Comfort Clipboard Pro", "Yellow");
-            }
-
-            UpdateInstallButtonState();
-        }
 
         private void ChkFolderSize_Click(object sender, RoutedEventArgs e)
         {
@@ -608,19 +486,6 @@ namespace GMTPC.Tool
             UpdateInstallButtonState();
         }
 
-        private void ChkPowerISO_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkPowerISO.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: PowerISO", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: PowerISO", "Yellow");
-            }
-
-            UpdateInstallButtonState();
-        }
 
         private void ChkGoogleDrive_Click(object sender, RoutedEventArgs e)
         {
@@ -636,128 +501,62 @@ namespace GMTPC.Tool
             UpdateInstallButtonState();
         }
 
-        private void ChkNetLimiter_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkNetLimiter.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: NetLimiter", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: NetLimiter", "Yellow");
-            }
-
-            UpdateInstallButtonState();
-        }
 
         // ===================================================================
         // Common â€” UpdateInstallButtonState
         // ===================================================================
         private void UpdateInstallButtonState()
+        
         {
             // Kiểm tra xem có ít nhất một checkbox nào được chọn Không
-            bool hasChecked = ChkInstallIDM.IsChecked == true ||
-                             ChkInstallNeatDM.IsChecked == true ||
-                             ChkActivateWindows.IsChecked == true ||
+            bool hasChecked = ChkInstallNeatDM.IsChecked == true ||
                              ChkDeactivateWindows.IsChecked == true ||
-                             ChkActivateOffice.IsChecked == true ||
                              ChkOfficeToolPlus.IsChecked == true ||
                              ChkPauseWindowsUpdate.IsChecked == true ||
                              ChkInstallWinRAR.IsChecked == true ||
-                             ChkInstallBID.IsChecked == true ||
-                             // thêm cÃ¡c checkbox má»›i cho tab Runtime
                              ChkVcredist.IsChecked == true ||
                              ChkDirectX.IsChecked == true ||
-                             // thêm checkbox cho Java vÃ  OpenAL
                              ChkJava.IsChecked == true ||
                              ChkOpenAL.IsChecked == true ||
-                             // thêm checkbox cho Driver
                              Chk3DPChip.IsChecked == true ||
                              Chk3DPNet.IsChecked == true ||
-                             // Google Chrome
                              ChkChrome.IsChecked == true ||
-                             // Cá»‘c Cá»‘c
                              ChkCocCoc.IsChecked == true ||
-                             // Microsoft Edge
                              ChkEdge.IsChecked == true ||
-                             // Brave
                              ChkBrave.IsChecked == true ||
-                             ChkRevoUninstaller.IsChecked == true ||
-                             // thêm checkbox cho Zalo
                              ChkInstallZalo.IsChecked == true ||
-                             // thêm checkbox cho MMT Apps
-                             ChkMMTApps.IsChecked == true ||
-                             // thêm checkbox cho DISM++
                              ChkDISMPP.IsChecked == true ||
-                             // thêm checkbox cho Comfort Clipboard Pro
-                             ChkComfortClipboardPro.IsChecked == true ||
-                             // thêm checkbox cho Office Softmaker
-                             ChkOfficeSoftmaker.IsChecked == true ||
-                             // thêm checkbox cho GMTPC Fonts
                              ChkGMTPCFonts.IsChecked == true ||
-                             // thêm checkbox cho Notepad++
                              ChkNotepadPlusPlus.IsChecked == true ||
-                             // thêm checkbox cho Subtitle Edit
                              ChkSubtitleEdit.IsChecked == true ||
-                             // thêm checkbox cho VidCoder (Tab Subtitle)
                              ChkVidCoder.IsChecked == true ||
-                             // thêm checkbox cho Boilsoft Video Splitter (Tab Subtitle)
-                             ChkBoilsoftVideoSplitter.IsChecked == true ||
-                             // thêm checkbox cho Vibe (Tab Subtitle)
                              ChkVibe.IsChecked == true ||
-                             // thêm checkbox cho MKVToolNix MKVCleaver (Tab Subtitle)
                              ChkMKVToolNix.IsChecked == true ||
-                             // thêm checkbox cho Subtitle Draft GMTPC (Tab Subtitle)
                              ChkSubtitleDraftGMTPC.IsChecked == true ||
-                             ChkDownloadSampleVideo.IsChecked == true ||
-                             // thêm checkbox cho AOMEI Partition Assistant
-                             ChkAomeiPartitionAssistant.IsChecked == true ||
-                             // thêm checkbox cho PowerISO
-                             ChkPowerISO.IsChecked == true ||
-                             // thêm checkbox cho Google Drive
                              ChkGoogleDrive.IsChecked == true ||
-                             // thêm checkbox cho NetLimiter
-                             ChkNetLimiter.IsChecked == true ||
-                             // FolderSize
                              ChkFolderSize.IsChecked == true ||
-                             // thêm checkbox cho Gaming tab
-                             ChkDiskGenius.IsChecked == true ||
-                             ChkProcessLasso.IsChecked == true ||
                              ChkThrottlestop.IsChecked == true ||
                              ChkMSIAfterburner.IsChecked == true ||
                              ChkLeagueOfLegends.IsChecked == true ||
                              ChkPorofessor.IsChecked == true ||
-                             ChkSamuraiMaiden.IsChecked == true ||
-                             ChkGhostOfTsushima.IsChecked == true ||
                              ChkUltraviewer.IsChecked == true ||
-                             // Multimedia
                              ChkPotPlayer.IsChecked == true ||
-                             ChkFastStone.IsChecked == true ||
                              ChkFoxit.IsChecked == true ||
-                             ChkBandiview.IsChecked == true ||
                              ChkTeamViewerQS.IsChecked == true ||
                              ChkTeamViewerFull.IsChecked == true ||
                              ChkAnyDesk.IsChecked == true ||
-                             ChkVMWare162Lite.IsChecked == true ||
-                             // Windows - Microsoft
                              ChkWin11_26H1.IsChecked == true ||
-                             ChkWin10LtscIot21H2.IsChecked == true ||
-                             ChkWin10_22H2_2024_December.IsChecked == true ||
-                             // Windows - Ventoy/WintoHDD
                              ChkVentoy.IsChecked == true ||
-                             ChkWintoHDD.IsChecked == true ||
-                             // Multimedia - Advanced Codec Pack
                              ChkAdvancedCodecPack.IsChecked == true ||
-                             // System - TeraCopy and VPN 1111
-                             ChkTeraCopy.IsChecked == true ||
-                             ChkVPN1111.IsChecked == true ||
-                             // Gaming - Jump Force
-                             ChkJumpForce.IsChecked == true;
+                             ChkVPN1111.IsChecked == true;
 
-            // Bao gá»“m checkbox cho Táº¡o WinRE vÃ  WinPE
-
-            // Cáº­p nháº­t tráº¡ng thÃ¡i cá»§a nÃºt Install
             BtnInstall.IsEnabled = hasChecked;
+
+            // Cập nhật trạng thái màu sắc dựa trên việc được chọn hay không
+            if (hasChecked)
+            {
+                // Thay đổi màu border hoặc text của nút install để gây chú ý
+            }
         }
 
         // ===================================================================
@@ -869,121 +668,8 @@ namespace GMTPC.Tool
         // TabItem Header: "System"
         // Checkbox: ChkNetLimiter
         // ===================================================================
-        private async Task InstallNetLimiterAsync()
-        {
-            try
-            {
-                UpdateStatus("Đang tải NetLimiter...", "Cyan");
-                string netLimiterPath = Path.Combine(GetGMTPCFolder(), "NetLimiter.exe");
-                await DownloadWithProgressAsync("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/netlimiter-4.1.12.0.exe", netLimiterPath, "NetLimiter");
 
-                UpdateStatus("Đang cài đặt NetLimiter...", "Yellow");
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    FileName = netLimiterPath,
-                    Arguments = "/passive",
-                    UseShellExecute = true
-                };
-                Process process = Process.Start(startInfo);
 
-                if (process != null)
-                {
-                    await Task.Run(() => process.WaitForExit());
-                    UpdateStatus("cài đặt NetLimiter hoàn tất!", "Green");
-
-                    await Dispatcher.InvokeAsync(() => ShowNetLimiterKeyDialog());
-                }
-
-                if (File.Exists(netLimiterPath)) File.Delete(netLimiterPath);
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi cài đặt NetLimiter: {ex.Message}", "Red");
-            }
-        }
-
-        private void ShowNetLimiterKeyDialog()
-        {
-            try
-            {
-                Window keyDialog = new Window
-                {
-                    Title = "NetLimiter Key",
-                    Width = 500,
-                    Height = 150,
-                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                    Owner = this,
-                    Background = new SolidColorBrush(Color.FromRgb(31, 31, 31)),
-                    Foreground = new SolidColorBrush(Color.FromRgb(230, 230, 230))
-                };
-
-                StackPanel mainPanel = new StackPanel { Margin = new Thickness(10), Orientation = Orientation.Vertical };
-
-                // Name row
-                StackPanel line1 = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 10) };
-                TextBox nameBox = new TextBox
-                {
-                    Text = "Vladimir Putin #2", Width = 300, Height = 28, IsReadOnly = true,
-                    Background = new SolidColorBrush(Color.FromRgb(43, 43, 43)),
-                    Foreground = new SolidColorBrush(Color.FromRgb(230, 230, 230)),
-                    BorderBrush = new SolidColorBrush(Color.FromRgb(122, 122, 122)),
-                    Margin = new Thickness(0, 0, 5, 0)
-                };
-                Button copyNameBtn = new Button
-                {
-                    Content = "Copy", Width = 70, Height = 28,
-                    Background = new SolidColorBrush(Color.FromRgb(43, 43, 43)),
-                    Foreground = new SolidColorBrush(Color.FromRgb(230, 230, 230)),
-                    BorderBrush = new SolidColorBrush(Color.FromRgb(122, 122, 122))
-                };
-                copyNameBtn.Click += (s, e) => { Clipboard.SetText(nameBox.Text); UpdateStatus("Đã copy: Vladimir Putin #2", "Green"); };
-                line1.Children.Add(nameBox);
-                line1.Children.Add(copyNameBtn);
-                mainPanel.Children.Add(line1);
-
-                // Key row
-                StackPanel line2 = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 10) };
-                TextBox keyBox = new TextBox
-                {
-                    Text = "XLEVD-PNASB-6A3BD-Z72GJ-SPAH7", Width = 300, Height = 28, IsReadOnly = true,
-                    Background = new SolidColorBrush(Color.FromRgb(43, 43, 43)),
-                    Foreground = new SolidColorBrush(Color.FromRgb(230, 230, 230)),
-                    BorderBrush = new SolidColorBrush(Color.FromRgb(122, 122, 122)),
-                    Margin = new Thickness(0, 0, 5, 0)
-                };
-                Button copyKeyBtn = new Button
-                {
-                    Content = "Copy", Width = 70, Height = 28,
-                    Background = new SolidColorBrush(Color.FromRgb(43, 43, 43)),
-                    Foreground = new SolidColorBrush(Color.FromRgb(230, 230, 230)),
-                    BorderBrush = new SolidColorBrush(Color.FromRgb(122, 122, 122))
-                };
-                copyKeyBtn.Click += (s, e) => { Clipboard.SetText(keyBox.Text); UpdateStatus("Đã copy: XLEVD-PNASB-6A3BD-Z72GJ-SPAH7", "Green"); };
-                line2.Children.Add(keyBox);
-                line2.Children.Add(copyKeyBtn);
-                mainPanel.Children.Add(line2);
-
-                keyDialog.Content = mainPanel;
-                keyDialog.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi hiá»ƒn thá»‹ dialog key: {ex.Message}", "Red");
-            }
-        }
-
-        private void BtnActivateNetLimiter_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                UpdateStatus("mở cá»­a sá»• kÃ­ch hoáº¡t NetLimiter...", "Cyan");
-                ShowNetLimiterKeyDialog();
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi mở NetLimiter Key Dialog: {ex.Message}", "Red");
-            }
-        }
 
 
         // ===================================================================
@@ -991,41 +677,6 @@ namespace GMTPC.Tool
         // TabItem Header: "System"
         // Checkbox: ChkComfortClipboardPro
         // ===================================================================
-        private async Task InstallComfortClipboardProAsync()
-        {
-            try
-            {
-                UpdateStatus("Đang tải Comfort Clipboard Pro...", "Cyan");
-                string comfortClipboardPath = Path.Combine(GetGMTPCFolder(), "Comfort.Clipboard.Pro.7.0.2.exe");
-                await DownloadWithProgressAsync("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/Comfort.Clipboard.Pro.7.0.2.exe", comfortClipboardPath, "Comfort Clipboard Pro Installer");
-
-                MessageBoxResult result = MessageBox.Show("Yes = cài đặt tự động vào ổ C\nNo = cài vào ổ khác", " cài đặt tự động Comfort Clipboard Pro", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-
-                ProcessStartInfo startInfo = new ProcessStartInfo { FileName = comfortClipboardPath, UseShellExecute = true };
-
-                if (result == MessageBoxResult.Yes) { startInfo.Arguments = "/passive"; UpdateStatus("cài đặt tự động vào ổ C", "Yellow"); }
-                else if (result == MessageBoxResult.No) { UpdateStatus("cài vào ổ khác...", "Yellow"); }
-                else
-                {
-                    UpdateStatus("Đã hủy cài đặt Comfort Clipboard Pro", "Yellow");
-                    if (File.Exists(comfortClipboardPath)) File.Delete(comfortClipboardPath);
-                    return;
-                }
-
-                Process process = Process.Start(startInfo);
-                if (process != null)
-                {
-                    await Task.Run(() => process.WaitForExit());
-                    UpdateStatus(process.ExitCode == 0 ? "cài đặt Comfort Clipboard Pro thành cÃ´ng!" : $"Tháº¥t báº¡i. MÃ£ Lỗi: {process.ExitCode}", process.ExitCode == 0 ? "Green" : "Red");
-                }
-
-                if (File.Exists(comfortClipboardPath)) File.Delete(comfortClipboardPath);
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi cài đặt Comfort Clipboard Pro: {ex.Message}", "Red");
-            }
-        }
 
 
         // ===================================================================
@@ -1033,41 +684,6 @@ namespace GMTPC.Tool
         // TabItem Header: "System"
         // Checkbox: ChkMMTApps
         // ===================================================================
-        private async Task InstallMMTAppsAsync()
-        {
-            try
-            {
-                UpdateStatus("Đang tải MMT.Apps.exe...", "Cyan");
-                string mmtAppsPath = Path.Combine(GetGMTPCFolder(), "MMT.Apps.exe");
-                await DownloadWithProgressAsync("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/MMT.Apps.exe", mmtAppsPath, "MMT Apps Installer");
-
-                MessageBoxResult result = MessageBox.Show("Yes = cài đặt tự động vào ổ C\nNo = cài vào ổ khác", "cài đặt tự động MMT Apps", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-
-                ProcessStartInfo startInfo = new ProcessStartInfo { FileName = mmtAppsPath, UseShellExecute = true };
-
-                if (result == MessageBoxResult.Yes) { startInfo.Arguments = "/passive"; UpdateStatus("cài đặt tự động vào ổ C", "Yellow"); }
-                else if (result == MessageBoxResult.No) { UpdateStatus("cài vào ổ khác...", "Yellow"); }
-                else
-                {
-                    UpdateStatus("Đã hủy cài đặt MMT Apps", "Yellow");
-                    if (File.Exists(mmtAppsPath)) File.Delete(mmtAppsPath);
-                    return;
-                }
-
-                Process process = Process.Start(startInfo);
-                if (process != null)
-                {
-                    await Task.Run(() => process.WaitForExit());
-                    UpdateStatus(process.ExitCode == 0 ? "cài đặt MMT Apps thành cÃ´ng!" : $"Tháº¥t báº¡i. MÃ£ Lỗi: {process.ExitCode}", process.ExitCode == 0 ? "Green" : "Red");
-                }
-
-                if (File.Exists(mmtAppsPath)) File.Delete(mmtAppsPath);
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi cài đặt MMT Apps: {ex.Message}", "Red");
-            }
-        }
 
 
         // ===================================================================
@@ -1168,41 +784,6 @@ namespace GMTPC.Tool
         // TabItem Header: "Partition"
         // Checkbox: ChkDiskGenius
         // ===================================================================
-        private async Task InstallDiskGeniusAsync()
-        {
-            try
-            {
-                UpdateStatus("Đang tải Disk Genius...", "Cyan");
-                string diskGeniusPath = Path.Combine(GetGMTPCFolder(), "DiskGenius.exe");
-                await DownloadWithProgressAsync("https://github.com/ghostminhtoan/MMT/releases/download/WinPE/Disk.Genius.exe", diskGeniusPath, "Disk Genius");
-
-                MessageBoxResult result = MessageBox.Show("Yes = cài đặt tự động vào ổ C\nNo = cài vào ổ khác", "cài đặt Disk Genius", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-
-                ProcessStartInfo startInfo = new ProcessStartInfo { FileName = diskGeniusPath, UseShellExecute = true };
-
-                if (result == MessageBoxResult.Yes) { startInfo.Arguments = "/s"; UpdateStatus("cài đặt Disk Genius vào ổ C...", "Yellow"); }
-                else if (result == MessageBoxResult.No) { UpdateStatus("cài Disk Genius vào ổ khác...", "Yellow"); }
-                else
-                {
-                    UpdateStatus("Đã hủy cài đặt Disk Genius", "Yellow");
-                    if (File.Exists(diskGeniusPath)) File.Delete(diskGeniusPath);
-                    return;
-                }
-
-                Process process = Process.Start(startInfo);
-                if (process != null)
-                {
-                    await Task.Run(() => process.WaitForExit());
-                    UpdateStatus("cài đặt Disk Genius hoàn tất!", "Green");
-                }
-
-                if (File.Exists(diskGeniusPath)) File.Delete(diskGeniusPath);
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi cài đặt Disk Genius: {ex.Message}", "Red");
-            }
-        }
 
 
         // ===================================================================
@@ -1210,41 +791,6 @@ namespace GMTPC.Tool
         // TabItem Header: "Partition"
         // Checkbox: ChkAomeiPartitionAssistant
         // ===================================================================
-        private async Task InstallAomeiPartitionAssistantAsync()
-        {
-            try
-            {
-                UpdateStatus("Đang tải AOMEI Partition Assistant...", "Cyan");
-                string filePath = Path.Combine(GetGMTPCFolder(), "AOMEI.Partition.Assistant.exe");
-                await DownloadWithProgressAsync("https://github.com/ghostminhtoan/MMT/releases/download/WinPE/AOMEI.Partition.Assistant.exe", filePath, "AOMEI Partition Assistant");
-
-                MessageBoxResult result = MessageBox.Show("Yes = cài đặt tự động vào ổ C\nNo = cài vào ổ khác", "cài đặt AOMEI Partition Assistant", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-
-                if (result == MessageBoxResult.Cancel)
-                {
-                    UpdateStatus("Đã hủy cài đặt AOMEI Partition Assistant", "Yellow");
-                    if (File.Exists(filePath)) File.Delete(filePath);
-                    return;
-                }
-
-                ProcessStartInfo startInfo = new ProcessStartInfo { FileName = filePath, UseShellExecute = true };
-                if (result == MessageBoxResult.Yes) { startInfo.Arguments = "/passive"; UpdateStatus("cài đặt AOMEI vào ổ C...", "Yellow"); }
-                else { UpdateStatus("cài AOMEI vào ổ khác...", "Yellow"); }
-
-                Process process = Process.Start(startInfo);
-                if (process != null)
-                {
-                    await Task.Run(() => process.WaitForExit());
-                    UpdateStatus("cài đặt AOMEI Partition Assistant hoàn tất!", "Green");
-                }
-
-                if (File.Exists(filePath)) File.Delete(filePath);
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi cài đặt AOMEI Partition Assistant: {ex.Message}", "Red");
-            }
-        }
 
         // ===================================================================
         // TabMultimedia â€” Advanced Codec Pack
@@ -1294,73 +840,6 @@ namespace GMTPC.Tool
         // TabItem Header: "System"
         // Checkbox: ChkTeraCopy
         // ===================================================================
-        private async Task InstallTeraCopyAsync()
-        {
-            string tempFolderPath = Path.GetTempPath();
-            string teraCopyInstallFolder = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                "TeraCopy");
-            string teraPath = Path.Combine(GetGMTPCFolder(), "TeraCopy.Pro.v3.17.0.0.exe");
-
-            try
-            {
-                UpdateStatus($"Đang thêm Windows Defender exclusion: {tempFolderPath}...", "Yellow");
-                AddDefenderExclusionPath(tempFolderPath);
-
-                UpdateStatus($"Đang thêm Windows Defender exclusion: {teraCopyInstallFolder}...", "Yellow");
-                AddDefenderExclusionPath(teraCopyInstallFolder);
-
-                UpdateStatus("Đang tải TeraCopy...", "Cyan");
-                await DownloadWithProgressAsync(TERACOPY_DOWNLOAD_URL, teraPath, "TeraCopy");
-
-                Dispatcher.Invoke(() =>
-                {
-                    DownloadProgressBar.Value = 0;
-                    ProgressTextBlock.Text = "";
-                    SpeedTextBlock.Text = "";
-                });
-
-                UpdateStatus("Đang cài đặt TeraCopy (silent)...", "Yellow");
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    FileName = teraPath,
-                    Arguments = TERACOPY_INSTALL_ARGUMENTS,
-                    UseShellExecute = true
-                };
-                Process process = Process.Start(startInfo);
-
-                if (process != null)
-                {
-                    await Task.Run(() => process.WaitForExit());
-                    UpdateStatus("TeraCopy đã hoàn tất.", "Green");
-                }
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi cài TeraCopy: {ex.Message}", "Red");
-            }
-            finally
-            {
-                try
-                {
-                    if (File.Exists(teraPath))
-                    {
-                        File.Delete(teraPath);
-                    }
-                }
-                catch
-                {
-                }
-
-                try
-                {
-                    RemoveDefenderExclusionPath(tempFolderPath);
-                }
-                catch
-                {
-                }
-            }
-        }
 
         // ===================================================================
         // TabSystem â€” VPN 1111 (Cloudflare)

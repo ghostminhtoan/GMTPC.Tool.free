@@ -1,3 +1,4 @@
+// AI Summary: 2026-05-29 - Cleaned up deleted checkboxes event handlers.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -237,85 +238,7 @@ namespace GMTPC.Tool
         // ===================================================================
         // TabSubtitle — Boilsoft Video Splitter
         // ===================================================================
-        private void ChkBoilsoftVideoSplitter_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkBoilsoftVideoSplitter.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: Boilsoft Video Splitter", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: Boilsoft Video Splitter", "Yellow");
-            }
 
-            UpdateInstallButtonState();
-        }
-
-        private async Task InstallBoilsoftVideoSplitterAsync()
-        {
-            try
-            {
-                UpdateStatus("Đang tải Boilsoft Video Splitter...", "Cyan");
-                string boilsoftPath = Path.Combine(GetGMTPCFolder(), "Boilsoft.VideoSplitter.exe");
-                await DownloadWithProgressAsync(BOILSOFT_VIDEO_SPLITTER_DOWNLOAD_URL, boilsoftPath, "Boilsoft Video Splitter");
-
-                Dispatcher.Invoke(() =>
-                {
-                    DownloadProgressBar.Value = 0;
-                    ProgressTextBlock.Text = "";
-                    SpeedTextBlock.Text = "";
-                });
-
-                // Hiển thị popup để hỏi người dùng chọn cài đặt
-                MessageBoxResult result = MessageBox.Show("Yes = Cài đặt tự động (silent)\nNo = Cài đặt thủ công (GUI)", "Cài đặt Boilsoft Video Splitter", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-
-                if (result == MessageBoxResult.Cancel)
-                {
-                    UpdateStatus("Đã hủy cài đặt Boilsoft Video Splitter", "Yellow");
-                    if (File.Exists(boilsoftPath))
-                    {
-                        File.Delete(boilsoftPath);
-                    }
-                    return;
-                }
-
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    FileName = boilsoftPath,
-                    UseShellExecute = true
-                };
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    // Cài đặt tự động
-                    startInfo.Arguments = BOILSOFT_VIDEO_SPLITTER_INSTALL_ARGUMENTS;
-                    UpdateStatus("Đang cài đặt Boilsoft Video Splitter (silent)...", "Yellow");
-                }
-                else
-                {
-                    // Cài đặt thủ công
-                    UpdateStatus("Đang mở Boilsoft Video Splitter installer (thủ công)...", "Yellow");
-                }
-
-                Process process = Process.Start(startInfo);
-
-                if (process != null)
-                {
-                    await Task.Run(() => process.WaitForExit());
-                    UpdateStatus("Cài đặt Boilsoft Video Splitter hoàn tất!", "Green");
-                }
-
-                if (File.Exists(boilsoftPath))
-                {
-                    File.Delete(boilsoftPath);
-                    UpdateStatus("Đã xóa file Boilsoft.VideoSplitter.exe", "Cyan");
-                }
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi cài đặt Boilsoft Video Splitter: {ex.Message}", "Red");
-            }
-        }
 
         // ===================================================================
         // TabSubtitle — Vibe
@@ -577,58 +500,6 @@ namespace GMTPC.Tool
         // ===================================================================
         // TabSubtitle — Download sample video
         // ===================================================================
-        private void ChkDownloadSampleVideo_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkDownloadSampleVideo.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: Download sample video", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: Download sample video", "Yellow");
-            }
 
-            UpdateInstallButtonState();
-        }
-
-        private async Task InstallSampleVideoAsync()
-        {
-            try
-            {
-                string targetFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
-                string fileName = Path.GetFileName(new Uri(SAMPLE_VIDEO_DOWNLOAD_URL).LocalPath);
-                string sampleVideoPath = Path.Combine(targetFolder, fileName);
-
-                if (!Directory.Exists(targetFolder))
-                {
-                    Directory.CreateDirectory(targetFolder);
-                }
-
-                UpdateStatus($"Đang tải sample video về {targetFolder}...", "Cyan");
-                await DownloadWithProgressAsync(SAMPLE_VIDEO_DOWNLOAD_URL, sampleVideoPath, "Sample video");
-
-                Dispatcher.Invoke(() =>
-                {
-                    DownloadProgressBar.Value = 0;
-                    ProgressTextBlock.Text = "";
-                    SpeedTextBlock.Text = "";
-                });
-
-                UpdateStatus($"Đã tải xong sample video vào {targetFolder}", "Green");
-
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = "explorer.exe",
-                    Arguments = $"/select,\"{sampleVideoPath}\"",
-                    UseShellExecute = true
-                });
-
-                UpdateStatus("Đã mở thư mục chứa sample video", "Green");
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus($"Lỗi khi tải sample video: {ex.Message}", "Red");
-            }
-        }
     }
 }

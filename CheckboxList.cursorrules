@@ -1,10 +1,8 @@
+<!-- AI Summary: 2026-05-29 - Removed 25 target checkboxes from the list and updated total count. -->
 <!-- AI Summary: 2026-05-02 - Refreshed the Windows Setup tab order -->
-<!-- AI Summary: 2026-05-12 - Added ChkDeactivateWindows and updated ChkTeraCopy to add Defender exclusions before download, delete the installer after install, and keep %ProgramFiles%\TeraCopy permanent -->
 <!-- AI Summary: 2026-04-30 - Updated ChkOfficeToolPlus to probe latest Office Tool Plus runtime x64 zip from GitHub Releases -->
 <!-- AI Summary: 2026-05-02 - Moved ChkVentoy to the reusable archive flow backed by MainWindow.SystemArchiveFlow.cs -->
 <!-- AI Summary: 2026-04-25 - Updated ChkSubtitleEdit to the new GMTPC portable release link -->
-<!-- AI Summary: 2026-04-24 (2) - Updated ChkDownloadSampleVideo to save into %USERPROFILE%\Videos -->
-<!-- AI Summary: 2026-04-24 - Added ChkDownloadSampleVideo to Tab Subtitle -->
 <!-- AI Summary: 2026-04-13 - Added ChkSubtitleDraftGMTPC to Tab Subtitle -->
 <!-- AI Summary: 2026-05-15 - Documented the final extra IDM launch after 5 open/close cycles -->
 
@@ -28,19 +26,14 @@
 
 | TÃªn Checkbox | Link Download | Argument |
 |-------------|---------------|----------|
-| ChkInstallIDM | https://tinyurl.com/idmhcmvn | `/s /a /u /o /quiet /skipdlgst` |
-| *(note)* | Sau 5 lần mở/tắt, mở thêm một lần nữa tại %ProgramFiles(x86)%\Internet Download Manager\IDMan.exe |  |
 | ChkInstallNeatDM | https://neatdownloadmanager.com/file/NeatDM_setup.exe | `/silent` |
 | ChkInstallWinRAR | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/WinRAR.exe | `/silent /I /EN` |
-| ChkInstallBID | https://bulkimagedownloader.com/files/bid_6_62_setup_x64.exe | *(khÃ´ng cÃ³)* |
-| ChkActivateWindows | (Built-in Windows Activation) | `slmgr /ipk ...` |
 | ChkDeactivateWindows | (Built-in Windows Deactivation) | `slmgr /dlv -> copy Activation ID -> slmgr /upk x` |
 | ChkPauseWindowsUpdate | (Windows Update Service) | *(system service)* |
 | ChkVcredist | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/vcredist.all.in.one.by.MMT.Windows.Tech.exe | `/passive` |
 | ChkDirectX | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/DirectX.exe | `/passive` |
 | ChkJava | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/java.exe | `/s` |
 | ChkOpenAL | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/oalinst.exe | `/S` |
-| ChkRevoUninstaller | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/RevoUninstallerPro.exe | `/S` |
 | ChkInstallZalo | https://zalo.me/download/zalo-pc?utm=90000 | `/s` |
 
 ## Tab Office
@@ -48,8 +41,6 @@
 | TÃªn Checkbox | Link Download | Argument |
 |-------------|---------------|----------|
 | ChkOfficeToolPlus | https://github.com/YerongAI/Office-Tool/releases | *(probe latest x64 runtime zip, extract to C:\, create desktop shortcut, open Office Tool Plus.exe)* |
-| ChkOfficeSoftmaker | *(Office Softmaker)* | *(tool riÃªng)* |
-| ChkActivateOffice | (Office Activation) | *(script riÃªng)* |
 | ChkGMTPCFonts | https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/releases/download/subtitle.materials/GMTPC-FONTS.exe | *(run directly, delete on app exit)* |
 | ChkNotepadPlusPlus | https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.2/npp.8.9.2.Installer.x64.msi | `/passive /norestart` |
 
@@ -59,11 +50,9 @@
 |-------------|---------------|----------|
 | ChkSubtitleEdit | https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/releases/download/subtitle.materials/Subtitle.Edit.-.GMTPC.portable.exe | `/verysilent /norestart` |
 | ChkVidCoder | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/vidcoder.exe | *(run directly, C:\Vidcoder)* |
-| ChkBoilsoftVideoSplitter | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/BoilsoftVideoSplitter.8.3.3.by.elchupacabra.exe | *(Yes: /S, No: manual)* |
 | ChkVibe | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/vibe.exe | *(Yes: /S, No: manual)* |
 | ChkMKVToolNix | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/mkvtoolnix-mkvcleaver.exe | *(Yes: /S, No: manual)* |
 | ChkSubtitleDraftGMTPC | https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/blob/master/Subtitle%20draft%20GMTPC.exe | *(download to C:\, create desktop shortcut, open file)* |
-| ChkDownloadSampleVideo | https://github.com/ghostminhtoan/Subtitle-draft-GMTPC/releases/download/subtitle.materials/ReZero.Starting.Life.in.Another.World.S04E01.WEB-DL.1080p.AVC.AAC.Dual.Audio-FBI.mkv | *(download to %USERPROFILE%\Videos, open containing folder after download)* |
 
 ## Tab Multimedia
 
@@ -71,43 +60,31 @@
 |-------------|---------------|----------|
 | ChkAdvancedCodecPack | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/ADVANCED_Codec_Pack.exe | `/S /V/qn` |
 | ChkPotPlayer | *(PotPlayer)* | *(tool riÃªng)* |
-| ChkFastStone | *(FastStone Capture)* | *(tool riÃªng)* |
 | ChkFoxit | *(Foxit PDF Reader)* | *(tool riÃªng)* |
-| ChkBandiview | *(Bandiview)* | *(tool riÃªng)* |
 
 ## Tab System
 
 | TÃªn Checkbox | Link Download | Argument |
 |-------------|---------------|----------|
-| ChkMMTApps | *(MMT Apps)* | *(tool riÃªng)* |
 | ChkDISMPP | *(DISM++)* | *(tool riÃªng)* |
-| ChkComfortClipboardPro | *(Comfort Clipboard Pro)* | *(tool riÃªng)* |
 | ChkFolderSize | *(FolderSize)* | *(tool riÃªng)* |
-| ChkPowerISO | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/PowerISO.exe | `/S` |
 | ChkMemReduct | https://github.com/henrypp/memreduct/releases/download/v.3.5.2/memreduct-3.5.2-setup.exe | `/S` |
-| ChkTeraCopy | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/TeraCopy.Pro.v3.17.0.0.exe | *(add exclusion for %TEMP% + %ProgramFiles%\TeraCopy before download, delete installer after install, keep %ProgramFiles%\TeraCopy permanent)* |
 | ChkVPN1111 | https://1111-releases.cloudflareclient.com/win/latest | `/passive` |
 | ChkGoogleDrive | *(Google Drive)* | *(tool riÃªng)* |
-| ChkNetLimiter | *(NetLimiter)* | *(tool riÃªng)* |
 
 ## Tab Partition
 
 | TÃªn Checkbox | Link Download | Argument |
 |-------------|---------------|----------|
-| ChkAomeiPartitionAssistant | *(AOMEI Partition Assistant)* | *(tool riÃªng)* |
-| ChkDiskGenius | *(Disk Genius)* | *(tool riÃªng)* |
 
 ## Tab Gaming
 
 | TÃªn Checkbox | Link Download | Argument |
 |-------------|---------------|----------|
-| ChkProcessLasso | *(Process Lasso)* | *(tool riÃªng)* |
 | ChkThrottlestop | *(Throttlestop)* | *(tool riÃªng)* |
 | ChkMSIAfterburner | *(MSI Afterburner)* | *(tool riÃªng)* |
 | ChkLeagueOfLegends | *(League of Legends VN)* | *(tool riÃªng)* |
 | ChkPorofessor | *(Porofessor)* | *(tool riÃªng)* |
-| ChkSamuraiMaiden | *(Samurai Maiden)* | *(tool riÃªng)* |
-| ChkGhostOfTsushima | https://github.com/ghostminhtoan/MMT/releases/download/game/Ghost.of.Tsushima_LinkNeverDie.Com.part01.exe (29 parts) | *(multi-part installer)* |
 
 ## Tab Browser
 
@@ -125,7 +102,6 @@
 | ChkTeamViewerQS | *(TeamViewer QuickSupport)* | *(tool riÃªng)* |
 | ChkTeamViewerFull | *(TeamViewer Full)* | *(tool riÃªng)* |
 | ChkAnyDesk | *(AnyDesk)* | *(tool riÃªng)* |
-| ChkVMWare162Lite | *(VMWare 16.2 lite)* | *(không cần argument)* |
 
 ## Tab Driver
 
@@ -140,7 +116,6 @@
 |-------------|---------------|----------|
 
 | ChkVentoy | https://github.com/ventoy/Ventoy/releases | *(GitHub latest release zip, extract to C:\Ventoy, move ventoy-x.x.x to C:\, run ventoy2disk.exe, delete zip after exit)* |
-| ChkWintoHDD | https://github.com/ghostminhtoan/MMT/releases/download/WinPE/wintohdd.exe | `/S` |
 | BtnWinPEToHDD | `powershell irm bit.ly/mmtwinpe \| iex` | *(button, run as administrator)* |
 
 ## Tab Windows - Microsoft
@@ -153,8 +128,6 @@
 
 | TÃªn Checkbox | Link Download | Argument |
 |-------------|---------------|----------|
-| ChkWin10LtscIot21H2 | GitHub (3 parts - auto merge):<br>https://github.com/ghostminhtoan/MMT/releases/download/windows/LTSC.IOT.21H2.-.2021.10.-.gaming.-.Office.365.-.win.10.MMTPC.3.0.iso.001<br>https://github.com/ghostminhtoan/MMT/releases/download/windows/LTSC.IOT.21H2.-.2021.10.-.gaming.-.Office.365.-.win.10.MMTPC.3.0.iso.002<br>https://github.com/ghostminhtoan/MMT/releases/download/windows/LTSC.IOT.21H2.-.2021.10.-.gaming.-.Office.365.-.win.10.MMTPC.3.0.iso.003 | *(ISO image - 3-part download, auto merge)* |
-| ChkWin10_22H2_2024_December | GitHub (5 parts - auto merge):<br>https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.001<br>https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.002<br>https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.003<br>https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.004<br>https://github.com/ghostminhtoan/MMT/releases/download/windows/win.10.22h2.2024.DECEMBER.-.Office.365.-.win.10.MMTPC.4.0.iso.005 | *(ISO image - 5-part download, auto merge)* |
 ---
 
 **Tá»•ng sá»‘:** 57 checkboxes
