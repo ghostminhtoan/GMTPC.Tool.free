@@ -1,3 +1,4 @@
+<!-- AI Summary: 2026-05-29 - Removed WinRAR checkbox (ChkInstallWinRAR). -->
 <!-- AI Summary: 2026-04-18 - Added child button "enable INVITE WORKSPACE LTSC" inside ChkEdge checkbox -->
 <!-- AI Summary: 2026-04-23 - Added spacing between CPU/RAM entries and distinct accent colors for System Information panels -->
 <!-- AI Summary: 2026-04-24 - Added ChkDownloadSampleVideo to the Subtitle tab -->
@@ -460,7 +461,6 @@
                     <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" Background="#FF1F1F1F">
                         <WrapPanel x:Name="CheckBoxPanel" Orientation="Horizontal" HorizontalAlignment="Stretch" Style="{StaticResource ResponsiveWrapPanelStyle}">
                             <CheckBox x:Name="ChkInstallNeatDM" Content="Neat Download Manager" Width="200" Height="34" Click="ChkInstallNeatDM_Click" MouseEnter="Checkbox_MouseEnter"/>
-                            <CheckBox x:Name="ChkInstallWinRAR" Content="Winrar" Width="200" Height="34" Click="ChkInstallWinRAR_Click" MouseEnter="Checkbox_MouseEnter"/>
                             <CheckBox x:Name="ChkDeactivateWindows" Content="Gỡ kích hoạt Windows" Width="200" Height="34" Click="ChkDeactivateWindows_Click" MouseEnter="Checkbox_MouseEnter"/>
                             <CheckBox x:Name="ChkPauseWindowsUpdate" Content="Pause Windows Update" Width="200" Height="34" Click="ChkPauseWindowsUpdate_Click" MouseEnter="Checkbox_MouseEnter"/>
                             <CheckBox x:Name="ChkVcredist" Content="Vcredist 2005-2022" Width="200" Height="34" Click="ChkVcredist_Click" MouseEnter="Checkbox_MouseEnter"/>

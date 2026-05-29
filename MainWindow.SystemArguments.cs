@@ -1,3 +1,4 @@
+// AI Summary: 2026-05-29 - Removed WinRAR checkbox constants and related references.
 // AI Summary: 2026-05-29 - Removed constants, click handlers, install methods, and UpdateInstallButtonState conditions for 25 target checkboxes.
 ﻿// AI Summary: 2026-04-28 - Added VentoySourceForgeFiles URL and Ventoy checkbox state wiring
 // AI Summary: 2026-04-30 - Added Office Tool Plus Releases URLs for latest x64 runtime zip probing and hover/copy-link flows
@@ -65,9 +66,7 @@ namespace GMTPC.Tool
         // ===================================================================
         // IDM
 
-        // WinRAR
-        private const string WINRAR_DOWNLOAD_URL = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/WinRAR.exe";
-        private const string WINRAR_INSTALL_ARGUMENTS = "/silent /I /EN";
+
 
         // BID (Bulk Image Downloader)
 
@@ -513,7 +512,6 @@ namespace GMTPC.Tool
                              ChkDeactivateWindows.IsChecked == true ||
                              ChkOfficeToolPlus.IsChecked == true ||
                              ChkPauseWindowsUpdate.IsChecked == true ||
-                             ChkInstallWinRAR.IsChecked == true ||
                              ChkVcredist.IsChecked == true ||
                              ChkDirectX.IsChecked == true ||
                              ChkJava.IsChecked == true ||

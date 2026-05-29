@@ -1,3 +1,4 @@
+// AI Summary: 2026-05-29 - Removed WinRAR installer methods and button click handler.
 // AI Summary: 2026-05-29 - Removed install and activation methods, click event handlers, and cleaned up RunAutomatedProcessAsync for deleted checkboxes.
 // =======================================================================
 // MainWindow.RestoredMethods.cs
@@ -316,30 +317,7 @@ namespace GMTPC.Tool
             catch (Exception ex) { UpdateStatus($"Lỗi: {ex.Message}", "Red"); }
         }
 
-        private async Task InstallAndActivateWinRARAsync()
-        {
-            await InstallWinRARAsync();
-        }
 
-
-        private async Task InstallWinRARAsync()
-        {
-            string winrarPath = Path.Combine(GetGMTPCFolder(), "WinRAR.exe");
-            try
-            {
-                // ===== Step 1: Download and Install WinRAR =====
-                UpdateStatus("Đang tải WinRAR...", "Cyan");
-                await DownloadWithRetryAsync(WINRAR_DOWNLOAD_URL, winrarPath, "WinRAR");
-                Dispatcher.Invoke(() => { DownloadProgressBar.Value = 0; ProgressTextBlock.Text = ""; SpeedTextBlock.Text = ""; });
-
-                UpdateStatus("Đang chạy WinRAR installer ( " + WINRAR_INSTALL_ARGUMENTS + " )...", "Yellow");
-                ProcessStartInfo startInfo = new ProcessStartInfo { FileName = winrarPath, Arguments = WINRAR_INSTALL_ARGUMENTS, UseShellExecute = true };
-                Process process = Process.Start(startInfo);
-                if (process != null) { await Task.Run(() => process.WaitForExit()); UpdateStatus("Cài đặt WinRAR hoàn tất.", "Green"); }
-                if (File.Exists(winrarPath)) File.Delete(winrarPath);
-            }
-            catch (Exception ex) { UpdateStatus($"Lỗi: {ex.Message}", "Red"); }
-        }
 
 
         /// <summary>
@@ -490,11 +468,7 @@ namespace GMTPC.Tool
             _ = Task.Run(() => PauseWindowsUpdate());
         }
 
-        private void BtnInstallWinRAR_Click(object sender, RoutedEventArgs e)
-        {
-            ChkInstallWinRAR.IsChecked = true;
-            _ = InstallWinRARAsync();
-        }
+
 
 
 

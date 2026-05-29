@@ -1,3 +1,4 @@
+// AI Summary: 2026-05-29 - Removed ChkInstallWinRAR from Select All, Select None, MouseEnter, and Install tasks lists.
 // AI Summary: 2026-05-29 - Removed 25 target checkboxes from Select All, Select None, MouseEnter, and Install tasks lists.
 ﻿// =======================================================================
 // MainWindow.SystemButtons.cs
@@ -383,7 +384,6 @@ namespace GMTPC.Tool
                     ChkInstallNeatDM.IsChecked = true;
                     ChkDeactivateWindows.IsChecked = true;
                     ChkPauseWindowsUpdate.IsChecked = true;
-                    ChkInstallWinRAR.IsChecked = true;
                     ChkVcredist.IsChecked = true;
                     ChkDirectX.IsChecked = true;
                     ChkJava.IsChecked = true;
@@ -485,7 +485,6 @@ namespace GMTPC.Tool
                     ChkInstallNeatDM.IsChecked = false;
                     ChkDeactivateWindows.IsChecked = false;
                     ChkPauseWindowsUpdate.IsChecked = false;
-                    ChkInstallWinRAR.IsChecked = false;
                     ChkVcredist.IsChecked = false;
                     ChkDirectX.IsChecked = false;
                     ChkJava.IsChecked = false;
@@ -579,7 +578,6 @@ namespace GMTPC.Tool
             ChkInstallNeatDM.IsChecked = false;
             ChkDeactivateWindows.IsChecked = false;
             ChkPauseWindowsUpdate.IsChecked = false;
-            ChkInstallWinRAR.IsChecked = false;
             ChkVcredist.IsChecked = false;
             ChkDirectX.IsChecked = false;
             ChkJava.IsChecked = false;
@@ -662,7 +660,7 @@ namespace GMTPC.Tool
             if (ChkInstallNeatDM.IsChecked == true) tasks.Add((InstallNeatDMAsync, ChkInstallNeatDM));
             if (ChkOfficeToolPlus.IsChecked == true) tasks.Add((InstallOfficeToolPlusAsync, ChkOfficeToolPlus)); // Thêm task cho Office Tool Plus
             if (ChkPauseWindowsUpdate.IsChecked == true) tasks.Add((() => Task.Run(() => PauseWindowsUpdate()), ChkPauseWindowsUpdate));
-            if (ChkInstallWinRAR.IsChecked == true) tasks.Add((InstallAndActivateWinRARAsync, ChkInstallWinRAR));
+
             if (ChkVcredist.IsChecked == true) tasks.Add((InstallVcredistAsync, ChkVcredist));
             if (ChkDirectX.IsChecked == true) tasks.Add((InstallDirectXAsync, ChkDirectX));
             if (ChkJava.IsChecked == true) tasks.Add((InstallJavaAsync, ChkJava));
@@ -790,8 +788,7 @@ namespace GMTPC.Tool
             _cachedDownloadLinks.Clear();
 
 
-            if (ChkInstallWinRAR?.IsChecked == true)
-                _cachedDownloadLinks.Add("https://github.com/ghostminhtoan/MMT/releases/download/v1.0/WinRAR.7.13.exe");
+
 
 
 
@@ -1060,7 +1057,7 @@ namespace GMTPC.Tool
         {
             var allCheckBoxes = new System.Windows.Controls.CheckBox[]
             {
-                ChkInstallWinRAR, ChkDeactivateWindows, ChkPauseWindowsUpdate, ChkVcredist, ChkDirectX, ChkJava, ChkOpenAL,
+                ChkDeactivateWindows, ChkPauseWindowsUpdate, ChkVcredist, ChkDirectX, ChkJava, ChkOpenAL,
                 Chk3DPChip, Chk3DPNet, ChkOfficeToolPlus, ChkGMTPCFonts,
                 ChkPotPlayer, ChkFoxit, ChkAdvancedCodecPack,
                 ChkDISMPP, ChkFolderSize, ChkMemReduct, ChkVPN1111, ChkGoogleDrive,
@@ -1087,9 +1084,6 @@ namespace GMTPC.Tool
                 {
                     case "ChkInstallNeatDM":
                         link = "https://neatdownloadmanager.com/file/NeatDM_setup.exe";
-                        break;
-                    case "ChkInstallWinRAR":
-                        link = "https://github.com/ghostminhtoan/MMT/releases/download/v1.0/WinRAR.7.13.exe";
                         break;
                     case "ChkDeactivateWindows":
                         link = "Built-in Windows flow: slmgr /dlv -> copy Activation ID -> slmgr /upk x";

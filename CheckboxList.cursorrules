@@ -1,3 +1,4 @@
+<!-- AI Summary: 2026-05-29 - Removed ChkInstallWinRAR from the list and updated total count. -->
 <!-- AI Summary: 2026-05-29 - Removed 25 target checkboxes from the list and updated total count. -->
 <!-- AI Summary: 2026-05-02 - Refreshed the Windows Setup tab order -->
 <!-- AI Summary: 2026-04-30 - Updated ChkOfficeToolPlus to probe latest Office Tool Plus runtime x64 zip from GitHub Releases -->
@@ -27,7 +28,7 @@
 | TÃªn Checkbox | Link Download | Argument |
 |-------------|---------------|----------|
 | ChkInstallNeatDM | https://neatdownloadmanager.com/file/NeatDM_setup.exe | `/silent` |
-| ChkInstallWinRAR | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/WinRAR.exe | `/silent /I /EN` |
+
 | ChkDeactivateWindows | (Built-in Windows Deactivation) | `slmgr /dlv -> copy Activation ID -> slmgr /upk x` |
 | ChkPauseWindowsUpdate | (Windows Update Service) | *(system service)* |
 | ChkVcredist | https://github.com/ghostminhtoan/MMT/releases/download/v1.0/vcredist.all.in.one.by.MMT.Windows.Tech.exe | `/passive` |
@@ -130,11 +131,11 @@
 |-------------|---------------|----------|
 ---
 
-**Tá»•ng sá»‘:** 57 checkboxes
+**Tổng số:** 56 checkboxes
 
 **Ghi chÃº:**
 - CÃ¡c checkbox Ä‘Æ°á»£c phÃ¢n loáº¡i theo Tab tÆ°Æ¡ng á»©ng trong giao diá»‡n (MainWindow.xaml)
-- Link download cÃ³ thá»ƒ lÃ  URL rÃºt gá»n (tinyurl) hoáº·c link trá»±c tiáº¿p tá»« GitHub Releases
+- Link download cÃ³ thá»ƒ lÃ  URL rÃºt gá» n (tinyurl) hoáº·c link trá»±c tiáº¿p tá»« GitHub Releases
 - Argument lÃ  tham sá»‘ dÃ²ng lá»‡nh Ä‘á»ƒ cÃ i Ä‘áº·t tá»± Ä‘á»™ng (silent/unattended) - Ä‘Æ°á»£c hiá»ƒn thá»‹ vá»›i Ä‘á»‹nh dáº¡ng `code`
 - *(khÃ´ng cÃ³)* = KhÃ´ng yÃªu cáº§u tham sá»‘ dÃ²ng lá»‡nh
 - *(tool riÃªng)* = Sá»­ dá»¥ng phÆ°Æ¡ng thá»©c cÃ i Ä‘áº·t riÃªng trong code

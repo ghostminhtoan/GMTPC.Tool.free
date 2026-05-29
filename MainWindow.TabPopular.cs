@@ -1,3 +1,4 @@
+// AI Summary: 2026-05-29 - Removed ChkInstallWinRAR_Click click handler.
 // AI Summary: 2026-05-29 - Cleaned up deleted checkboxes event handlers.
 ﻿// =======================================================================
 // MainWindow.TabPopular.cs
@@ -152,19 +153,7 @@ namespace GMTPC.Tool
         }
 
 
-        private void ChkInstallWinRAR_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChkInstallWinRAR.IsChecked == true)
-            {
-                UpdateStatus("Đã chọn: WinRAR", "Green");
-            }
-            else
-            {
-                UpdateStatus("Đã hủy chọn: WinRAR", "Yellow");
-            }
 
-            UpdateInstallButtonState();
-        }
 
 
 
